@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
   if (!pythonProcess) {
     
-    const scriptPath = path.join(process.cwd(), "src/app/api/compile", "app.py");
+    const scriptPath = path.join(process.cwd(), "src/app/api/compile/compiler_script", "app.py");
     pythonProcess = spawn("python3", [scriptPath, pseudocode]);
 
     // Collect output from the Python script
@@ -30,6 +30,7 @@ export async function POST(req: Request) {
 
         // Detect if Python script is requesting input
         if (outputChunk.includes("The code is requesting your input on line")) {
+          console.log("SETTING TRUE AND",bufferedOutput)
           isWaitingForInput = true;
         }
       });
@@ -57,6 +58,7 @@ export async function POST(req: Request) {
   // If the process is waiting for input, send the user input
   if (isWaitingForInput && userInput) {
     if (pythonProcess.stdin) {
+      isWaitingForInput = false; // Reset waiting state
       pythonProcess.stdin.write(userInput + "\n");
       isWaitingForInput = false; // Reset waiting state
     } else {
@@ -71,11 +73,14 @@ export async function POST(req: Request) {
   }
 
   // Return accumulated output to the frontend
+  console.log("FR")
   const response = {
     output: bufferedOutput,
     requestingInput: isWaitingForInput,
     isComplete: !pythonProcess || pythonProcess.killed,
   };
+
+  console.log(response, "IS BEING SENT")
 
   // Clear buffered output after sending it
   bufferedOutput = "";
