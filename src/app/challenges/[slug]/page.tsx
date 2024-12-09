@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import CodeEditor from "../../components/code_editor/code_editor"
+import CodeEditor from "../../components/ide/ide"
 
 export default function Challenge() {
     return (

@@ -25,5 +25,14 @@
     "tags": ["Sorting", "Greedy"],
     "difficulty": "Medium",
     "type": "Algorithm"
+  },
+  {
+    "id": 5,
+    "title": "String Reverse",
+    "description":
+      "Given a collection of intervals, merge overlapping intervals.",
+    "tags": ["Sorting", "Greedy"],
+    "difficulty": "Medium",
+    "type": "Algorithm"
   }
 ]

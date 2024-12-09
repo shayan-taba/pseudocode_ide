@@ -1,8 +1,8 @@
 import Image from "next/image";
-import CodeEditor from "./components/code_editor/code_editor";
+import CodeEditor from "./components/ide/ide";
 import Link from 'next/link';
 import ChallengesPage from "./challenges/page";
-import AuthPage from "./components/home/auth";
+import AuthPage from "./components/auth/auth";
 
 
 export default function Home() {
