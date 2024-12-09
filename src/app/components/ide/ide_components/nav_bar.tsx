@@ -36,7 +36,7 @@ const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const router = useRouter();
   return (
-    <nav className="flex items-center justify-between bg-gray-800 text-white">
+    <nav className="flex items-center justify-between bg-slate-600 text-white h-[50px]">
       <div className={`nav-els ${taskWidth != "hidden" ? taskWidth : "pr-6"}`}>
         <h1 className="text-xl font-bold">Task</h1>
         <div className="flex !mr-4">

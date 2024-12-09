@@ -9,7 +9,21 @@ import Output from "./ide_components/output";
 import "./ide_styles.css";
 // pages/code-editor.tsx
 
-const CodeEditorPage: React.FC = () => {
+interface IDEProps {
+  title: string;
+  description: string;
+  tags: string[];
+  difficulty: string;
+  testCases: { input: any; output: any }[]; // Test case structure
+}
+
+const IDE: React.FC<IDEProps> = ({
+  title,
+  description,
+  tags,
+  difficulty,
+  testCases,
+}) => {
   const [code, setCode] = useState<string>("");
   const [output, setOutput] = useState<string[]>([]);
   const [userInput, setUserInput] = useState<string>("");
@@ -23,6 +37,15 @@ const CodeEditorPage: React.FC = () => {
   const [taskWidthState, setTaskWidthState] = useState<string>("w-[22%]");
   const [editorWidthState, setEditorWidthState] = useState<string>("w-[50%]");
   const [outputWidthState, setOutputWidthState] = useState<string>("w-[28%]");
+
+  const [testIndex, setTestIndex] = useState<number>(0);
+
+  useEffect(() => {
+    console.log('hayo',testIndex != -1 ? testCases[testIndex].input : undefined)
+    if (!testCases) {
+      setTestIndex(-1) // -1 means playground mode
+    }
+  }, []);
 
   // Calculate widths dynamically
   const getSectionWidths = () => {
@@ -87,11 +110,15 @@ const CodeEditorPage: React.FC = () => {
 
   const fetchFromBackend = async (input: string, run: boolean) => {
     if (code.trim()) {
-      console.log("mai c", code);
       const response = await fetch("/api/compile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pseudocode: code, userInput: input, run: run }),
+        body: JSON.stringify({
+          pseudocode: code,
+          userInput: input,
+          run: run,
+          test_case_input: testIndex != -1 ? testCases[testIndex].input : undefined
+        }),
       });
 
       const data = await response.json();
@@ -150,7 +177,16 @@ const CodeEditorPage: React.FC = () => {
         onClearOutput={() => setOutput([])}
       />
       <div className="overflow-hidden border-t-4 border-gray-300 flex flex-grow">
-        {showTask && <TaskDescription taskWidth={taskWidthState} />}
+        {showTask && (
+          <TaskDescription
+            taskWidth={taskWidthState}
+            title={title}
+            description={description}
+            tags={tags}
+            difficulty={difficulty}
+            testCases={testCases}
+          />
+        )}
         {showEditor && (
           <Editor
             code={code}
@@ -174,4 +210,4 @@ const CodeEditorPage: React.FC = () => {
   );
 };
 
-export default CodeEditorPage;
+export default IDE;

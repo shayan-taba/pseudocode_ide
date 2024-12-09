@@ -18,6 +18,7 @@
     "@uiw/codemirror-themes-all": "^4.23.6",
     "@uiw/react-codemirror": "^4.23.6",
     "next": "15.0.4",
+    "next-navigation": "^1.0.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

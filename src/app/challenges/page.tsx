@@ -57,7 +57,10 @@ export default function ChallengesPage() {
   const filteredChallenges = challenges
     .filter((challenge) => {
       // Filter by title
-      if (search && !challenge.title.toLowerCase().includes(search.toLowerCase())) {
+      if (
+        search &&
+        !challenge.title.toLowerCase().includes(search.toLowerCase())
+      ) {
         return false;
       }
 
@@ -104,7 +107,7 @@ export default function ChallengesPage() {
           </div>
         )}
         {!user && (
-            <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4">
             {/* Display the user's email or username */}
             <span className="text-sm font-medium text-gray-300">
               Logged in as: GUEST
@@ -171,7 +174,10 @@ export default function ChallengesPage() {
       {/* Challenges List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredChallenges.map((challenge) => (
-          <div key={challenge.id} className="bg-slate-800 p-4 shadow rounded-lg">
+          <div
+            key={challenge.id}
+            className="bg-slate-800 p-4 shadow rounded-lg"
+          >
             <h2 className="text-xl font-bold">{challenge.title}</h2>
             <p>Difficulty: {challenge.difficulty}</p>
 
@@ -187,7 +193,10 @@ export default function ChallengesPage() {
               ))}
             </div>
 
-            <Link href={`challenges/${challenge.id}`} className="text-blue-500 mt-2 inline-block">
+            <Link
+              href={`challenges/${challenge.id}`}
+              className="text-blue-500 mt-2 inline-block"
+            >
               Solve Challenge
             </Link>
           </div>
@@ -196,8 +205,19 @@ export default function ChallengesPage() {
 
       {/* No Results Found */}
       {filteredChallenges.length === 0 && (
-        <div className="text-center mt-6 text-gray-500">No challenges found.</div>
+        <div className="text-center mt-6 text-gray-500">
+          No challenges found.
+        </div>
       )}
+
+      <button
+        onClick={() => {
+          router.push("challenges/playground");
+        }}
+        className="bg-green-500 text-white px-4 py-2 mt-4 rounded"
+      >
+        IDE Playground
+      </button>
     </div>
   );
 }

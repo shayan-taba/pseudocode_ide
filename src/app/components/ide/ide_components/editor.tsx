@@ -49,7 +49,7 @@ interface EditorProps {
 const Editor: React.FC<EditorProps> = ({ code, onCodeChange, editorWidth }) => {
   return (
     <div
-      className={`z-10 outline-2 outline border-x-2 border-gray-300 outline-gray-300 flex-grow bg-gray-900 p-4 overflow-y-auto ${
+      className={`z-10 outline-2 outline border-x-1 border-gray-300 outline-gray-300 flex-grow bg-slate-900 p-4 overflow-y-auto scrollable-container ${
         editorWidth == undefined ? "flex-grow" : editorWidth
       }`}
     >
@@ -59,7 +59,7 @@ const Editor: React.FC<EditorProps> = ({ code, onCodeChange, editorWidth }) => {
         extensions={[
           python(),
           autocompletion({ activateOnTyping: false }),
-          indentUnit.of("    "),
+          indentUnit.of("    ")
         ]}
         theme={myTheme}
         onChange={(value) => onCodeChange(value || "")} // Ensure `value` is never `undefined`

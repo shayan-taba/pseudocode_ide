@@ -1,38 +1,24 @@
 [
-  {
-    "id": 1,
-    "title": "Two Sum",
-    "description":
-      "Given an array of integers, return indices of two numbers such that they add up to a specific target.",
-    "tags": ["Array", "HashMap"],
-    "difficulty": "Easy",
-    "type": "Algorithm"
-  },
-  {
-    "id": 2,
-    "title": "Merge Intervals",
-    "description":
-      "Given a collection of intervals, merge overlapping intervals.",
-    "tags": ["Sorting", "Greedy"],
-    "difficulty": "Medium",
-    "type": "Algorithm"
-  },
-  {
-    "id": 4,
-    "title": "Merge Intervals",
-    "description":
-      "Given a collection of intervals, merge overlapping intervals.",
-    "tags": ["Sorting", "Greedy"],
-    "difficulty": "Medium",
-    "type": "Algorithm"
-  },
+
   {
     "id": 5,
     "title": "String Reverse",
-    "description":
-      "Given a collection of intervals, merge overlapping intervals.",
-    "tags": ["Sorting", "Greedy"],
+    "description": "Given a collection of intervals, merge overlapping intervals.",
+    "tags": [
+      "Sorting",
+      "Greedy"
+    ],
     "difficulty": "Medium",
-    "type": "Algorithm"
+    "type": "Algorithm",
+    "testCases": [
+      {
+        "input": "Hello",
+        "output": "olleH"
+      },
+      {
+        "input": "Computer Science is awesome",
+        "output": "emosewa si ecneicS retupmoC"
+      }
+    ]
   }
 ]

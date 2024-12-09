@@ -1,7 +1,7 @@
 // components/Output.tsx
 import React from "react";
 
-import "../ide_styles.css"
+import "../ide_styles.css";
 
 interface OutputProps {
   output: string[];
@@ -25,11 +25,11 @@ const Output: React.FC<OutputProps> = ({
   return (
     <>
       <div
-        className={`outline-2 outline outline-gray-300 flex flex-col bg-gray-800 p-5 ${outputWidth}`}
+        className={`outline-1 outline outline-gray-300 flex flex-col bg-slate-800 p-5 ${outputWidth}`}
       >
         <h2 className="text-xl font-bold mb-2">Raw Output</h2>
         <pre
-          className="text-white p-4 scrollable-container rounded overflow-auto max-h-[33%]"
+          className="text-white bg-gray-900 p-2 scrollable-container rounded overflow-auto max-h-[33%]"
           style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}
         >
           {output.join("\n")}
@@ -51,11 +51,17 @@ const Output: React.FC<OutputProps> = ({
             </button>
           </div>
         )}
-        {isComplete && (
+        {isComplete && output.join("\n").includes("Code executed successfully.") && (
           <p className="text-green-200 mt-4">Execution Completed</p>
         )}
+        {!isComplete && (
+          <p className="text-yellow-200 mt-4">Waiting for Execution Completion</p>
+        )}
+        {isComplete && !output.join("\n").includes("Code executed successfully.") && (
+          <p className="text-red-200 mt-4">Error on Conversion to Python</p>
+        )}
+        <h2 className="text-xl font-bold mb-2">Output Checks</h2>
       </div>
-      
     </>
   );
 };

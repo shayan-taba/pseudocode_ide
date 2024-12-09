@@ -5,7 +5,7 @@ from ib_dp_datatypes.queue import Queue
 from ib_dp_datatypes.stack import Stack
 from pseudo_conversions_utils.assignment_utils import check_valid_variable_assignment
 
-def syntax_check_and_run_converted(code_string):
+def syntax_check_and_run_converted(code_string, test_case_input):
 
     try:
         # Syntax check using compile
@@ -17,6 +17,8 @@ def syntax_check_and_run_converted(code_string):
             "Collection": Collection,
             "Stack": Stack,
             "Queue": Queue,
+            "TEST_CASE": str(test_case_input) # This is the input variable for the code challenge, or "None" for the
+            # standard IDE "playground".
         }
 
         # Syntax is valid as not errors have been raised, execute the code and handle input/output
