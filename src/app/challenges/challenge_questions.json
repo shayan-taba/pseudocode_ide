@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Two Sum",
+    "description":
+      "Given an array of integers, return indices of two numbers such that they add up to a specific target.",
+    "tags": ["Array", "HashMap"],
+    "difficulty": "Easy",
+    "type": "Algorithm"
+  },
+  {
+    "id": 2,
+    "title": "Merge Intervals",
+    "description":
+      "Given a collection of intervals, merge overlapping intervals.",
+    "tags": ["Sorting", "Greedy"],
+    "difficulty": "Medium",
+    "type": "Algorithm"
+  },
+  {
+    "id": 4,
+    "title": "Merge Intervals",
+    "description":
+      "Given a collection of intervals, merge overlapping intervals.",
+    "tags": ["Sorting", "Greedy"],
+    "difficulty": "Medium",
+    "type": "Algorithm"
+  }
+]

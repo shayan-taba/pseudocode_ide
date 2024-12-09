@@ -145,6 +145,9 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
                 raise Exception(
                         f"Syntax Error on Line {line_number+1}: a `{block_statements[-1][0]}` block statement was opened on line {block_statements[-1][1]}, but it was never closed"
                     )
+                
+            python_code.append("")
+            
             continue
         # Perform conversion only on the pseudocode part
 

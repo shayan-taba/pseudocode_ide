@@ -14,7 +14,7 @@ def main():
     try:
         python_code = pseudocode_to_python(pseudocode)
         if not python_code:
-            print("Error: Failed to convert pseudocode to Python.", python_code)
+            print("Error: Failed to convert pseudocode to Python.")
             sys.exit(1)
         #if python_code:
             #print(python_code)
@@ -24,7 +24,7 @@ def main():
 
     # Run the converted Python code
     try:
-        print("Executing converted Python code...")
+        print("Executing converted Python code...\n")
         print(syntax_check_and_run_converted(python_code))
     except Exception as e:
         print(f"Runtime error: {e}")

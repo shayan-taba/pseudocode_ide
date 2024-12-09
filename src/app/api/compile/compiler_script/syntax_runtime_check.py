@@ -26,11 +26,10 @@ def syntax_check_and_run_converted(code_string):
         error_line = code_string.splitlines()[
             e.lineno - 1
         ]  # Get the error containing line
-        print(e)
         return (
             f"Syntax error on line {e.lineno}: {e.msg}\n"
-            f"Error in line:\n{error_line}\n"
-            f"{' ' * (e.offset - 1)}^"
+            #f"Error in line:\n{error_line}\n"
+            #f"{' ' * (e.offset - 1)}^"
         )  # Find where the error was from
 
     except Exception as e:
@@ -54,17 +53,17 @@ def syntax_check_and_run_converted(code_string):
             
             if custom_error := special_runtime_errors(str(e)):
                 return (
-                    f"Runtime error: {custom_error}\n"
+                    f"Runtime Error on Line {user_line_number}: {custom_error}\n"
                     # f"Error occurred in file: {frame_info.filename}, "
-                    f"Line Number: {user_line_number}\n"
-                    f"{error_line.strip()}\n"
+                   # f"Line Number: {user_line_number}\n"
+                    #f"{error_line.strip()}\n"
                     # f"in function {frame_info.function}"
                 )
 
             else:
                 return (
-                    f"Runtime error: {str(e)}\n"
-                    f"Line Number: {user_line_number}\n"
+                    f"Runtime Error on Line {user_line_number}: {str(e)}\n"
+                    #f"Line Number: {user_line_number}\n"
                     f"{error_line.strip()}\n"
                 )
         else:
@@ -77,7 +76,7 @@ def syntax_check_and_run_converted(code_string):
         if not checked_variable_assignments[0]:
             return f"Syntax error on line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}, must only contain uppercase alphabetic characters (A-Z) and underscores"
 
-        return "Code executed successfully."
+        return "\nCode executed successfully."
 
 
 def special_runtime_errors(error: str) -> str:

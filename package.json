@@ -12,6 +12,8 @@
     "@codemirror/lang-python": "^6.1.6",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@heroicons/react": "^2.2.0",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/supabase-js": "^2.47.2",
     "@uiw/codemirror-themes": "^4.23.6",
     "@uiw/codemirror-themes-all": "^4.23.6",
     "@uiw/react-codemirror": "^4.23.6",
