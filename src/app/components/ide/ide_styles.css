@@ -2,30 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --container-heading-height: 50px;
+}
+
 @layer components {
+  #IDE_Panel {
+    @apply h-[calc(100vh-2rem)];
+  }
+
   .nav-els {
-    @apply pl-5 flex items-center space-x-4 mt-4 mb-4 outline-1 outline-white outline h-[100%] justify-between;
+    @apply flex items-center space-x-4 outline-1 justify-between;
   }
 
   .nav-icons {
-    @apply size-6 text-white;
+    @apply size-6;
   }
 
   .nav-btns {
-    @apply !ml-0 px-4 py-2 hover:bg-blue-100 hover:bg-opacity-10 rounded flex flex-row gap-4 font-bold
+    @apply !ml-0 p-1 hover:bg-blue-100 hover:bg-opacity-10 rounded flex flex-row gap-2 font-bold;
   }
+
+  #IDE .divider {
+    @apply m-5;
+  }
+
+  .container-els {
+    @apply flex flex-col bg-slate-800 rounded-lg outline outline-slate-400 outline-2;
+  }
+
+  .container-els > * {
+    @apply p-5;
+  }
+
+  .container-els > .container-headings {
+    @apply bg-slate-700 flex flex-row justify-between px-5 py-2 h-[var(--container-heading-height)];
+  }
+
+  .container-nav-box {
+    @apply flex flex-row gap-7;
+  }
+
+  .container-navs {
+    @apply flex justify-center items-center gap-2 flex-row-reverse font-bold text-base decoration-white underline-offset-4;
+  }
+
+  .container-navs > h1 {
+    @apply text-white;
+  }
+
+  .container-navs.inactive {
+    @apply opacity-25 text-white;
+  }
+
+  .container-navs.inactive:hover {
+    @apply opacity-40 text-inherit underline decoration-white underline-offset-4;
+  }
+
+  .container-navs:not(.inactive) {
+    @apply underline;
+  }
+
+  .container-utils-box {
+    @apply text-white flex flex-row gap-5;
+  }
+
+  .container-body {
+    @apply text-white flex flex-col gap-4 h-[calc(100%-var(--container-heading-height))];
+  }
+
+  .scrollable-container {
+    @apply overflow-y-scroll
+  }
+  
+  .scrollable-container::-webkit-scrollbar {
+    @apply w-[10px]
+  }
+  
+  .scrollable-container::-webkit-scrollbar-thumb {
+    @apply bg-slate-600 border-r-[5px];
+  }
+  
+  .scrollable-container::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-600;
+  }
+  
 }
 
-/* Optional: Add scrollbar customization if needed */
-.scrollable-container::-webkit-scrollbar {
-  width: 10px;
-}
-
-.scrollable-container::-webkit-scrollbar-thumb {
-  background-color: rgb(209 213 219);
-  border-radius: 5px;
-}
-
-.scrollable-container::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(209 213 219);
-}

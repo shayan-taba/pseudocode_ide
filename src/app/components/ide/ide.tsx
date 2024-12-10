@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Navbar from "./ide_components/nav_bar";
-import TaskDescription from "./ide_components/task_description";
-import Editor from "./ide_components/editor";
-import Output from "./ide_components/output";
+import Instructions from "./ide_components/instructions/instructions";
+import Editor from "./ide_components/editor/editor";
+import Results from "./ide_components/results/results";
+import Popup from "./ide_components/input_popup";
 
 import "./ide_styles.css";
 // pages/code-editor.tsx
@@ -30,83 +31,70 @@ const IDE: React.FC<IDEProps> = ({
   const [waitingForInput, setWaitingForInput] = useState<boolean>(false);
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
-  const [showTask, setShowTask] = useState<boolean>(true);
-  const [showEditor, setShowEditor] = useState<boolean>(true); // Toggle Editor
-  const [showOutput, setShowOutput] = useState<boolean>(true);
-
-  const [taskWidthState, setTaskWidthState] = useState<string>("w-[22%]");
-  const [editorWidthState, setEditorWidthState] = useState<string>("w-[50%]");
-  const [outputWidthState, setOutputWidthState] = useState<string>("w-[28%]");
+  const [expandInstructions, setExpandInstructions] = useState<boolean>(false);
+  const [expandEditor, setExpandEditor] = useState<boolean>(false);
+  const [expandResults, setExpandResults] = useState<boolean>(false);
 
   const [testIndex, setTestIndex] = useState<number>(0);
 
-  useEffect(() => {
-    console.log('hayo',testIndex != -1 ? testCases[testIndex].input : undefined)
-    if (!testCases) {
-      setTestIndex(-1) // -1 means playground mode
-    }
-  }, []);
+  const [inputMessage, setInputMessage] = useState<string>("");
 
-  // Calculate widths dynamically
-  const getSectionWidths = () => {
-    const visibleSections = [showTask, showEditor, showOutput].filter(
-      Boolean
-    ).length;
-    if (visibleSections === 3)
-      return {
-        taskWidth: "w-[27%]",
-        editorWidth: "w-[43%]",
-        outputWidth: "w-[30%]",
-      };
-    if (visibleSections === 2) {
-      if (!showTask)
-        return {
-          taskWidth: "hidden",
-          editorWidth: "w-[60%]",
-          outputWidth: "w-[40%]",
-        };
-      if (!showOutput)
-        return {
-          taskWidth: "w-1/3",
-          editorWidth: "w-2/3",
-          outputWidth: "hidden",
-        };
-      return { taskWidth: "w-1/5", editorWidth: "w-3/5", outputWidth: "w-1/5" };
-    }
-    if (visibleSections === 1) {
-      if (showTask)
-        return {
-          taskWidth: "w-full",
-          editorWidth: "hidden",
-          outputWidth: "hidden",
-        };
-      if (showEditor)
-        return {
-          taskWidth: "hidden",
-          editorWidth: "w-full",
-          outputWidth: "hidden",
-        };
-      return {
-        taskWidth: "hidden",
-        editorWidth: "hidden",
-        outputWidth: "w-full",
-      };
-    }
-    return {
-      taskWidth: "hidden",
-      editorWidth: "hidden",
-      outputWidth: "hidden",
-    };
+  const [instructionState, setInstructionState] = useState<"task" | "solution">(
+    "task"
+  );
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserInput(e.target.value);
+  };
+
+  const toggleInstructionState = () => {
+    setInstructionState((prevState) =>
+      prevState === "task" ? "solution" : "task"
+    );
+  };
+
+  const [resultState, setResultState] = useState<"outcome" | "output">(
+    "outcome"
+  );
+
+  const toggleResultsState = () => {
+    setResultState((prevState) =>
+      prevState === "outcome" ? "output" : "outcome"
+    );
   };
 
   useEffect(() => {
-    console.log("Values", showTask, showEditor, showOutput);
-    const { taskWidth, editorWidth, outputWidth } = getSectionWidths();
+    if (!testCases) {
+      setTestIndex(-1); // -1 means playground mode
+    }
+  }, []);
 
-    setTaskWidthState(taskWidth);
-    setEditorWidthState(editorWidth);
-    setOutputWidthState(outputWidth);
-  }, [showTask, showEditor, showOutput]);
+  useEffect(() => {
+  }, [output]);
+
+  // Calculate widths dynamically
+  useEffect(() => {
+    if (expandInstructions) {
+      setExpandEditor(false);
+      setExpandResults(false);
+    }
+  }, [expandInstructions]);
+
+  useEffect(() => {
+    if (expandEditor) {
+      setExpandInstructions(false);
+      setExpandResults(false);
+    }
+  }, [expandEditor]);
+
+  useEffect(() => {
+    if (expandResults) {
+      setExpandInstructions(false);
+      setExpandEditor(false);
+    }
+  }, [expandResults]);
 
   const fetchFromBackend = async (input: string, run: boolean) => {
     if (code.trim()) {
@@ -117,7 +105,8 @@ const IDE: React.FC<IDEProps> = ({
           pseudocode: code,
           userInput: input,
           run: run,
-          test_case_input: testIndex != -1 ? testCases[testIndex].input : undefined
+          test_case_input:
+            testIndex != -1 ? testCases[testIndex].input : undefined,
         }),
       });
 
@@ -138,14 +127,16 @@ const IDE: React.FC<IDEProps> = ({
   };
 
   const handleSendInput = async () => {
+    setIsPopupOpen(false);
     setWaitingForInput(false); // Hide input box while backend processes
     await fetchFromBackend(userInput, false); // Send user input to backend
     setUserInput(""); // Clear input field
   };
 
   const handleBackendResponse = (data: any) => {
-    console.log(data);
+    console.log(data.output, "prior output", output);
     if (data.output) {
+      setInputMessage(data.output);
       setOutput((prev) => [...prev, data.output]); // Append new output
     }
 
@@ -154,6 +145,8 @@ const IDE: React.FC<IDEProps> = ({
   };
 
   useEffect(() => {
+    setIsPopupOpen(waitingForInput);
+
     if (!waitingForInput && !isComplete) {
       const interval = setInterval(async () => {
         await fetchFromBackend("", false); // Poll backend with no additional input
@@ -163,49 +156,98 @@ const IDE: React.FC<IDEProps> = ({
   }, [waitingForInput, isComplete]);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-800">
-      <Navbar
-        taskVisible={showTask}
-        outputVisible={showOutput}
-        taskWidth={taskWidthState}
-        outputWidth={outputWidthState}
-        showOutput={showOutput}
-        showTask={showTask}
-        onToggleTask={() => setShowTask(!showTask)}
-        onToggleOutput={() => setShowOutput(!showOutput)}
-        onRun={handleRunCode}
-        onClearOutput={() => setOutput([])}
-      />
-      <div className="overflow-hidden border-t-4 border-gray-300 flex flex-grow">
-        {showTask && (
-          <TaskDescription
-            taskWidth={taskWidthState}
+    <div id="IDE" className="flex flex-col h-screen bg-zinc-950">
+      <Navbar />
+      <div id="IDE_Panel" className="flex flex-row flex-grow overflow-hidden">
+        {expandInstructions && (
+          <Instructions
+            width={"w-[100%] m-5"}
             title={title}
             description={description}
             tags={tags}
             difficulty={difficulty}
             testCases={testCases}
+            expandInstructions={expandInstructions}
+            setExpandInstructions={setExpandInstructions}
+            instructionState={instructionState}
+            toggleInstructionState={toggleInstructionState}
           />
         )}
-        {showEditor && (
+
+        {expandEditor && (
           <Editor
+            width={"w-[100%] m-5"}
             code={code}
             onCodeChange={setCode}
-            editorWidth={editorWidthState}
+            onRun={handleRunCode}
+            expandEditor={expandEditor}
+            setExpandEditor={setExpandEditor}
           />
         )}
-        {showOutput && (
-          <Output
+
+        {expandResults && (
+          <Results
+            width={"w-[100%] m-5"}
             output={output}
-            userInput={userInput}
-            waitingForInput={waitingForInput}
             isComplete={isComplete}
-            outputWidth={outputWidthState}
-            onInputChange={(e) => setUserInput(e.target.value)}
-            onSendInput={handleSendInput}
+            onClearOutput={() => setOutput([])}
+            expandResults={expandResults}
+            setExpandResults={setExpandResults}
+            resultState={resultState}
+            toggleResultsState={toggleResultsState}
           />
+        )}
+
+        {!expandInstructions && !expandEditor && !expandResults && (
+          <>
+            <Instructions
+              width={"w-1/4"}
+              title={title}
+              description={description}
+              tags={tags}
+              difficulty={difficulty}
+              testCases={testCases}
+              expandInstructions={expandInstructions}
+              setExpandInstructions={setExpandInstructions}
+              instructionState={instructionState}
+              toggleInstructionState={toggleInstructionState}
+            />
+
+            <div className="divider flex flex-col flex-grow justify-between gap-6 w-[75%]">
+              <div className="h-[49%]">
+                <Editor
+                  width={"flex-grow"}
+                  code={code}
+                  onCodeChange={setCode}
+                  onRun={handleRunCode}
+                  expandEditor={expandEditor}
+                  setExpandEditor={setExpandEditor}
+                />
+              </div>
+              <div className="h-[49%] flex-grow">
+                <Results
+                  width={"flex-grow"}
+                  output={output}
+                  isComplete={isComplete}
+                  onClearOutput={() => setOutput([])}
+                  expandResults={expandResults}
+                  setExpandResults={setExpandResults}
+                  resultState={resultState}
+                  toggleResultsState={toggleResultsState}
+                />
+              </div>
+            </div>
+          </>
         )}
       </div>
+
+      <Popup
+        isOpen={isPopupOpen}
+        userInput={userInput}
+        onInputChange={handleInputChange}
+        onSubmit={handleSendInput}
+        message={inputMessage}
+      />
     </div>
   );
 };
