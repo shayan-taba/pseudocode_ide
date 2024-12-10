@@ -1,5 +1,5 @@
 // components/Output.tsx
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 import {
   TrashIcon,
@@ -32,7 +32,16 @@ const Results: React.FC<ResultsProps> = ({
   expandResults,
   onClearOutput,
 }) => {
-  console.log(output);
+
+
+  const preRef = useRef<HTMLPreElement>(null); 
+
+  useEffect(() => {
+    if (preRef.current) {
+      preRef.current.scrollTop = preRef.current.scrollHeight;
+    }
+  }, [output, resultState]); // Runs whenever "output", "resultState" changes
+
   return (
     <div
       className={`container-els ${!expandResults ? "h-[100%]" : ""} ${width}`}
@@ -60,7 +69,10 @@ const Results: React.FC<ResultsProps> = ({
         </div>
         <div className="container-utils-box">
           {resultState == "output" ? (
-            <button onClick={onClearOutput} className={`nav-btns px-3 bg-rose-600 hover:bg-rose-700`}>
+            <button
+              onClick={onClearOutput}
+              className={`nav-btns px-3 bg-rose-600 hover:bg-rose-700`}
+            >
               <TrashIcon className="nav-icons" />
               Clear
             </button>
@@ -84,7 +96,8 @@ const Results: React.FC<ResultsProps> = ({
         {resultState == "output" && (
           <>
             <pre
-              className="text-white bg-zinc-950 p-2 scrollable-container rounded max-h-[275px] min-h-8"
+              ref={preRef}
+              className="text-white bg-zinc-950 p-2 scrollable-container rounded min-h-8"
               style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}
             >
               {output.join("\n")}

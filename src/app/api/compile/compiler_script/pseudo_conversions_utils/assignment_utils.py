@@ -14,8 +14,8 @@ def check_valid_variable_name(name: str) -> bool:
 
     return True # No issue with the variable name
 
-def check_valid_variable_assignment(pseudocode: str) -> tuple:
-    tree = ast.parse(pseudocode)
+def check_valid_variable_assignment(code: str) -> tuple:
+    tree = ast.parse(code)
     
     # Variable names will be put here
     defined_variables = []
