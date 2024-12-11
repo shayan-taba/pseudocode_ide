@@ -1,5 +1,11 @@
 // components/Output.tsx
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import {
   TrashIcon,
@@ -10,6 +16,7 @@ import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
 } from "@heroicons/react/24/solid";
+import TestCaseResult from "./test_case_results";
 
 interface ResultsProps {
   width: string;
@@ -20,6 +27,13 @@ interface ResultsProps {
   setExpandResults: Dispatch<React.SetStateAction<boolean>>;
   resultState: "outcome" | "output";
   toggleResultsState: () => void;
+  testResults: { 
+    status: string; 
+    actual: string[]; 
+    expected: any; 
+    input: any 
+  }[];
+  testCases: { input: any; output: any }[];
 }
 
 const Results: React.FC<ResultsProps> = ({
@@ -31,11 +45,11 @@ const Results: React.FC<ResultsProps> = ({
   setExpandResults,
   expandResults,
   onClearOutput,
+  testResults,
 }) => {
+  const preRef = useRef<HTMLPreElement>(null);
 
-
-  const preRef = useRef<HTMLPreElement>(null); 
-
+  console.log("here", testResults)
   useEffect(() => {
     if (preRef.current) {
       preRef.current.scrollTop = preRef.current.scrollHeight;
@@ -117,7 +131,18 @@ const Results: React.FC<ResultsProps> = ({
               ))}
           </>
         )}
-        {resultState == "outcome" && <div></div>}
+        {resultState == "outcome" && (
+          <div className="p-4 rounded-md scrollable-container">
+          {testResults.map((result, index) => (
+            <TestCaseResult
+              key={index}
+              testCaseIndex={index}
+              result={result}
+              isLast={index === testResults.length - 1}
+            />
+          ))}
+        </div>
+        )}
       </div>
     </div>
   );
