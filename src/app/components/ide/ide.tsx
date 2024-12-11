@@ -11,7 +11,7 @@ import "./ide_styles.css";
 // pages/code-editor.tsx
 
 export type TestResultType = {
-  status: "Pass" | "Fail" | "Pending" | "Syntax Error" | "Runtime Error" | "Fail (Multiple Outputs)" | "Special Fail";
+  status: "Pass" | "Fail" | "Pending" | "Syntax Error" | "Runtime Error" | "Fail (Multiple Outputs)" | "Special Error";
   actual: string[]; // Array of actual outputs
   expected: any; // Expected output (type depends on your test case structure)
   input: any; // Input for the test case
@@ -155,6 +155,15 @@ const IDE: React.FC<IDEProps> = ({
     setWaitingForInput(false); // Reset input state
     setIsComplete(false); // Reset completion state
     testIndexRef.current = 0; // Start from the first test case
+    setTestResults( // Reset test results
+      testCases.map((testCase) => ({
+        status: "Pending",
+        actual: [],
+        expected: testCase.output,
+        input: testCase.input,
+      }))
+    ); // Reset test results to their initial state
+
 
     processNextTestCase();
   };
@@ -188,8 +197,8 @@ const handleBackendResponse = (data: any) => {
     validOutputs.push(match[1]);
   }
 
-  // Check for special cases
-  let status: TestResultType["status"];
+  // Default to "pending" while waiting for input
+  let status: TestResultType["status"] = "Pending";
 
   if (data.output.includes("Syntax Error")) {
     status = "Syntax Error";
@@ -197,19 +206,25 @@ const handleBackendResponse = (data: any) => {
     status = "Runtime Error";
   } else if (validOutputs.length > 1) {
     status = "Fail (Multiple Outputs)";
+  } else if (data.output.includes("Error: Pseudocode argument missing") || data.output.includes("Error: Failed to convert pseudocode to Python") || data.output.includes("Error during conversion")) {
+    status = "Special Error";
   } else if (validOutputs[0] === currentTest.output) {
     status = "Pass";
   } else {
     status = "Fail";
   }
 
-  // Update test results
+  if (!data.isComplete) {
+    status = "Pending"
+  }
+
+  // Update test results with the status of the current test
   setTestResults((prevResults) => {
     const updatedResults = [...prevResults];
     updatedResults[currentIndex] = {
       ...updatedResults[currentIndex],
       status,
-      actual: validOutputs.length>1 ? validOutputs[0] :  validOutputs,
+      actual: validOutputs.length > 1 ? validOutputs[0] : validOutputs,
     };
     return updatedResults;
   });
@@ -220,7 +235,9 @@ const handleBackendResponse = (data: any) => {
     setIsPopupOpen(true); // Show popup for user input
     setWaitingForInput(true); // Indicate waiting state
   } else if (data.isComplete) {
+    // Once the test completes, move to the next test case
     testIndexRef.current += 1;
+    console.log(testCases[currentIndex])
     processNextTestCase(); // Move to the next test case
   }
 };

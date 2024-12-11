@@ -1,66 +1,129 @@
-import React from "react";
+import React, { useState } from "react";
 import SkeletonLoader from "./skeleton_loader";
 import { TestResultType } from "../../ide";
 
 const TestCaseResult: React.FC<{
   testCaseIndex: number;
-  result:TestResultType;
+  result: TestResultType;
   isLast: boolean;
 }> = ({ testCaseIndex, result, isLast }) => {
-  const getStatusClass = () => {
+  const [isExpanded, setIsExpanded] = useState(false); // For collapsing the input/expected output
+  const [isHovered, setIsHovered] = useState(false); // For hover effects to show more details
+
+  const handleExpandToggle = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
+  const handleHover = () => {
+    setIsHovered(true);
+  };
+
+  const handleHoverOut = () => {
+    setIsHovered(false);
+  };
+
+  console.log(testCaseIndex);
+
+  const getStatusClass = (typeClass: "border" | "text") => {
     switch (result.status) {
       case "Pass":
-        return "border-green-500 text-green-500";
+        return typeClass == "border" ? "border-green-500" : "text-green-500";
       case "Fail":
-        return "border-red-500 text-red-500";
+        return typeClass == "border" ? "border-red-500" : "text-red-500";
       case "Syntax Error":
-        return "border-yellow-500 text-yellow-500";
+        return typeClass == "border" ? "border-yellow-500" : "text-yellow-500";
       case "Runtime Error":
-        return "border-blue-500 text-blue-500";
+        return typeClass == "border" ? "border-yellow-500" : "text-yellow-500";
+      case "Special Error":
+        return typeClass == "border" ? "border-yellow-500" : "text-yellow-500";
       default:
-        return "border-gray-300 text-gray-500";
+        return typeClass == "border" ? "border-gray-300" : "text-gray-500";
     }
   };
 
   return (
     <div
-      className={`border p-4 rounded-md mb-4 ${getStatusClass()}`}
+      className={
+        "border w-ma p-4 rounded-md mb-4" + " " + getStatusClass("border")
+      }
     >
       <div className="font-bold">
-        Test Case {testCaseIndex + 1}
-        {isLast && <span className="text-gray-500 italic ml-2">(Hidden)</span>}
+        {!isLast && `Test Case ${testCaseIndex + 1}`}
+        {isLast && (
+          <span className="">Hidden Test Case ({testCaseIndex + 1})</span>
+        )}
       </div>
 
       {result.status === "Pending" ? (
-        <SkeletonLoader />
+        <SkeletonLoader
+          input={result.input}
+          expected={result.expected}
+          isLast={isLast}
+        />
       ) : (
         <>
-          {!isLast && (
-            <>
-              <div className="mt-2">
-                <span className="font-medium">Input:</span>{" "}
-                <code className="text-gray-700">
-                  {JSON.stringify(result.input)}
-                </code>
-              </div>
-              <div className="mt-2">
-                <span className="font-medium">Expected Output:</span>{" "}
-                <code className="text-gray-700">
-                  {JSON.stringify(result.expected)}
-                </code>
-              </div>
-            </>
-          )}
+          <div className="mt-2 flex justify-between items-center">
+            <div>
+              {isLast && (
+                <p>
+                  The hidden test case is a special test case used to verify
+                  your solution. Its input and expected output are not
+                  displayed. You will only see whether your solution passes or
+                  fails for this case, but not the specific values being tested.
+                  This ensures a fair assessment of your code's correctness.
+                </p>
+              )}
+              <span className="font-bold">Status:</span>{" "}
+              <span className={getStatusClass("text")}>{result.status}</span>
+            </div>
 
-          <div className="mt-2">
-            <span className="font-medium">Actual Output:</span>{" "}
-            <code className="text-gray-700">
-              {JSON.stringify(result.actual)}
-            </code>
+            {/* Toggle button to expand/collapse details */}
+            <button
+              onClick={handleExpandToggle}
+              className="text-sm text-blue-500"
+            >
+              {isExpanded ? "Hide Details" : "Show Details"}
+            </button>
           </div>
-          <div className="mt-2">
-            <span className="font-medium">Status:</span>{" "}
-            <span className={getStatusClass()}>{result.status}</span>
+
+          <div className={`mt-2 ${isExpanded ? "" : "hidden"}`}>
+            {
+              <>
+                <div className="mt-2">
+                  <span className="font-bold">Input:</span>{" "}
+                  <span className="text-gray-300">
+                    {!isLast &&
+                      (JSON.stringify(result.input).length > 100
+                        ? `${JSON.stringify(result.input).slice(0, 100)}...`
+                        : JSON.stringify(result.input))}
+                    {isLast && "hidden"}
+                  </span>
+                </div>
+                <div className="mt-2">
+                  <span className="font-bold">Expected Output:</span>{" "}
+                  <span className="text-gray-300">
+                    {!isLast &&
+                      (JSON.stringify(result.expected).length > 100
+                        ? `${JSON.stringify(result.expected).slice(0, 100)}...`
+                        : JSON.stringify(result.expected))}
+                    {isLast && "hidden"}
+                  </span>
+                </div>
+              </>
+            }
+
+            <div className="mt-2">
+              <span className="font-bold">Actual Output:</span>{" "}
+              <span className="text-gray-300">
+                {!isLast &&
+                  (JSON.stringify(result.actual).length > 100
+                    ? `${JSON.stringify(result.actual[0]).slice(0, 100)}...`
+                    : result.actual[0]
+                    ? JSON.stringify(result.actual[0])
+                    : "None")}
+                {isLast && "hidden"}
+              </span>
+            </div>
           </div>
         </>
       )}

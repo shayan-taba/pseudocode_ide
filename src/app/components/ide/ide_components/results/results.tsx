@@ -45,12 +45,46 @@ const Results: React.FC<ResultsProps> = ({
 }) => {
   const preRef = useRef<HTMLPreElement>(null);
 
-  console.log("here", testResults)
+  console.log("here", testResults);
   useEffect(() => {
     if (preRef.current) {
       preRef.current.scrollTop = preRef.current.scrollHeight;
     }
   }, [output, resultState]); // Runs whenever "output", "resultState" changes
+
+  const summarizeTestResults = () => {
+    const allPassed = testResults.every((result) => result.status === "Pass");
+    const hasErrors = testResults.some(
+      (result) =>
+        result.status.includes("Error") ||
+        result.status === "Fail (Multiple Outputs)"
+    );
+    const hasMismatch = testResults.some(
+      (result) => result.status === "Fail" && result.actual !== result.expected
+    );
+
+    if (allPassed) {
+      return <span className="text-green-300">All tests passed!</span>;
+    } else if (hasErrors) {
+      return (
+        <span className="text-red-300">
+          Syntax or runtime errors occurred on at least one "Test Case". Check the
+          output console for details on the error and to see on which Test
+          Case(s) this occurred.
+        </span>
+      );
+    } else if (hasMismatch) {
+      return (
+        <span className="text-yellow-300">
+          No errors occurred, but the output wasn't expected on at least one
+          "Test Case". Click on "Show Details" for further information in any of
+          the failed "Test Cases" below.
+        </span>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <div
@@ -129,15 +163,16 @@ const Results: React.FC<ResultsProps> = ({
         )}
         {resultState == "outcome" && (
           <div className="pr-4 rounded-md scrollable-container">
-          {testResults.map((result, index) => (
-            <TestCaseResult
-              key={index}
-              testCaseIndex={index}
-              result={result}
-              isLast={index === testResults.length - 1}
-            />
-          ))}
-        </div>
+            <div className="summary mb-4 text-lg">{summarizeTestResults()}</div>
+            {testResults.map((result, index) => (
+              <TestCaseResult
+                key={index}
+                testCaseIndex={index}
+                result={result}
+                isLast={index === testResults.length - 1}
+              />
+            ))}
+          </div>
         )}
       </div>
     </div>
