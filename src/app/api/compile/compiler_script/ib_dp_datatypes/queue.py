@@ -89,4 +89,4 @@ class Queue:
             A string in the format 'Queue([item1, item2, ...])', where the list shows
             the current elements in the queue in their order of arrival from enqueue.
         """
-        return f"Queue({self._items})"
+        return f"Queue({', '.join(self._items)})"

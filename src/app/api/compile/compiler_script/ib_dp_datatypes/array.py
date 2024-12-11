@@ -13,7 +13,7 @@ class Array:
         length (int | None): The number of elements in the array, which must be larger or equal to zero, or None (read-only).
     """
 
-    def __init__(self):
+    def __init__(self, *values):
         """Initializes an empty array with no values.
 
         The following variables are for private use only.
@@ -25,6 +25,9 @@ class Array:
         self._initialized = False # Only True after methods set_length or initialize_values is successfully
         # called. Once True, the internal property prevents either method to be reused. This restricts the only
         # way to set values as Array[index] = expression.
+        for value in values:
+            self._data = []
+            self._data.append(value) # Sets initialized values if any
 
     @property
     def length(self) -> int | None:
@@ -118,4 +121,4 @@ class Array:
         Returns:
             str: A string in the format 'Array([item1, item2, ...])'.
         """
-        return f"Array({self._data})"
+        return f"Array({', '.join(self._data)})"

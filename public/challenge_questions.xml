@@ -2,188 +2,149 @@
 <challenges>
   <challenge>
     <id>1</id>
-    <title>Sum of Positive Numbers</title>
-    <description>Write an algorithm that calculates the sum of all positive integers in an array.</description>
+    <title>Sum of Array Elements</title>
+    <description>Write an algorithm to compute the sum of all elements in an array.</description>
     <tags>
       <tag>Arrays</tag>
       <tag>Loops</tag>
     </tags>
     <dataTypes>
       <input>Array of integers</input>
-      <output>Number representing the sum of positive integers in the input</output>
+      <output>Integer representing the sum of the elements</output>
     </dataTypes>
     <difficulty>SL</difficulty>
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>[1, -2, 3, 4, -5]</input>
-        <output>8</output>
+        <input>[1, 2, 3, 4]</input>
+        <output>10</output>
       </testCase>
       <testCase>
-        <input>[-1, -2, -3]</input>
+        <input>[0, 0, 0]</input>
         <output>0</output>
       </testCase>
       <testCase>
-        <input>[10, 20, 30]</input>
-        <output>60</output>
+        <input>[10, -5, 15]</input>
+        <output>20</output>
       </testCase>
     </testCases>
-    <exampleSolution>
-      SUM = 0
-      loop I from 0 to LENGTH of ARRAY - 1
-      if ARRAY[I] > 0 then
-      SUM = SUM + ARRAY[I]
-      end if
-      end loop
-      output SUM
-    </exampleSolution>
   </challenge>
+
   <challenge>
     <id>2</id>
-    <title>String Reversal</title>
-    <description>Write an algorithm that reverses a given string.</description>
+    <title>Check if Collection is Empty</title>
+    <description>Write an algorithm that checks if a collection is empty and outputs "Empty" or "Not Empty".</description>
     <tags>
-      <tag>Strings</tag>
-      <tag>Loops</tag>
+      <tag>Collections</tag>
     </tags>
+    <dataTypes>
+      <input>Collection</input>
+      <output>String indicating whether the collection is empty</output>
+    </dataTypes>
     <difficulty>SL</difficulty>
-    <type>Algorithm</type>
+    <type>Condition</type>
     <testCases>
       <testCase>
-        <input>'hello'</input>
-        <output>'olleh'</output>
+        <input>Collection()</input>
+        <output>Empty</output>
       </testCase>
       <testCase>
-        <input>'world'</input>
-        <output>'dlrow'</output>
+        <input>Collection(5, 10, 15)</input>
+        <output>Not Empty</output>
       </testCase>
       <testCase>
-        <input>'a'</input>
-        <output>'a'</output>
+        <input>Collection("A")</input>
+        <output>Not Empty</output>
       </testCase>
     </testCases>
-    <exampleSolution>
-      REVERSED = ''
-      loop I from LENGTH of STRING - 1 to 0 step -1
-      REVERSED = REVERSED + STRING[I]
-      end loop
-      output REVERSED
-    </exampleSolution>
   </challenge>
+
   <challenge>
     <id>3</id>
-    <title>Palindrome Checker</title>
-    <description>Determine whether a given string is a palindrome.</description>
+    <title>Reverse Array Using Stack</title>
+    <description>Write an algorithm to reverse an array using a stack.</description>
     <tags>
-      <tag>Strings</tag>
-      <tag>Logic</tag>
-    </tags>
-    <difficulty>SL</difficulty>
-    <type>Algorithm</type>
-    <testCases>
-      <testCase>
-        <input>'racecar'</input>
-        <output>TRUE</output>
-      </testCase>
-      <testCase>
-        <input>'hello'</input>
-        <output>FALSE</output>
-      </testCase>
-      <testCase>
-        <input>'madam'</input>
-        <output>TRUE</output>
-      </testCase>
-    </testCases>
-    <exampleSolution>
-      IS_PALINDROME = TRUE
-      loop I from 0 to LENGTH of STRING div 2 - 1
-      if STRING[I] != STRING[LENGTH of STRING - 1 - I] then
-      IS_PALINDROME = FALSE
-      end if
-      end loop
-      output IS_PALINDROME
-    </exampleSolution>
-  </challenge>
-  <challenge>
-    <id>4</id>
-    <title>Balanced Brackets</title>
-    <description>Check if a string of brackets is balanced using a stack.</description>
-    <tags>
+      <tag>Arrays</tag>
       <tag>Stacks</tag>
-      <tag>Logic</tag>
     </tags>
+    <dataTypes>
+      <input>Array of integers</input>
+      <output>Array of integers in reverse order</output>
+    </dataTypes>
     <difficulty>HL</difficulty>
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>'()'</input>
-        <output>TRUE</output>
+        <input>[1, 2, 3]</input>
+        <output>[3, 2, 1]</output>
       </testCase>
       <testCase>
-        <input>'(()'</input>
-        <output>FALSE</output>
+        <input>[5, 10]</input>
+        <output>[10, 5]</output>
       </testCase>
       <testCase>
-        <input>'(())'</input>
-        <output>TRUE</output>
+        <input>[8]</input>
+        <output>[8]</output>
       </testCase>
     </testCases>
-    <exampleSolution>
-      STACK = EMPTY
-      IS_BALANCED = TRUE
-      loop I from 0 to LENGTH of STRING - 1
-      if STRING[I] = '(' then
-      STACK.push('(')
-      else if STRING[I] = ')' then
-      if STACK.isEmpty() then
-      IS_BALANCED = FALSE
-      else
-      STACK.pop()
-      end if
-      end if
-      end loop
-      if not STACK.isEmpty() then
-      IS_BALANCED = FALSE
-      end if
-      output IS_BALANCED
-    </exampleSolution>
   </challenge>
+
   <challenge>
-    <id>5</id>
+    <id>4</id>
     <title>Queue Simulation</title>
-    <description>Simulate a sequence of enqueue and dequeue operations on a queue.</description>
+    <description>Simulate a queue where elements are added and removed, and output the final state of the queue.</description>
     <tags>
       <tag>Queues</tag>
-      <tag>Simulation</tag>
     </tags>
+    <dataTypes>
+      <input>Sequence of operations</input>
+      <output>Final state of the queue</output>
+    </dataTypes>
     <difficulty>HL</difficulty>
     <type>Simulation</type>
     <testCases>
       <testCase>
-        <input>enqueue(1), enqueue(2), dequeue(), enqueue(3)</input>
-        <output>[2, 3]</output>
+        <input>[enqueue(1), enqueue(2), dequeue(), enqueue(3)]</input>
+        <output>Queue(2, 3)</output>
       </testCase>
       <testCase>
-        <input>enqueue('a'), dequeue(), enqueue('b'), enqueue('c')</input>
-        <output>['b', 'c']</output>
+        <input>[enqueue("A"), enqueue("B"), dequeue(), dequeue()]</input>
+        <output>Queue()</output>
       </testCase>
       <testCase>
-        <input>dequeue(), enqueue(10), enqueue(20), dequeue()</input>
-        <output>[20]</output>
+        <input>[enqueue(10), dequeue(), enqueue(20), enqueue(30)]</input>
+        <output>Queue(20, 30)</output>
       </testCase>
     </testCases>
-    <exampleSolution>
-      QUEUE = EMPTY
-      loop through OPERATIONS
-      if OPERATION is enqueue(VALUE) then
-      QUEUE.enqueue(VALUE)
-      else if OPERATION is dequeue() then
-      if not QUEUE.isEmpty() then
-      QUEUE.dequeue()
-      end if
-      end if
-      end loop
-      output QUEUE
-    </exampleSolution>
+  </challenge>
+
+  <challenge>
+    <id>5</id>
+    <title>Find Maximum in Collection</title>
+    <description>Write an algorithm to find the maximum value in a collection.</description>
+    <tags>
+      <tag>Collections</tag>
+      <tag>Loops</tag>
+    </tags>
+    <dataTypes>
+      <input>Collection of integers</input>
+      <output>Maximum integer value</output>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>Collection(1, 3, 2, 4)</input>
+        <output>4</output>
+      </testCase>
+      <testCase>
+        <input>Collection(-5, -2, -3)</input>
+        <output>-2</output>
+      </testCase>
+      <testCase>
+        <input>Collection(10)</input>
+        <output>10</output>
+      </testCase>
+    </testCases>
   </challenge>
 </challenges>
