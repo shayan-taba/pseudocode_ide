@@ -11,7 +11,14 @@ import "./ide_styles.css";
 // pages/code-editor.tsx
 
 export type TestResultType = {
-  status: "Pass" | "Fail" | "Pending" | "Syntax Error" | "Runtime Error" | "Fail (Multiple Outputs)" | "Special Error";
+  status:
+    | "Pass"
+    | "Fail"
+    | "Pending"
+    | "Syntax Error"
+    | "Runtime Error"
+    | "Fail (Multiple Outputs)"
+    | "Special Error";
   actual: string[]; // Array of actual outputs
   expected: any; // Expected output (type depends on your test case structure)
   input: any; // Input for the test case
@@ -23,6 +30,9 @@ interface IDEProps {
   tags: string[];
   difficulty: string;
   testCases: { input: any; output: any }[]; // Test case structure
+  exampleCode: string;
+  inputType: any;
+  outputType: any;
 }
 
 const IDE: React.FC<IDEProps> = ({
@@ -31,7 +41,11 @@ const IDE: React.FC<IDEProps> = ({
   tags,
   difficulty,
   testCases,
+  exampleCode,
+  inputType,
+  outputType,
 }) => {
+  console.log("MBH", inputType)
   const [code, setCode] = useState<string>("");
   const [output, setOutput] = useState<string[]>([]);
   const [userInput, setUserInput] = useState<string>("");
@@ -155,7 +169,8 @@ const IDE: React.FC<IDEProps> = ({
     setWaitingForInput(false); // Reset input state
     setIsComplete(false); // Reset completion state
     testIndexRef.current = 0; // Start from the first test case
-    setTestResults( // Reset test results
+    setTestResults(
+      // Reset test results
       testCases.map((testCase) => ({
         status: "Pending",
         actual: [],
@@ -164,96 +179,98 @@ const IDE: React.FC<IDEProps> = ({
       }))
     ); // Reset test results to their initial state
 
-
     processNextTestCase();
   };
 
   const handleSendInput = async () => {
-  setIsPopupOpen(false);
-  setWaitingForInput(false); // Hide input box while backend processes
-  await fetchFromBackend(userInput, false, testIndexRef.current); // Send user input to backend
-  setUserInput(""); // Clear input field
-};
+    setIsPopupOpen(false);
+    setWaitingForInput(false); // Hide input box while backend processes
+    await fetchFromBackend(userInput, false, testIndexRef.current); // Send user input to backend
+    setUserInput(""); // Clear input field
+  };
 
-const handleBackendResponse = (data: any) => {
-  const currentIndex = testIndexRef.current;
+  const handleBackendResponse = (data: any) => {
+    const currentIndex = testIndexRef.current;
 
-  if (!testCases[currentIndex]) {
-    console.error("No test case found at index:", currentIndex);
-    return;
-  }
+    if (!testCases[currentIndex]) {
+      console.error("No test case found at index:", currentIndex);
+      return;
+    }
 
-  setOutput((prev) => [...prev, data.output]); // Append new output
+    setOutput((prev) => [...prev, data.output]); // Append new output
 
-  const currentTest = testCases[currentIndex];
+    const currentTest = testCases[currentIndex];
 
-  // Regex to extract outputs after the UUID
-  const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
-  const outputRegex = new RegExp(`${uuid}\\s(.*?)(?:\\n|$)`, "g");
-  const validOutputs: any = [];
-  let match;
+    // Regex to extract outputs after the UUID
+    const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
+    const outputRegex = new RegExp(`${uuid}\\s(.*?)(?:\\n|$)`, "g");
+    const validOutputs: any = [];
+    let match;
 
-  while ((match = outputRegex.exec(data.output)) !== null) {
-    validOutputs.push(match[1]);
-  }
+    while ((match = outputRegex.exec(data.output)) !== null) {
+      validOutputs.push(match[1]);
+    }
 
-  // Default to "pending" while waiting for input
-  let status: TestResultType["status"] = "Pending";
+    // Default to "pending" while waiting for input
+    let status: TestResultType["status"] = "Pending";
 
-  if (data.output.includes("Syntax Error")) {
-    status = "Syntax Error";
-  } else if (data.output.includes("Runtime Error")) {
-    status = "Runtime Error";
-  } else if (validOutputs.length > 1) {
-    status = "Fail (Multiple Outputs)";
-  } else if (data.output.includes("Error: Pseudocode argument missing") || data.output.includes("Error: Failed to convert pseudocode to Python") || data.output.includes("Error during conversion")) {
-    status = "Special Error";
-  } else if (validOutputs[0] === currentTest.output) {
-    status = "Pass";
-  } else {
-    status = "Fail";
-  }
+    if (data.output.includes("Syntax Error")) {
+      status = "Syntax Error";
+    } else if (data.output.includes("Runtime Error")) {
+      status = "Runtime Error";
+    } else if (validOutputs.length > 1) {
+      status = "Fail (Multiple Outputs)";
+    } else if (
+      data.output.includes("Error: Pseudocode argument missing") ||
+      data.output.includes("Error: Failed to convert pseudocode to Python") ||
+      data.output.includes("Error during conversion")
+    ) {
+      status = "Special Error";
+    } else if (validOutputs[0] === currentTest.output) {
+      status = "Pass";
+    } else {
+      status = "Fail";
+    }
 
-  if (!data.isComplete) {
-    status = "Pending"
-  }
+    if (!data.isComplete) {
+      status = "Pending";
+    }
 
-  // Update test results with the status of the current test
-  setTestResults((prevResults) => {
-    const updatedResults = [...prevResults];
-    updatedResults[currentIndex] = {
-      ...updatedResults[currentIndex],
-      status,
-      actual: validOutputs.length > 1 ? validOutputs[0] : validOutputs,
-    };
-    return updatedResults;
-  });
+    // Update test results with the status of the current test
+    setTestResults((prevResults) => {
+      const updatedResults = [...prevResults];
+      updatedResults[currentIndex] = {
+        ...updatedResults[currentIndex],
+        status,
+        actual: validOutputs.length > 1 ? validOutputs[0] : validOutputs,
+      };
+      return updatedResults;
+    });
 
-  // Handle input requests or move to the next test case
-  if (data.requestingInput) {
-    setInputMessage("Please provide input for the program.");
-    setIsPopupOpen(true); // Show popup for user input
-    setWaitingForInput(true); // Indicate waiting state
-  } else if (data.isComplete) {
-    // Once the test completes, move to the next test case
-    testIndexRef.current += 1;
-    console.log(testCases[currentIndex])
-    processNextTestCase(); // Move to the next test case
-  }
-};
+    // Handle input requests or move to the next test case
+    if (data.requestingInput) {
+      setInputMessage("Please provide input for the program.");
+      setIsPopupOpen(true); // Show popup for user input
+      setWaitingForInput(true); // Indicate waiting state
+    } else if (data.isComplete) {
+      // Once the test completes, move to the next test case
+      testIndexRef.current += 1;
+      // console.log(testCases[currentIndex]);
+      processNextTestCase(); // Move to the next test case
+    }
+  };
 
-const processNextTestCase = async () => {
-  if (testIndexRef.current >= testCases.length) {
-    console.log("All test cases processed");
-    return; // All test cases are processed
-  }
+  const processNextTestCase = async () => {
+    if (testIndexRef.current >= testCases.length) {
+      console.log("All test cases processed");
+      return; // All test cases are processed
+    }
 
-  setWaitingForInput(false); // Reset input state
-  setIsComplete(false); // Reset completion state
+    setWaitingForInput(false); // Reset input state
+    setIsComplete(false); // Reset completion state
 
-  await fetchFromBackend("", true, testIndexRef.current); // Process current test case
-};
-
+    await fetchFromBackend("", true, testIndexRef.current); // Process current test case
+  };
 
   return (
     <div id="IDE" className="flex flex-col h-screen bg-zinc-950">
@@ -271,6 +288,8 @@ const processNextTestCase = async () => {
             setExpandInstructions={setExpandInstructions}
             instructionState={instructionState}
             toggleInstructionState={toggleInstructionState}
+            inputType={inputType}
+            outputType={outputType}
           />
         )}
 
@@ -303,7 +322,7 @@ const processNextTestCase = async () => {
         {!expandInstructions && !expandEditor && !expandResults && (
           <>
             <Instructions
-              width={"w-1/4"}
+              width={"w-[30%]"}
               title={title}
               description={description}
               tags={tags}
@@ -313,9 +332,11 @@ const processNextTestCase = async () => {
               setExpandInstructions={setExpandInstructions}
               instructionState={instructionState}
               toggleInstructionState={toggleInstructionState}
+              inputType={inputType}
+              outputType={outputType}
             />
 
-            <div className="divider flex flex-col flex-grow justify-between gap-6 w-[75%]">
+            <div className="divider flex flex-col flex-grow justify-between gap-6 w-[70%]">
               <div className="h-[49%]">
                 <Editor
                   width={"flex-grow"}

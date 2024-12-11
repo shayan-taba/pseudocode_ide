@@ -1,6 +1,5 @@
 "use client";
 
-import challenges_questions from "./challenge_questions.json";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { supabase_client } from "../api/supabase_client";
@@ -16,9 +15,8 @@ export type Challenge = {
   type: string;
 };
 
-const challenges = challenges_questions as Challenge[];
-
 export default function ChallengesPage() {
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [search, setSearch] = useState<string>(""); // Search input for title
   const [difficulty, setDifficulty] = useState<string>("All"); // Selected difficulty
   const [selectedTag, setSelectedTag] = useState<string>("All"); // Selected tag
@@ -31,14 +29,50 @@ export default function ChallengesPage() {
   useEffect(() => {
     const fetchUser = async () => {
       const { data } = await supabase_client.auth.getUser();
-      if (data?.user) {
-        setUser(data.user); // This is now valid as setUser expects User | null
-      } else {
-        setUser(null); // This is valid as well
-      }
+      setUser(data?.user || null);
     };
     fetchUser();
   }, []);
+
+  // Fetch challenges from XML
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const response = await fetch("/challenge_questions.xml");
+        const text = await response.text(); // Fetch XML as text
+        console.log("Fetched XML Text:", text);
+
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(text, "application/xml"); // Parse XML
+  
+        // Handle parse errors
+        if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+          console.error("Error parsing XML", xmlDoc.getElementsByTagName("parsererror"));
+          return;
+        }
+  
+        const challengeNodes = xmlDoc.getElementsByTagName("challenge");
+        console.log("Fetched Challenges:", challengeNodes);
+  
+        const loadedChallenges: Challenge[] = Array.from(challengeNodes).map((node) => ({
+          id: parseInt(node.getElementsByTagName("id")[0]?.textContent || "0"),
+          title: node.getElementsByTagName("title")[0]?.textContent || "",
+          description: node.getElementsByTagName("description")[0]?.textContent || "",
+          tags: Array.from(node.getElementsByTagName("tag")).map((tagNode) => tagNode.textContent || ""),
+          difficulty: (node.getElementsByTagName("difficulty")[0]?.textContent || "Easy") as "Easy" | "Medium" | "Hard",
+          type: node.getElementsByTagName("type")[0]?.textContent || "",
+        }));
+  
+        console.log("Parsed Challenges:", loadedChallenges);
+        setChallenges(loadedChallenges);
+      } catch (error) {
+        console.error("Failed to fetch or parse XML:", error);
+      }
+    };
+  
+    fetchChallenges();
+  }, []);
+  
 
   // Handle sign out
   const handleSignOut = async () => {
@@ -56,45 +90,29 @@ export default function ChallengesPage() {
   // Filter and sort challenges
   const filteredChallenges = challenges
     .filter((challenge) => {
-      // Filter by title
-      if (
-        search &&
-        !challenge.title.toLowerCase().includes(search.toLowerCase())
-      ) {
+      if (search && !challenge.title.toLowerCase().includes(search.toLowerCase()))
         return false;
-      }
-
-      // Filter by difficulty
-      if (difficulty !== "All" && challenge.difficulty !== difficulty) {
+      if (difficulty !== "All" && challenge.difficulty !== difficulty)
         return false;
-      }
-
-      // Filter by tag
-      if (selectedTag !== "All" && !challenge.tags.includes(selectedTag)) {
+      if (selectedTag !== "All" && !challenge.tags.includes(selectedTag))
         return false;
-      }
-
       return true;
     })
     .sort((a, b) => {
-      // Sort by selected criteria
-      if (sortBy === "title") {
-        return a.title.localeCompare(b.title);
-      }
+      if (sortBy === "title") return a.title.localeCompare(b.title);
       if (sortBy === "difficulty") {
         const difficultyOrder = { Easy: 1, Medium: 2, Hard: 3 };
         return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
       }
-      return 0; // Default: No sorting
+      return 0;
     });
 
   return (
     <div className="bg-gray-900 min-h-screen p-20 text-cyan-50">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Pseudocode Challenges</h1>
-        {user && (
+        {user ? (
           <div className="flex items-center space-x-4">
-            {/* Display the user's email or username */}
             <span className="text-sm font-medium text-gray-300">
               Logged in as: <span className="font-semibold">{user.email}</span>
             </span>
@@ -105,20 +123,8 @@ export default function ChallengesPage() {
               Sign Out
             </button>
           </div>
-        )}
-        {!user && (
-          <div className="flex items-center space-x-4">
-            {/* Display the user's email or username */}
-            <span className="text-sm font-medium text-gray-300">
-              Logged in as: GUEST
-            </span>
-            <button
-              onClick={handleSignOut}
-              className="bg-green-500 text-white px-4 py-2 rounded"
-            >
-              Sign In
-            </button>
-          </div>
+        ) : (
+          <span className="text-sm font-medium text-gray-300">GUEST</span>
         )}
       </div>
 
@@ -180,8 +186,6 @@ export default function ChallengesPage() {
           >
             <h2 className="text-xl font-bold">{challenge.title}</h2>
             <p>Difficulty: {challenge.difficulty}</p>
-
-            {/* Tags - Styled as badges */}
             <div className="flex flex-wrap gap-2 mt-2">
               {challenge.tags.map((tag) => (
                 <span
@@ -192,7 +196,6 @@ export default function ChallengesPage() {
                 </span>
               ))}
             </div>
-
             <Link
               href={`challenges/${challenge.id}`}
               className="text-blue-500 mt-2 inline-block"
@@ -203,21 +206,9 @@ export default function ChallengesPage() {
         ))}
       </div>
 
-      {/* No Results Found */}
       {filteredChallenges.length === 0 && (
-        <div className="text-center mt-6 text-gray-500">
-          No challenges found.
-        </div>
+        <div className="text-center mt-6 text-gray-500">No challenges found.</div>
       )}
-
-      <button
-        onClick={() => {
-          router.push("challenges/playground");
-        }}
-        className="bg-green-500 text-white px-4 py-2 mt-4 rounded"
-      >
-        IDE Playground
-      </button>
     </div>
   );
 }

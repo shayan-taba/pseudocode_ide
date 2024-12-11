@@ -22,8 +22,10 @@ interface InstructionsProps {
   testCases: { input: string; output: string }[]; // Test case structure
   expandInstructions: boolean;
   setExpandInstructions: Dispatch<React.SetStateAction<boolean>>;
-  instructionState: string;
+  instructionState: "task" | "solution";
   toggleInstructionState: () => void;
+  inputType: any;
+  outputType: any;
 }
 
 const Instructions: React.FC<InstructionsProps> = ({
@@ -36,7 +38,9 @@ const Instructions: React.FC<InstructionsProps> = ({
   expandInstructions,
   setExpandInstructions,
   instructionState,
-  toggleInstructionState
+  toggleInstructionState,
+  inputType,
+  outputType,
 }) => {
   const router = useRouter();
 
@@ -76,32 +80,102 @@ const Instructions: React.FC<InstructionsProps> = ({
           </button>
         </div>
       </div>
-      <div className={`container-body overflow-y-auto`}>
-        <h2 className="text-lg font-bold mb-2">{title}</h2>
-        <p className="text-sm mb2">{description}</p>
-        {/* Tags - Styled as badges */}
-        <div className="flex flex-wrap gap-2 mt-2">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-3 py-1 text-sm font-semibold text-white bg-blue-500 rounded-full"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-2 mt-2 mb-2">
-          <span
-            key={difficulty}
-            className="px-3 py-1 text-sm font-semibold text-white bg-blue-500 rounded-full"
-          >
-            {difficulty}
-          </span>
-        </div>
-        <p className="text-sm mb2">
-          Enter pseudocode in the editor. Once ready, press "Run Code" to
-          execute the code and see the output.
-        </p>
+      <div className={`container-body scrollable-container`}>
+        {instructionState == "task" && (
+          <div>
+            <h2 className="text-4xl font-bold mb-4">{title}</h2>
+
+            <h3 className="text-2xl font-semibold mb-2">Task</h3>
+            <p className="text-base mb-4">{description}</p>
+
+            {/*<h3 className="text-2xl font-semibold mb-2">Tags and Difficulty</h3>*/}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1 text-sm font-semibold bg-blue-500 rounded-full"
+                >
+                  {tag}
+                </span>
+              ))}
+              <span
+                key={difficulty}
+                className="px-3 py-1 text-sm font-semibold bg-purple-500 rounded-full"
+              >
+                Difficulty: {difficulty}
+              </span>
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-2xl font-semibold mb-3">
+                Instructions
+              </h3>
+              <ul className="list-disc list-inside text-base space-y-2">
+                <li>Enter your pseudocode in the editor.</li>
+                <li>
+                  Access the input for each test case using the variable{" "}
+                  <code className="bg-slate-700 px-1 py-0.5 rounded">
+                    TEST_CASE
+                  </code>
+                  .
+                </li>
+                <li>
+                  Ensure your code outputs the result using{" "}
+                  <code className="bg-slate-700 px-1 py-0.5 rounded">
+                    output
+                  </code>
+                  .
+                </li>
+                <li>
+                  Once ready, press <strong>Run Code</strong> to execute your
+                  code and view results in the Outcome/Output panel.
+                </li>
+              </ul>
+            </div>
+
+            <h3 className="text-2xl font-semibold mb-2">
+              Input and Output Types
+            </h3>
+            <div className="bg-slate-700 p-4 border rounded-xl mb-4">
+              <p className="text-sm mb-2">
+                <strong>Input Type:</strong>{" "}
+                <span className="text-blue-300">{inputType}</span>
+              </p>
+              <p className="text-sm">
+                <strong>Output Type:</strong>{" "}
+                <span className="text-purple-300">{outputType}</span>
+              </p>
+              <p className="text-sm mt-2 text-gray-200">
+                Note: Each "Test Case" follows the <strong>Input Type</strong>{" "}
+                format, and your solution's output is validated against the{" "}
+                <strong>Expected Output</strong>.
+              </p>
+            </div>
+
+            {testCases.length > 0 && (
+              <>
+                <h3 className="text-2xl font-semibold mb-2 ">
+                  Example Test Case
+                </h3>
+                <div className="bg-slate-700 p-4 border rounded-2xl mb-4 shadow-sm">
+                  <p className="text-sm mb-2">
+                    <strong>Input:</strong>{" "}
+                    <span className="text-blue-300">
+                      {JSON.stringify(testCases[0].input)}
+                    </span>
+                  </p>
+                  <p className="text-sm">
+                    <strong>Expected Output:</strong>{" "}
+                    <span className="text-purple-300">
+                      {JSON.stringify(testCases[0].output)}
+                    </span>
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+        {instructionState == "solution" && <></>}
       </div>
     </div>
   );

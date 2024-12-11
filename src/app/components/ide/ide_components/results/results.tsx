@@ -90,7 +90,7 @@ const Results: React.FC<ResultsProps> = ({
     <div
       className={`container-els ${!expandResults ? "h-[100%]" : ""} ${width}`}
     >
-      <div className="container-headings text-fuchsia-400">
+      <div className="container-headings text-purple-400">
         <div className="container-nav-box">
           <div
             className={`container-navs ${
