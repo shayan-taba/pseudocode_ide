@@ -9,13 +9,15 @@ let isWaitingForInput = false;
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const { pseudocode, userInput, run, test_case_input } = body;
+  const { pseudocode, userInput, run, test_case_input, test_case_index } = body;
 
   // If no process exists, spawn a new one
 
   //console.log("pythonProcess STAT", pythonProcess);
 
   if (run) {
+
+    bufferedOutput = `________________________________________________\nRUNNING TEST CASE ${test_case_index+1}\n`
 
     isWaitingForInput = false
 
@@ -93,4 +95,5 @@ export async function POST(req: Request) {
 
     return NextResponse.json(response);
   }
+  return NextResponse.json("");
 }

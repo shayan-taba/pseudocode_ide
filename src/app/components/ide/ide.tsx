@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "./ide_components/nav_bar";
 import Instructions from "./ide_components/instructions/instructions";
 import Editor from "./ide_components/editor/editor";
@@ -9,6 +9,13 @@ import Popup from "./ide_components/input_popup";
 
 import "./ide_styles.css";
 // pages/code-editor.tsx
+
+export type TestResultType = {
+  status: "Pass" | "Fail" | "Pending" | "Syntax Error" | "Runtime Error" | "Fail (Multiple Outputs)" | "Special Error";
+  actual: string[]; // Array of actual outputs
+  expected: any; // Expected output (type depends on your test case structure)
+  input: any; // Input for the test case
+};
 
 interface IDEProps {
   title: string;
@@ -35,8 +42,6 @@ const IDE: React.FC<IDEProps> = ({
   const [expandEditor, setExpandEditor] = useState<boolean>(false);
   const [expandResults, setExpandResults] = useState<boolean>(false);
 
-  const [testIndex, setTestIndex] = useState<number>(0);
-
   const [inputMessage, setInputMessage] = useState<string>("");
 
   const [instructionState, setInstructionState] = useState<"task" | "solution">(
@@ -44,6 +49,32 @@ const IDE: React.FC<IDEProps> = ({
   );
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const pollerRef = useRef<NodeJS.Timeout | null>(null);
+  const testIndexRef = useRef<number>(0);
+
+  /*const [testResults, setTestResults] = useState<{ 
+    status: string; 
+    actual: string[]; 
+    expected: any; 
+    input: any 
+  }[]>(
+    testCases.map((testCase) => ({
+      status: "pending", 
+      actual: [], 
+      expected: testCase.output, 
+      input: testCase.input
+    }))
+  );*/
+
+  const [testResults, setTestResults] = useState<TestResultType[]>(
+    testCases.map((testCase) => ({
+      status: "Pending",
+      actual: [],
+      expected: testCase.output,
+      input: testCase.input,
+    }))
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(e.target.value);
@@ -67,14 +98,10 @@ const IDE: React.FC<IDEProps> = ({
 
   useEffect(() => {
     if (!testCases) {
-      setTestIndex(-1); // -1 means playground mode
+      testIndexRef.current = -1; // -1 means playground mode
     }
-  }, []);
+  }, [testCases]);
 
-  useEffect(() => {
-  }, [output]);
-
-  // Calculate widths dynamically
   useEffect(() => {
     if (expandInstructions) {
       setExpandEditor(false);
@@ -96,7 +123,11 @@ const IDE: React.FC<IDEProps> = ({
     }
   }, [expandResults]);
 
-  const fetchFromBackend = async (input: string, run: boolean) => {
+  const fetchFromBackend = async (
+    input: string,
+    run: boolean,
+    test_case_index: number
+  ) => {
     if (code.trim()) {
       const response = await fetch("/api/compile", {
         method: "POST",
@@ -105,8 +136,8 @@ const IDE: React.FC<IDEProps> = ({
           pseudocode: code,
           userInput: input,
           run: run,
-          test_case_input:
-            testIndex != -1 ? testCases[testIndex].input : undefined,
+          test_case_input: testCases[test_case_index].input,
+          test_case_index: test_case_index,
         }),
       });
 
@@ -123,37 +154,106 @@ const IDE: React.FC<IDEProps> = ({
     setOutput([]); // Clear previous output
     setWaitingForInput(false); // Reset input state
     setIsComplete(false); // Reset completion state
-    await fetchFromBackend("", true); // Start execution with no input
+    testIndexRef.current = 0; // Start from the first test case
+    setTestResults( // Reset test results
+      testCases.map((testCase) => ({
+        status: "Pending",
+        actual: [],
+        expected: testCase.output,
+        input: testCase.input,
+      }))
+    ); // Reset test results to their initial state
+
+
+    processNextTestCase();
   };
 
   const handleSendInput = async () => {
-    setIsPopupOpen(false);
-    setWaitingForInput(false); // Hide input box while backend processes
-    await fetchFromBackend(userInput, false); // Send user input to backend
-    setUserInput(""); // Clear input field
-  };
+  setIsPopupOpen(false);
+  setWaitingForInput(false); // Hide input box while backend processes
+  await fetchFromBackend(userInput, false, testIndexRef.current); // Send user input to backend
+  setUserInput(""); // Clear input field
+};
 
-  const handleBackendResponse = (data: any) => {
-    console.log(data.output, "prior output", output);
-    if (data.output) {
-      setInputMessage(data.output);
-      setOutput((prev) => [...prev, data.output]); // Append new output
-    }
+const handleBackendResponse = (data: any) => {
+  const currentIndex = testIndexRef.current;
 
-    setWaitingForInput(data.requestingInput); // Update input request state
-    setIsComplete(data.isComplete); // Update completion state
-  };
+  if (!testCases[currentIndex]) {
+    console.error("No test case found at index:", currentIndex);
+    return;
+  }
 
-  useEffect(() => {
-    setIsPopupOpen(waitingForInput);
+  setOutput((prev) => [...prev, data.output]); // Append new output
 
-    if (!waitingForInput && !isComplete) {
-      const interval = setInterval(async () => {
-        await fetchFromBackend("", false); // Poll backend with no additional input
-      }, 500); // Adjust polling interval as needed (500ms here)
-      return () => clearInterval(interval); // Clear polling interval when done
-    }
-  }, [waitingForInput, isComplete]);
+  const currentTest = testCases[currentIndex];
+
+  // Regex to extract outputs after the UUID
+  const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
+  const outputRegex = new RegExp(`${uuid}\\s(.*?)(?:\\n|$)`, "g");
+  const validOutputs: any = [];
+  let match;
+
+  while ((match = outputRegex.exec(data.output)) !== null) {
+    validOutputs.push(match[1]);
+  }
+
+  // Default to "pending" while waiting for input
+  let status: TestResultType["status"] = "Pending";
+
+  if (data.output.includes("Syntax Error")) {
+    status = "Syntax Error";
+  } else if (data.output.includes("Runtime Error")) {
+    status = "Runtime Error";
+  } else if (validOutputs.length > 1) {
+    status = "Fail (Multiple Outputs)";
+  } else if (data.output.includes("Error: Pseudocode argument missing") || data.output.includes("Error: Failed to convert pseudocode to Python") || data.output.includes("Error during conversion")) {
+    status = "Special Error";
+  } else if (validOutputs[0] === currentTest.output) {
+    status = "Pass";
+  } else {
+    status = "Fail";
+  }
+
+  if (!data.isComplete) {
+    status = "Pending"
+  }
+
+  // Update test results with the status of the current test
+  setTestResults((prevResults) => {
+    const updatedResults = [...prevResults];
+    updatedResults[currentIndex] = {
+      ...updatedResults[currentIndex],
+      status,
+      actual: validOutputs.length > 1 ? validOutputs[0] : validOutputs,
+    };
+    return updatedResults;
+  });
+
+  // Handle input requests or move to the next test case
+  if (data.requestingInput) {
+    setInputMessage("Please provide input for the program.");
+    setIsPopupOpen(true); // Show popup for user input
+    setWaitingForInput(true); // Indicate waiting state
+  } else if (data.isComplete) {
+    // Once the test completes, move to the next test case
+    testIndexRef.current += 1;
+    console.log(testCases[currentIndex])
+    processNextTestCase(); // Move to the next test case
+  }
+};
+
+const processNextTestCase = async () => {
+  if (testIndexRef.current >= testCases.length) {
+    console.log("All test cases processed");
+    return; // All test cases are processed
+  }
+
+  setWaitingForInput(false); // Reset input state
+  setIsComplete(false); // Reset completion state
+
+  await fetchFromBackend("", true, testIndexRef.current); // Process current test case
+};
+
 
   return (
     <div id="IDE" className="flex flex-col h-screen bg-zinc-950">
@@ -195,6 +295,8 @@ const IDE: React.FC<IDEProps> = ({
             setExpandResults={setExpandResults}
             resultState={resultState}
             toggleResultsState={toggleResultsState}
+            testResults={testResults}
+            testCases={testCases}
           />
         )}
 
@@ -234,13 +336,14 @@ const IDE: React.FC<IDEProps> = ({
                   setExpandResults={setExpandResults}
                   resultState={resultState}
                   toggleResultsState={toggleResultsState}
+                  testResults={testResults}
+                  testCases={testCases}
                 />
               </div>
             </div>
           </>
         )}
       </div>
-
       <Popup
         isOpen={isPopupOpen}
         userInput={userInput}

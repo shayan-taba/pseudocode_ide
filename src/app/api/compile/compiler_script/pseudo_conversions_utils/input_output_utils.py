@@ -7,7 +7,8 @@ def pseudo_output_to_python_print(line: str) -> str:
     subtracted_start = len("output ")
     ouput_values = re.split(" , |, | ,|,", line.rstrip()[subtracted_start:])
     python_conversion = (
-        f"print({', '.join([ouput_value for ouput_value in ouput_values])})"
+        f"print('49e7d449-5214-4b8f-8743-888c6009c227',{', '.join([ouput_value for ouput_value in ouput_values])})"
+        ## uuid to signal output
     )
     return python_conversion
 

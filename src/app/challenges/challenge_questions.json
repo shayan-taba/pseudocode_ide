@@ -1,5 +1,4 @@
 [
-
   {
     "id": 5,
     "title": "String Reverse",
@@ -18,6 +17,26 @@
       {
         "input": "Computer Science is awesome",
         "output": "emosewa si ecneicS retupmoC"
+      },
+      {
+        "input": "Python",
+        "output": "nohtyP"
+      },
+      {
+        "input": "Reverse this string",
+        "output": "gnirts siht esreveR"
+      },
+      {
+        "input": "12345",
+        "output": "54321"
+      },
+      {
+        "input": "Racecar",
+        "output": "racecaR"
+      },
+      {
+        "input": "Palindrome",
+        "output": "emordnilaP"
       }
     ]
   }
