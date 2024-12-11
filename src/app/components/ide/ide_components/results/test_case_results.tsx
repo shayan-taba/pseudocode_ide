@@ -1,37 +1,37 @@
-// TestCaseResult.tsx
 import React from "react";
 import SkeletonLoader from "./skeleton_loader";
+import { TestResultType } from "../../ide";
 
 const TestCaseResult: React.FC<{
   testCaseIndex: number;
-  result: { 
-    status: string; 
-    actual: string[]; 
-    expected: any; 
-    input: any 
-  };
+  result:TestResultType;
   isLast: boolean;
 }> = ({ testCaseIndex, result, isLast }) => {
+  const getStatusClass = () => {
+    switch (result.status) {
+      case "Pass":
+        return "border-green-500 text-green-500";
+      case "Fail":
+        return "border-red-500 text-red-500";
+      case "Syntax Error":
+        return "border-yellow-500 text-yellow-500";
+      case "Runtime Error":
+        return "border-blue-500 text-blue-500";
+      default:
+        return "border-gray-300 text-gray-500";
+    }
+  };
+
   return (
     <div
-      className={`border p-4 rounded-md mb-4 ${
-        result.status === "passed"
-          ? "border-green-500"
-          : result.status === "failed"
-          ? "border-red-500"
-          : result.status === "syntax error"
-          ? "border-yellow-500"
-          : result.status === "runtime error"
-          ? "border-blue-500"
-          : "border-gray-300"
-      }`}
+      className={`border p-4 rounded-md mb-4 ${getStatusClass()}`}
     >
       <div className="font-bold">
         Test Case {testCaseIndex + 1}
         {isLast && <span className="text-gray-500 italic ml-2">(Hidden)</span>}
       </div>
 
-      {result.status === "pending" ? (
+      {result.status === "Pending" ? (
         <SkeletonLoader />
       ) : (
         <>
@@ -39,40 +39,28 @@ const TestCaseResult: React.FC<{
             <>
               <div className="mt-2">
                 <span className="font-medium">Input:</span>{" "}
-                <span className="text-gray-700">
+                <code className="text-gray-700">
                   {JSON.stringify(result.input)}
-                </span>
+                </code>
               </div>
               <div className="mt-2">
                 <span className="font-medium">Expected Output:</span>{" "}
-                <span className="text-gray-700">
+                <code className="text-gray-700">
                   {JSON.stringify(result.expected)}
-                </span>
+                </code>
               </div>
             </>
           )}
 
           <div className="mt-2">
             <span className="font-medium">Actual Output:</span>{" "}
-            <span className="text-gray-700">
+            <code className="text-gray-700">
               {JSON.stringify(result.actual)}
-            </span>
+            </code>
           </div>
           <div className="mt-2">
             <span className="font-medium">Status:</span>{" "}
-            <span
-              className={`${
-                result.status === "passed"
-                  ? "text-green-500"
-                  : result.status === "failed"
-                  ? "text-red-500"
-                  : result.status === "syntax error"
-                  ? "text-yellow-500"
-                  : "text-blue-500"
-              }`}
-            >
-              {result.status}
-            </span>
+            <span className={getStatusClass()}>{result.status}</span>
           </div>
         </>
       )}

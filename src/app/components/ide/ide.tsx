@@ -10,6 +10,13 @@ import Popup from "./ide_components/input_popup";
 import "./ide_styles.css";
 // pages/code-editor.tsx
 
+export type TestResultType = {
+  status: "Pass" | "Fail" | "Pending" | "Syntax Error" | "Runtime Error" | "Fail (Multiple Outputs)" | "Special Fail";
+  actual: string[]; // Array of actual outputs
+  expected: any; // Expected output (type depends on your test case structure)
+  input: any; // Input for the test case
+};
+
 interface IDEProps {
   title: string;
   description: string;
@@ -60,9 +67,9 @@ const IDE: React.FC<IDEProps> = ({
     }))
   );*/
 
-  const [testResults, setTestResults] = useState(
+  const [testResults, setTestResults] = useState<TestResultType[]>(
     testCases.map((testCase) => ({
-      status: "pending",
+      status: "Pending",
       actual: [],
       expected: testCase.output,
       input: testCase.input,
@@ -182,7 +189,8 @@ const handleBackendResponse = (data: any) => {
   }
 
   // Check for special cases
-  let status;
+  let status: TestResultType["status"];
+
   if (data.output.includes("Syntax Error")) {
     status = "Syntax Error";
   } else if (data.output.includes("Runtime Error")) {
@@ -201,7 +209,7 @@ const handleBackendResponse = (data: any) => {
     updatedResults[currentIndex] = {
       ...updatedResults[currentIndex],
       status,
-      actual: validOutputs,
+      actual: validOutputs.length>1 ? validOutputs[0] :  validOutputs,
     };
     return updatedResults;
   });

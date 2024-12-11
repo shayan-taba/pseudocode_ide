@@ -17,6 +17,7 @@ import {
   ArrowsPointingInIcon,
 } from "@heroicons/react/24/solid";
 import TestCaseResult from "./test_case_results";
+import { TestResultType } from "../../ide";
 
 interface ResultsProps {
   width: string;
@@ -27,12 +28,7 @@ interface ResultsProps {
   setExpandResults: Dispatch<React.SetStateAction<boolean>>;
   resultState: "outcome" | "output";
   toggleResultsState: () => void;
-  testResults: { 
-    status: string; 
-    actual: string[]; 
-    expected: any; 
-    input: any 
-  }[];
+  testResults: TestResultType[];
   testCases: { input: any; output: any }[];
 }
 
@@ -132,7 +128,7 @@ const Results: React.FC<ResultsProps> = ({
           </>
         )}
         {resultState == "outcome" && (
-          <div className="p-4 rounded-md scrollable-container">
+          <div className="pr-4 rounded-md scrollable-container">
           {testResults.map((result, index) => (
             <TestCaseResult
               key={index}
