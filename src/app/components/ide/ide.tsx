@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "./ide_components/nav_bar";
 import Instructions from "./ide_components/instructions/instructions";
 import Editor from "./ide_components/editor/editor";
@@ -35,8 +35,6 @@ const IDE: React.FC<IDEProps> = ({
   const [expandEditor, setExpandEditor] = useState<boolean>(false);
   const [expandResults, setExpandResults] = useState<boolean>(false);
 
-  const [testIndex, setTestIndex] = useState<number>(0);
-
   const [inputMessage, setInputMessage] = useState<string>("");
 
   const [instructionState, setInstructionState] = useState<"task" | "solution">(
@@ -44,6 +42,9 @@ const IDE: React.FC<IDEProps> = ({
   );
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const pollerRef = useRef<NodeJS.Timeout | null>(null);
+  const testIndexRef = useRef<number>(0);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(e.target.value);
@@ -67,14 +68,10 @@ const IDE: React.FC<IDEProps> = ({
 
   useEffect(() => {
     if (!testCases) {
-      setTestIndex(-1); // -1 means playground mode
+      testIndexRef.current = -1; // -1 means playground mode
     }
-  }, []);
+  }, [testCases]);
 
-  useEffect(() => {
-  }, [output]);
-
-  // Calculate widths dynamically
   useEffect(() => {
     if (expandInstructions) {
       setExpandEditor(false);
@@ -96,8 +93,11 @@ const IDE: React.FC<IDEProps> = ({
     }
   }, [expandResults]);
 
-  const fetchFromBackend = async (input: string, run: boolean) => {
+  const fetchFromBackend = async (input: string, run: boolean, test_case_index: number) => {
     if (code.trim()) {
+      const testCaseInput =
+        testIndexRef.current !== -1 ? testCases[testIndexRef.current].input : undefined;
+
       const response = await fetch("/api/compile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -105,8 +105,8 @@ const IDE: React.FC<IDEProps> = ({
           pseudocode: code,
           userInput: input,
           run: run,
-          test_case_input:
-            testIndex != -1 ? testCases[testIndex].input : undefined,
+          test_case_input: testCaseInput,
+          test_case_index: test_case_index
         }),
       });
 
@@ -123,18 +123,30 @@ const IDE: React.FC<IDEProps> = ({
     setOutput([]); // Clear previous output
     setWaitingForInput(false); // Reset input state
     setIsComplete(false); // Reset completion state
-    await fetchFromBackend("", true); // Start execution with no input
+    testIndexRef.current = 0; // Start from the first test case
+
+    processNextTestCase();
+  };
+
+  const processNextTestCase = async () => {
+    if (testIndexRef.current >= testCases.length) {
+      return; // All test cases are processed
+    }
+
+    setWaitingForInput(false); // Reset input state
+    setIsComplete(false); // Reset completion state
+
+    await fetchFromBackend("", true, testIndexRef.current); // Process current test case
   };
 
   const handleSendInput = async () => {
     setIsPopupOpen(false);
     setWaitingForInput(false); // Hide input box while backend processes
-    await fetchFromBackend(userInput, false); // Send user input to backend
+    await fetchFromBackend(userInput, false, 0); // Send user input to backend
     setUserInput(""); // Clear input field
   };
 
   const handleBackendResponse = (data: any) => {
-    console.log(data.output, "prior output", output);
     if (data.output) {
       setInputMessage(data.output);
       setOutput((prev) => [...prev, data.output]); // Append new output
@@ -142,17 +154,37 @@ const IDE: React.FC<IDEProps> = ({
 
     setWaitingForInput(data.requestingInput); // Update input request state
     setIsComplete(data.isComplete); // Update completion state
+
+    if (data.isComplete && !data.requestingInput) {
+      testIndexRef.current += 1; // Move to the next test case
+      processNextTestCase();
+    }
   };
+
+  useEffect(() => {
+    console.log("outcal",output)
+  }, [output]);
 
   useEffect(() => {
     setIsPopupOpen(waitingForInput);
 
-    if (!waitingForInput && !isComplete) {
-      const interval = setInterval(async () => {
-        await fetchFromBackend("", false); // Poll backend with no additional input
+    if (waitingForInput || isComplete) {
+      if (pollerRef.current) {
+        clearInterval(pollerRef.current);
+        pollerRef.current = null;
+      }
+    } else {
+      pollerRef.current = setInterval(async () => {
+        await fetchFromBackend("", false, 0); // Poll backend with no additional input
       }, 500); // Adjust polling interval as needed (500ms here)
-      return () => clearInterval(interval); // Clear polling interval when done
     }
+
+    return () => {
+      if (pollerRef.current) {
+        clearInterval(pollerRef.current);
+        pollerRef.current = null;
+      }
+    };
   }, [waitingForInput, isComplete]);
 
   return (
@@ -240,7 +272,6 @@ const IDE: React.FC<IDEProps> = ({
           </>
         )}
       </div>
-
       <Popup
         isOpen={isPopupOpen}
         userInput={userInput}

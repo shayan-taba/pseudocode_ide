@@ -1,5 +1,4 @@
 [
-
   {
     "id": 5,
     "title": "String Reverse",
@@ -12,12 +11,32 @@
     "type": "Algorithm",
     "testCases": [
       {
-        "input": "Hello",
+        "input": "T1",
         "output": "olleH"
       },
       {
-        "input": "Computer Science is awesome",
+        "input": "T2",
         "output": "emosewa si ecneicS retupmoC"
+      },
+      {
+        "input": "T3",
+        "output": "nohtyP"
+      },
+      {
+        "input": "T4",
+        "output": "gnirts siht esreveR"
+      },
+      {
+        "input": "T5",
+        "output": "54321"
+      },
+      {
+        "input": "T6",
+        "output": "racecaR"
+      },
+      {
+        "input": "T7",
+        "output": "emordnilaP"
       }
     ]
   }

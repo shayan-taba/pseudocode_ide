@@ -29,7 +29,7 @@ def syntax_check_and_run_converted(code_string, test_case_input):
             e.lineno - 1
         ]  # Get the error containing line
         return (
-            f"Syntax error on line {e.lineno}: {e.msg}\n"
+            f"Syntax Error on line {e.lineno}: {e.msg}\n"
             # f"Error in line:\n{error_line}\n"
             # f"{' ' * (e.offset - 1)}^"
             # Find where the error was from
@@ -38,7 +38,7 @@ def syntax_check_and_run_converted(code_string, test_case_input):
     checked_variable_assignments = check_valid_variable_assignment(code_string)
     # in tuple checked_variable_assignments, the first item is boolean of success, the second item is line number, the third item is variable name
     if not checked_variable_assignments[0]:
-        return f"Syntax error on line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}, must only contain uppercase alphabetic characters (A-Z) and underscores"
+        return f"Syntax Error on line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}, must only contain uppercase alphabetic characters (A-Z) and underscores"
 
     try:
         # Syntax is valid as not errors have been raised, execute the code and handle input/output
