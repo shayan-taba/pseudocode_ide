@@ -15,8 +15,10 @@ import { Dispatch, SetStateAction, useState } from "react";
 
 import Task from "./task";
 import Solution from "./solution";
+import { TestResultType } from "../../ide";
 
 interface InstructionsProps {
+  id: number;
   width: string;
   title: string;
   description: string;
@@ -31,9 +33,12 @@ interface InstructionsProps {
   outputType: any;
   inputName: string;
   exampleSolution: string;
+  testResults: TestResultType[];
+  completeStatus: boolean | undefined;
 }
 
 const Instructions: React.FC<InstructionsProps> = ({
+  id,
   width,
   title,
   description,
@@ -48,6 +53,8 @@ const Instructions: React.FC<InstructionsProps> = ({
   outputType,
   inputName,
   exampleSolution,
+  testResults,
+  completeStatus,
 }) => {
   const router = useRouter();
 
@@ -108,6 +115,7 @@ const Instructions: React.FC<InstructionsProps> = ({
       <div className={`container-body scrollable-container`}>
         {instructionState == "task" && (
           <Task
+            id={id}
             outputType={outputType}
             testCases={testCases}
             title={title}
@@ -116,6 +124,8 @@ const Instructions: React.FC<InstructionsProps> = ({
             tags={tags}
             inputName={inputName}
             inputType={inputType}
+            testResults={testResults}
+            completeStatus={completeStatus}
           />
         )}
         {instructionState == "solution" && (

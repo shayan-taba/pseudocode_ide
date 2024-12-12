@@ -129,6 +129,7 @@ export default function Challenge({
       )}
       {!isPlayground && challenge && (
         <IDE
+          id={challenge.id}
           title={challenge.title}
           description={challenge.description}
           tags={challenge.tags}

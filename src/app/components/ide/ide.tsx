@@ -25,6 +25,7 @@ export type TestResultType = {
 };
 
 interface IDEProps {
+  id: number;
   title: string;
   description: string;
   tags: string[];
@@ -37,6 +38,7 @@ interface IDEProps {
 }
 
 const IDE: React.FC<IDEProps> = ({
+  id,
   title,
   description,
   tags,
@@ -47,6 +49,7 @@ const IDE: React.FC<IDEProps> = ({
   outputType,
   inputName,
 }) => {
+  const [completeStatus, setCompleteStatus] = useState<boolean | undefined>();
   const [code, setCode] = useState<string>("");
   const [output, setOutput] = useState<string[]>([]);
   const [userInput, setUserInput] = useState<string>("");
@@ -276,6 +279,7 @@ const IDE: React.FC<IDEProps> = ({
   };
 
   const instructionArgs = {
+    id: id,
     title: title,
     description: description,
     tags: tags,
@@ -289,6 +293,8 @@ const IDE: React.FC<IDEProps> = ({
     outputType: outputType,
     inputName: inputName,
     exampleSolution: exampleCode,
+    testResults: testResults,
+    completeStatus: completeStatus,
   };
 
   const editorArgs = {
@@ -300,6 +306,7 @@ const IDE: React.FC<IDEProps> = ({
   };
 
   const resultsArgs = {
+    id: id,
     output: output,
     isComplete: isComplete,
     onClearOutput: () => setOutput([]),
@@ -309,6 +316,7 @@ const IDE: React.FC<IDEProps> = ({
     toggleResultsState: toggleResultsState,
     testResults: testResults,
     testCases: testCases,
+    setCompleteStatus: setCompleteStatus,
   };
 
   return (

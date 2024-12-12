@@ -20,8 +20,10 @@ import {
 } from "@heroicons/react/24/solid";
 import TestCaseResult from "./test_case_results";
 import { TestResultType } from "../../ide";
+import { consoleLight } from "@uiw/codemirror-themes-all";
 
 interface ResultsProps {
+  id: number;
   width: string;
   output: string[];
   isComplete: boolean;
@@ -32,9 +34,11 @@ interface ResultsProps {
   toggleResultsState: () => void;
   testResults: TestResultType[];
   testCases: { input: any; output: any }[];
+  setCompleteStatus: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
 
 const Results: React.FC<ResultsProps> = ({
+  id,
   width,
   output,
   isComplete,
@@ -44,6 +48,7 @@ const Results: React.FC<ResultsProps> = ({
   expandResults,
   onClearOutput,
   testResults,
+  setCompleteStatus,
 }) => {
   const preRef = useRef<HTMLPreElement>(null);
 
@@ -52,6 +57,22 @@ const Results: React.FC<ResultsProps> = ({
       preRef.current.scrollTop = preRef.current.scrollHeight;
     }
   }, [output, resultState]); // Runs whenever "output", "resultState" changes
+
+  useEffect(() => {
+    console.log("setting local data to pass");
+    const allPassed = testResults.every((result) => result.status === "Pass");
+
+    // Update localStorage with the completion status
+    if (allPassed) {
+      localStorage.setItem(
+        `challenge-${id}`,
+        JSON.stringify({ status: allPassed })
+      );
+      setCompleteStatus(true);
+    } else {
+      setCompleteStatus(false);
+    }
+  }, [testResults, id]);
 
   const summarizeTestResults = () => {
     const allPassed = testResults.every((result) => result.status === "Pass");
@@ -69,14 +90,20 @@ const Results: React.FC<ResultsProps> = ({
         <div className="flex flex-col">
           {allPassed && (
             <>
-              <div className="text-green-300 w-[100%] items-center flex flex-row gap-2 font-bold">Overall Status: Pass{/*<CheckCircleIcon className="h-5 w-5 mr-2" />*/} </div>
+              <div className="text-green-300 w-[100%] items-center flex flex-row gap-2 font-bold">
+                Overall Status: Pass
+                {/*<CheckCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
+              </div>
               <span className="text-green-300">All tests passed!</span>
             </>
           )}
 
           {hasErrors && (
             <>
-              <div className="text-yellow-300 w-[100%] items-center flex flex-row gap-2 font-bold">Overall Status: Error{/*<ExclamationCircleIcon className="h-5 w-5 mr-2" />*/} </div>
+              <div className="text-yellow-300 w-[100%] items-center flex flex-row gap-2 font-bold">
+                Overall Status: Error
+                {/*<ExclamationCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
+              </div>
               <span className="text-yellow-300">
                 Syntax or runtime errors occurred on at least one "Test Case".
                 Check the output console for details on the error and to see on
@@ -86,7 +113,10 @@ const Results: React.FC<ResultsProps> = ({
           )}
           {hasMismatch && (
             <>
-              <div className="text-red-300 w-[100%] items-center flex flex-row gap-2 font-bold">Overall Status: Fail{/*<XCircleIcon className="h-5 w-5 mr-2" />*/} </div>
+              <div className="text-red-300 w-[100%] items-center flex flex-row gap-2 font-bold">
+                Overall Status: Fail
+                {/*<XCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
+              </div>
               <span className="text-red-300">
                 No errors occurred, but the output wasn't expected on at least
                 one "Test Case". Click on "Show Details" for further information
@@ -94,11 +124,11 @@ const Results: React.FC<ResultsProps> = ({
               </span>
             </>
           )}
-          {
-            !allPassed && !hasErrors && !hasMismatch && (
-              <p className="text-lg font-bold">Run your code to see the results below.</p>
-            )
-          }
+          {!allPassed && !hasErrors && !hasMismatch && (
+            <p className="text-lg font-bold">
+              Run your code to see the results below.
+            </p>
+          )}
         </div>
       </>
     );
@@ -173,9 +203,7 @@ const Results: React.FC<ResultsProps> = ({
               (output.join("\n").includes("Code executed successfully.") ? (
                 <p className="text-green-200">Execution Completed</p>
               ) : (
-                <p className="text-red-200">
-                  Error on Conversion to Python
-                </p>
+                <p className="text-red-200">Error on Conversion to Python</p>
               ))}
           </>
         )}

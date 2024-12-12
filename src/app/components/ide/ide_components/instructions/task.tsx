@@ -1,4 +1,12 @@
+import React, { useState, useEffect } from "react";
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+} from "@heroicons/react/24/solid";
+import { TestResultType } from "../../ide";
+
 interface TaskProps {
+  id: number; // Task ID to fetch the completion status
   title: string;
   description: string;
   tags: string[];
@@ -7,9 +15,12 @@ interface TaskProps {
   inputType: any;
   outputType: any;
   inputName: string;
+  testResults: TestResultType[];
+  completeStatus: boolean | undefined;
 }
 
 const Task: React.FC<TaskProps> = ({
+  id,
   title,
   description,
   tags,
@@ -18,16 +29,54 @@ const Task: React.FC<TaskProps> = ({
   inputType,
   outputType,
   inputName,
+  testResults,
+  completeStatus,
 }) => {
+  const [completionStatus, setCompletionStatus] = useState<{
+    status: boolean;
+    message: string;
+  }>({ status: false, message: "Not Complete" });
 
-    return (
+  useEffect(() => {
+    // Function to get the completion status from localStorage
+    const fetchCompletionStatus = () => {
+      const storedData = localStorage.getItem(`challenge-${id}`);
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        setCompletionStatus({
+          status: parsedData.status,
+          message: parsedData.status ? "Complete" : "Not Complete",
+        });
+      }
+    };
+
+    fetchCompletionStatus();
+  },[completeStatus]);
+
+  return (
     <div>
       <h2 className="text-4xl font-bold mb-4">{title}</h2>
+
+      {/* Completion Status */}
+      <div className="flex items-center gap-2 mb-4">
+        {completionStatus.status ? (
+          <CheckCircleIcon className="h-6 w-6 text-green-300" />
+        ) : (
+          <ExclamationCircleIcon className="h-6 w-6 text-red-300" />
+        )}
+        <span
+          className={`text-lg font-medium ${
+            completionStatus.status ? "text-green-300" : "text-red-300"
+          }`}
+        >
+          Status: {completionStatus.message}
+        </span>
+      </div>
 
       <h3 className="text-2xl font-semibold mb-2">Task</h3>
       <p className="text-base mb-4">{description}</p>
 
-      {/*<h3 className="text-2xl font-semibold mb-2">Tags and Difficulty</h3>*/}
+      {/* Tags and Difficulty */}
       <div className="flex flex-wrap gap-2 mb-4">
         {tags.map((tag) => (
           <span
@@ -45,6 +94,7 @@ const Task: React.FC<TaskProps> = ({
         </span>
       </div>
 
+      {/* Instructions */}
       <div className="mb-4">
         <h3 className="text-2xl font-semibold mb-3">Instructions</h3>
         <ul className="list-disc list-inside text-base space-y-2">
@@ -107,5 +157,4 @@ const Task: React.FC<TaskProps> = ({
   );
 };
 
-
-export default Task
+export default Task;
