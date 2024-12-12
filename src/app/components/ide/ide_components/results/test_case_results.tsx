@@ -22,8 +22,6 @@ const TestCaseResult: React.FC<{
     setIsHovered(false);
   };
 
-  console.log(testCaseIndex);
-
   const getStatusClass = (typeClass: "border" | "text") => {
     switch (result.status) {
       case "Pass":

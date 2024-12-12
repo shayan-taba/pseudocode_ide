@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { supabase_client } from "../api/supabase_client";
 import { useRouter } from "next/navigation";
-import { User } from "@supabase/supabase-js";
 
 export type Challenge = {
   id: number;
@@ -21,19 +20,10 @@ export default function ChallengesPage() {
   const [difficulty, setDifficulty] = useState<string>("All"); // Selected difficulty
   const [selectedTag, setSelectedTag] = useState<string>("All"); // Selected tag
   const [sortBy, setSortBy] = useState<string>("title"); // Sort criteria
-  const [user, setUser] = useState<User | null>(null); // Specify that user can be null or a User object
 
   const router = useRouter();
 
-  // Fetch current user
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data } = await supabase_client.auth.getUser();
-      setUser(data?.user || null);
-    };
-    fetchUser();
-  }, []);
-
+ 
   // Fetch challenges from XML
   useEffect(() => {
     const fetchChallenges = async () => {
@@ -72,14 +62,6 @@ export default function ChallengesPage() {
   
     fetchChallenges();
   }, []);
-  
-
-  // Handle sign out
-  const handleSignOut = async () => {
-    await supabase_client.auth.signOut();
-    setUser(null);
-    router.push("/");
-  };
 
   // Extract unique tags and difficulties for filters
   const uniqueTags = Array.from(
@@ -108,24 +90,9 @@ export default function ChallengesPage() {
     });
 
   return (
-    <div className="bg-gray-900 min-h-screen p-20 text-cyan-50">
+    <div className="bg-zinc-950 min-h-screen p-20 text-cyan-50">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Pseudocode Challenges</h1>
-        {user ? (
-          <div className="flex items-center space-x-4">
-            <span className="text-sm font-medium text-gray-300">
-              Logged in as: <span className="font-semibold">{user.email}</span>
-            </span>
-            <button
-              onClick={handleSignOut}
-              className="bg-red-500 text-white px-4 py-2 rounded"
-            >
-              Sign Out
-            </button>
-          </div>
-        ) : (
-          <span className="text-sm font-medium text-gray-300">GUEST</span>
-        )}
       </div>
 
       {/* Filters Section */}

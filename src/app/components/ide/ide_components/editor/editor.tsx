@@ -69,9 +69,6 @@ const Editor: React.FC<EditorProps> = ({
   setExpandEditor
 }) => {
 
-  const logval:((this: Window, ev: KeyboardEvent) => any) | null = () => {
-    console.log
-  }
   return (
     <div className={`z-10 container-els ${!expandEditor ? "h-[100%]":""} ${width}`}>
       <div className="container-headings text-green-400">

@@ -30,7 +30,7 @@ const Solution: React.FC<SolutionProps> = ({ exampleSolution }) => {
     <div className="space-y-6">
       {/* Warning Section */}
       <div
-        className={`gap-3 justify-between p-4 border-l-4 rounded-md ${
+        className={`gap-3 max-w-[400px] justify-between p-4 border-l-4 rounded-md ${
           showWarning ? "bg-green-100" : "bg-yellow-100"
         } flex items-center space-x-2`}
         style={{ borderColor: showWarning ? "#16a34a" : "#f59e0b" }}

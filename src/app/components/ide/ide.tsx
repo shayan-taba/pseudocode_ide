@@ -47,7 +47,6 @@ const IDE: React.FC<IDEProps> = ({
   outputType,
   inputName,
 }) => {
-  console.log("MBH", inputType);
   const [code, setCode] = useState<string>("");
   const [output, setOutput] = useState<string[]>([]);
   const [userInput, setUserInput] = useState<string>("");
@@ -326,9 +325,9 @@ const IDE: React.FC<IDEProps> = ({
 
         {!expandInstructions && !expandEditor && !expandResults && (
           <>
-            <Instructions width={"w-[30%]"} {...instructionArgs} />
+            <Instructions width={"w-[35%]"} {...instructionArgs} />
 
-            <div className="divider flex flex-col flex-grow justify-between gap-6 w-[70%]">
+            <div className="divider flex flex-col flex-grow justify-between gap-6 w-[65%]">
               <div className="h-[49%]">
                 <Editor width={"flex-grow"} {...editorArgs} />
               </div>

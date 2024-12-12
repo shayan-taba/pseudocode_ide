@@ -47,7 +47,6 @@ const Results: React.FC<ResultsProps> = ({
 }) => {
   const preRef = useRef<HTMLPreElement>(null);
 
-  console.log("here", testResults);
   useEffect(() => {
     if (preRef.current) {
       preRef.current.scrollTop = preRef.current.scrollHeight;
