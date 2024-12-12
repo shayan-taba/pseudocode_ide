@@ -5,6 +5,7 @@ import { python } from "@codemirror/lang-python";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { indentUnit } from "@codemirror/language";
 import { autocompletion } from "@codemirror/autocomplete";
+import { EditorView } from "@uiw/react-codemirror";
 
 import { createTheme } from "@uiw/codemirror-themes";
 import { tags as t } from "@lezer/highlight";
@@ -109,6 +110,7 @@ const Editor: React.FC<EditorProps> = ({
             python(),
             autocompletion({ activateOnTyping: false }),
             indentUnit.of("    "),
+            EditorView.lineWrapping
           ]}
           theme={myTheme}
           onChange={(value) => onCodeChange(value || "")} // Ensure `value` is never `undefined`

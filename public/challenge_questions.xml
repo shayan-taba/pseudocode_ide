@@ -1,150 +1,263 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <challenges>
   <challenge>
     <id>1</id>
-    <title>Sum of Array Elements</title>
-    <description>Write an algorithm to compute the sum of all elements in an array.</description>
+    <title>Count Numbers in Range</title>
+    <description>Write an algorithm to count how many numbers in a collection are in the range [-1, 1].</description>
     <tags>
-      <tag>Arrays</tag>
+      <tag>Collections</tag>
       <tag>Loops</tag>
     </tags>
     <dataTypes>
-      <input>Array of integers</input>
-      <output>Integer representing the sum of the elements</output>
+      <input>Collection of numbers</input>
+      <inputName>NUMBERS</inputName>
+      <output>Integer count</output>
     </dataTypes>
     <difficulty>SL</difficulty>
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>[1, 2, 3, 4]</input>
-        <output>10</output>
+        <input>Collection(-0.5, 0.8, 2, -1, 1.5)</input>
+        <output>3</output>
       </testCase>
       <testCase>
-        <input>[0, 0, 0]</input>
+        <input>Collection(5, -2, 3)</input>
         <output>0</output>
       </testCase>
       <testCase>
-        <input>[10, -5, 15]</input>
-        <output>20</output>
+        <input>Collection(1, -1, 0)</input>
+        <output>3</output>
       </testCase>
     </testCases>
   </challenge>
 
   <challenge>
     <id>2</id>
-    <title>Check if Collection is Empty</title>
-    <description>Write an algorithm that checks if a collection is empty and outputs "Empty" or "Not Empty".</description>
+    <title>Reverse Queue Elements</title>
+    <description>Write an algorithm to reverse the order of elements in a queue.</description>
     <tags>
-      <tag>Collections</tag>
+      <tag>Queues</tag>
+      <tag>Stacks</tag>
     </tags>
     <dataTypes>
-      <input>Collection</input>
-      <output>String indicating whether the collection is empty</output>
+      <input>Queue of strings</input>
+      <inputName>QUEUE</inputName>
+      <output>Queue of strings in reverse order</output>
     </dataTypes>
-    <difficulty>SL</difficulty>
-    <type>Condition</type>
+    <difficulty>HL</difficulty>
+    <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>Collection()</input>
-        <output>Empty</output>
+        <input>Queue("a", "b", "c")</input>
+        <output>Queue(["c", "b", "a"])</output>
       </testCase>
       <testCase>
-        <input>Collection(5, 10, 15)</input>
-        <output>Not Empty</output>
+        <input>Queue("1", "2", "3", "4")</input>
+        <output>Queue(["4", "3", "2", "1"])</output>
       </testCase>
       <testCase>
-        <input>Collection("A")</input>
-        <output>Not Empty</output>
+        <input>Queue("cat")</input>
+        <output>Queue(["cat"])</output>
       </testCase>
     </testCases>
   </challenge>
 
   <challenge>
     <id>3</id>
-    <title>Reverse Array Using Stack</title>
-    <description>Write an algorithm to reverse an array using a stack.</description>
+    <title>Find Common IDs</title>
+    <description>Write an algorithm to find the count of students who are in both tennis and football teams using isIn method.</description>
     <tags>
-      <tag>Arrays</tag>
-      <tag>Stacks</tag>
+      <tag>Collections</tag>
+      <tag>Conditionals</tag>
     </tags>
     <dataTypes>
-      <input>Array of integers</input>
-      <output>Array of integers in reverse order</output>
+      <input>Collection of student IDs for tennis</input>
+      <inputName>TENNIS</inputName>
+      <input>Collection of student IDs for football</input>
+      <inputName>FOOTBALL</inputName>
+      <output>Integer count</output>
     </dataTypes>
-    <difficulty>HL</difficulty>
+    <difficulty>SL</difficulty>
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>[1, 2, 3]</input>
-        <output>[3, 2, 1]</output>
+        <input>Collection(101, 102, 103)</input>
+        <input>Collection(102, 103, 104)</input>
+        <output>2</output>
       </testCase>
       <testCase>
-        <input>[5, 10]</input>
-        <output>[10, 5]</output>
+        <input>Collection(100, 200)</input>
+        <input>Collection(300, 400)</input>
+        <output>0</output>
       </testCase>
       <testCase>
-        <input>[8]</input>
-        <output>[8]</output>
+        <input>Collection(1, 2, 3, 4, 5)</input>
+        <input>Collection(4, 5, 6, 7)</input>
+        <output>2</output>
       </testCase>
     </testCases>
   </challenge>
 
   <challenge>
     <id>4</id>
-    <title>Queue Simulation</title>
-    <description>Simulate a queue where elements are added and removed, and output the final state of the queue.</description>
+    <title>Stack Sort</title>
+    <description>Write an algorithm to sort a stack of integers in ascending order using a second stack.</description>
     <tags>
-      <tag>Queues</tag>
+      <tag>Stacks</tag>
+      <tag>Sorting</tag>
     </tags>
     <dataTypes>
-      <input>Sequence of operations</input>
-      <output>Final state of the queue</output>
+      <input>Stack of integers</input>
+      <inputName>STACK</inputName>
+      <output>Stack of integers in ascending order</output>
     </dataTypes>
     <difficulty>HL</difficulty>
-    <type>Simulation</type>
+    <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>[enqueue(1), enqueue(2), dequeue(), enqueue(3)]</input>
-        <output>Queue(2, 3)</output>
+        <input>Stack(3, 1, 4, 2)</input>
+        <output>Stack([1, 2, 3, 4])</output>
       </testCase>
       <testCase>
-        <input>[enqueue("A"), enqueue("B"), dequeue(), dequeue()]</input>
-        <output>Queue()</output>
+        <input>Stack(5, 1, 3)</input>
+        <output>Stack([1, 3, 5])</output>
       </testCase>
       <testCase>
-        <input>[enqueue(10), dequeue(), enqueue(20), enqueue(30)]</input>
-        <output>Queue(20, 30)</output>
+        <input>Stack(10)</input>
+        <output>Stack([10])</output>
       </testCase>
     </testCases>
   </challenge>
 
   <challenge>
     <id>5</id>
-    <title>Find Maximum in Collection</title>
-    <description>Write an algorithm to find the maximum value in a collection.</description>
+    <title>Simulate Elevator</title>
+    <description>Write an algorithm to simulate the operations of an elevator using a queue. Assume the queue holds the floor numbers where the elevator must stop.</description>
+    <tags>
+      <tag>Queues</tag>
+      <tag>Simulation</tag>
+    </tags>
+    <dataTypes>
+      <input>Queue of integers</input>
+      <inputName>FLOORS</inputName>
+      <output>Sequence of elevator stops</output>
+    </dataTypes>
+    <difficulty>HL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>Queue(1, 3, 5, 2)</input>
+        <output>Queue([1, 3, 5, 2])</output>
+      </testCase>
+      <testCase>
+        <input>Queue(10, 1, 7)</input>
+        <output>Queue([10, 1, 7])</output>
+      </testCase>
+      <testCase>
+        <input>Queue(2)</input>
+        <output>Queue([2])</output>
+      </testCase>
+    </testCases>
+  </challenge>
+
+  <challenge>
+    <id>6</id>
+    <title>Bracket Matching</title>
+    <description>Write an algorithm to check if the brackets in a string are balanced using a stack.</description>
+    <tags>
+      <tag>Stacks</tag>
+      <tag>Conditionals</tag>
+    </tags>
+    <dataTypes>
+      <input>String of brackets</input>
+      <inputName>BRACKETS</inputName>
+      <output>Boolean indicating if brackets are balanced</output>
+    </dataTypes>
+    <difficulty>HL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>"()[]{}"</input>
+        <output>True</output>
+      </testCase>
+      <testCase>
+        <input>"([)]"</input>
+        <output>False</output>
+      </testCase>
+      <testCase>
+        <input>"((()))"</input>
+        <output>True</output>
+      </testCase>
+    </testCases>
+  </challenge>
+
+  <challenge>
+    <id>7</id>
+    <title>Merge Two Collections</title>
+    <description>Write an algorithm to merge two collections into one and remove duplicates.</description>
     <tags>
       <tag>Collections</tag>
       <tag>Loops</tag>
     </tags>
     <dataTypes>
       <input>Collection of integers</input>
-      <inputName>COLLECTION_TEST_CASE</inputName>
-      <output>Maximum integer value</output>
+      <inputName>COLLECTION1</inputName>
+      <input>Collection of integers</input>
+      <inputName>COLLECTION2</inputName>
+      <output>Collection of unique integers</output>
     </dataTypes>
     <difficulty>SL</difficulty>
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>"1"</input>
-        <output>4</output>
+        <input>Collection(1, 2, 3)</input>
+        <input>Collection(3, 4, 5)</input>
+        <output>Collection([1, 2, 3, 4, 5])</output>
       </testCase>
       <testCase>
-        <input>Collection(-5, -2, -3)</input>
-        <output>-2</output>
+        <input>Collection(10, 20)</input>
+        <input>Collection(20, 30, 40)</input>
+        <output>Collection([10, 20, 30, 40])</output>
       </testCase>
       <testCase>
-        <input>Collection(10)</input>
-        <output>10</output>
+        <input>Collection()</input>
+        <input>Collection(1, 2)</input>
+        <output>Collection([1, 2])</output>
+      </testCase>
+    </testCases>
+  </challenge>
+
+  <challenge>
+    <id>8</id>
+    <title>Generate Random Queue</title>
+    <description>Write an algorithm to generate a queue of random integers given a specified size and range.</description>
+    <tags>
+      <tag>Queues</tag>
+      <tag>Random</tag>
+    </tags>
+    <dataTypes>
+      <input>Integer size</input>
+      <inputName>SIZE</inputName>
+      <input>Integer range</input>
+      <inputName>RANGE</inputName>
+      <output>Queue of random integers</output>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>5</input>
+        <input>10</input>
+        <output>Queue([random])</output>
+      </testCase>
+      <testCase>
+        <input>3</input>
+        <input>100</input>
+        <output>Queue([random])</output>
+      </testCase>
+      <testCase>
+        <input>1</input>
+        <input>50</input>
+        <output>Queue([random])</output>
       </testCase>
     </testCases>
   </challenge>

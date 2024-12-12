@@ -50,7 +50,7 @@ const TestCaseResult: React.FC<{
       <div className="font-bold underline underline-offset-3">
         {!isLast && `Test Case ${testCaseIndex + 1}`}
         {isLast && (
-          <span className="">Hidden Test Case ({testCaseIndex + 1})</span>
+          <span className="">Test Case {testCaseIndex + 1} (Hidden Test Case)</span>
         )}
       </div>
 

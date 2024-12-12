@@ -45,9 +45,9 @@ const IDE: React.FC<IDEProps> = ({
   exampleCode,
   inputType,
   outputType,
-  inputName
+  inputName,
 }) => {
-  console.log("MBH", inputType)
+  console.log("MBH", inputType);
   const [code, setCode] = useState<string>("");
   const [output, setOutput] = useState<string[]>([]);
   const [userInput, setUserInput] = useState<string>("");
@@ -276,96 +276,64 @@ const IDE: React.FC<IDEProps> = ({
     await fetchFromBackend("", true, testIndexRef.current); // Process current test case
   };
 
+  const instructionArgs = {
+    title: title,
+    description: description,
+    tags: tags,
+    difficulty: difficulty,
+    testCases: testCases,
+    expandInstructions: expandInstructions,
+    setExpandInstructions: setExpandInstructions,
+    instructionState: instructionState,
+    toggleInstructionState: toggleInstructionState,
+    inputType: inputType,
+    outputType: outputType,
+    inputName: inputName,
+    exampleSolution: exampleCode,
+  };
+
+  const editorArgs = {
+    code: code,
+    onCodeChange: setCode,
+    onRun: handleRunCode,
+    expandEditor: expandEditor,
+    setExpandEditor: setExpandEditor,
+  };
+
+  const resultsArgs = {
+    output: output,
+    isComplete: isComplete,
+    onClearOutput: () => setOutput([]),
+    expandResults: expandResults,
+    setExpandResults: setExpandResults,
+    resultState: resultState,
+    toggleResultsState: toggleResultsState,
+    testResults: testResults,
+    testCases: testCases,
+  };
+
   return (
     <div id="IDE" className="flex flex-col h-screen bg-zinc-950">
       <Navbar />
       <div id="IDE_Panel" className="flex flex-row flex-grow overflow-hidden">
         {expandInstructions && (
-          <Instructions
-            width={"w-[100%] m-5"}
-            title={title}
-            description={description}
-            tags={tags}
-            difficulty={difficulty}
-            testCases={testCases}
-            expandInstructions={expandInstructions}
-            setExpandInstructions={setExpandInstructions}
-            instructionState={instructionState}
-            toggleInstructionState={toggleInstructionState}
-            inputType={inputType}
-            outputType={outputType}
-            inputName={inputName}
-          />
+          <Instructions width={"w-[100%] m-5"} {...instructionArgs} />
         )}
 
-        {expandEditor && (
-          <Editor
-            width={"w-[100%] m-5"}
-            code={code}
-            onCodeChange={setCode}
-            onRun={handleRunCode}
-            expandEditor={expandEditor}
-            setExpandEditor={setExpandEditor}
-          />
-        )}
+        {expandEditor && <Editor width={"w-[100%] m-5"} {...editorArgs} />}
 
-        {expandResults && (
-          <Results
-            width={"w-[100%] m-5"}
-            output={output}
-            isComplete={isComplete}
-            onClearOutput={() => setOutput([])}
-            expandResults={expandResults}
-            setExpandResults={setExpandResults}
-            resultState={resultState}
-            toggleResultsState={toggleResultsState}
-            testResults={testResults}
-            testCases={testCases}
-          />
-        )}
+        {expandResults && <Results width={"w-[100%] m-5"} {...resultsArgs} />}
 
         {!expandInstructions && !expandEditor && !expandResults && (
           <>
-            <Instructions
-              width={"w-[30%]"}
-              title={title}
-              description={description}
-              tags={tags}
-              difficulty={difficulty}
-              testCases={testCases}
-              expandInstructions={expandInstructions}
-              setExpandInstructions={setExpandInstructions}
-              instructionState={instructionState}
-              toggleInstructionState={toggleInstructionState}
-              inputType={inputType}
-              outputType={outputType}
-              inputName={inputName}
-            />
+            <Instructions width={"w-[30%]"} {...instructionArgs} />
 
             <div className="divider flex flex-col flex-grow justify-between gap-6 w-[70%]">
               <div className="h-[49%]">
-                <Editor
-                  width={"flex-grow"}
-                  code={code}
-                  onCodeChange={setCode}
-                  onRun={handleRunCode}
-                  expandEditor={expandEditor}
-                  setExpandEditor={setExpandEditor}
-                />
+                <Editor width={"flex-grow"} {...editorArgs} />
               </div>
               <div className="h-[49%] flex-grow">
-                <Results
-                  width={"flex-grow"}
-                  output={output}
-                  isComplete={isComplete}
-                  onClearOutput={() => setOutput([])}
-                  expandResults={expandResults}
-                  setExpandResults={setExpandResults}
-                  resultState={resultState}
-                  toggleResultsState={toggleResultsState}
-                  testResults={testResults}
-                  testCases={testCases}
-                />
+                <Results width={"flex-grow"} {...resultsArgs} />
               </div>
             </div>
           </>

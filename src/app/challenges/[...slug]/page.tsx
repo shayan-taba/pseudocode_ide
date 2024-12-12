@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import IDE from "../../components/ide/ide";
+import { useRouter } from 'next/navigation'
 
 export default function Challenge({
   params,
@@ -9,10 +10,12 @@ export default function Challenge({
   params: Promise<{ slug: string }>;
 }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [isSolution, setIsSolution] = useState(false);
   const [challenges, setChallenges] = useState<any[]>([]);
   const [challenge, setChallenge] = useState<any | null>(null);
 
   const [isPlayground, setIsPlayground] = useState(false);
+
 
   useEffect(() => {
     const loadChallenges = async () => {
@@ -20,10 +23,16 @@ export default function Challenge({
         const { slug } = await params;
 
         // Check if it's the playground
-        if (slug === "playground") {
+        if (slug[0] === "playground") {
           setIsPlayground(true);
           setIsLoading(false);
           return;
+        } else {
+          if (Number.isInteger(parseInt(slug))) {
+            if (slug.length >= 2 && slug[1]=="solutoin") {
+              setIsSolution(true)
+            }
+          }
         }
 
         // Fetch challenges from XML
