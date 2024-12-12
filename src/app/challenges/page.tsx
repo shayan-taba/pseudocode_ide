@@ -69,7 +69,6 @@ export default function ChallengesPage() {
   const [completionFilter, setCompletionFilter] = useState<string>("All");
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("title");
-  const router = useRouter();
 
   useEffect(() => {
     const fetchChallenges = async () => {

@@ -51,7 +51,7 @@ const Task: React.FC<TaskProps> = ({
     };
 
     fetchCompletionStatus();
-  },[completeStatus]);
+  },[completeStatus, id]);
 
   return (
     <div>
@@ -128,8 +128,8 @@ const Task: React.FC<TaskProps> = ({
           <span className="text-purple-300">{outputType}</span>
         </p>
         <p className="text-sm mt-2 text-gray-200">
-          Note: Each "Test Case" follows the <strong>Input Type</strong> format,
-          and your solution's output is validated against the{" "}
+          Note: Each &quot;Test Case&quot; follows the <strong>Input Type</strong> format,
+          and your solution&apos;s output is validated against the{" "}
           <strong>Expected Output</strong>.
         </p>
       </div>

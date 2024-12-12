@@ -1,26 +1,19 @@
 // components/Output.tsx
 import React, {
   Dispatch,
-  SetStateAction,
   useEffect,
   useRef,
-  useState,
 } from "react";
 
 import {
   TrashIcon,
-  EyeIcon,
-  EyeSlashIcon,
   CommandLineIcon,
   CheckCircleIcon,
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
-  ExclamationCircleIcon,
-  XCircleIcon,
 } from "@heroicons/react/24/solid";
 import TestCaseResult from "./test_case_results";
 import { TestResultType } from "../../ide";
-import { consoleLight } from "@uiw/codemirror-themes-all";
 
 interface ResultsProps {
   id: number;
@@ -33,7 +26,7 @@ interface ResultsProps {
   resultState: "outcome" | "output";
   toggleResultsState: () => void;
   testResults: TestResultType[];
-  testCases: { input: any; output: any }[];
+  testCases: { input: string; output: string }[];
   setCompleteStatus: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
 
@@ -105,7 +98,7 @@ const Results: React.FC<ResultsProps> = ({
                 {/*<ExclamationCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
               </div>
               <span className="text-yellow-300">
-                Syntax or runtime errors occurred on at least one "Test Case".
+                Syntax or runtime errors occurred on at least one &quot;Test Case&quot;.
                 Check the output console for details on the error and to see on
                 which Test Case(s) this occurred.
               </span>
@@ -119,8 +112,8 @@ const Results: React.FC<ResultsProps> = ({
               </div>
               <span className="text-red-300">
                 No errors occurred, but the output wasn't expected on at least
-                one "Test Case". Click on "Show Details" for further information
-                in any of the failed "Test Cases" below.
+                one &quot;Test Case&quot;. Click on &quot;Show Details&quot; for further information
+                in any of the failed &quot;Test Cases&quot; below.
               </span>
             </>
           )}

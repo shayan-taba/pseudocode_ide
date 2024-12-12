@@ -1,8 +1,7 @@
 // components/Editor.tsx
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
-import { oneDark } from "@codemirror/theme-one-dark";
 import { indentUnit } from "@codemirror/language";
 import { autocompletion } from "@codemirror/autocomplete";
 import { EditorView } from "@uiw/react-codemirror";
@@ -15,7 +14,6 @@ import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
 } from "@heroicons/react/24/solid";
-import { useState } from "react";
 
 import { CodeBracketIcon } from "@heroicons/react/24/solid";
 

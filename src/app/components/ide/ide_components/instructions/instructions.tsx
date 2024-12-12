@@ -1,17 +1,13 @@
 // components/TaskDescription.tsx
 
 import {
-  HomeIcon,
-  EyeSlashIcon,
-  EyeIcon,
   BookOpenIcon,
   DocumentTextIcon,
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
 } from "@heroicons/react/24/solid";
 
-import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch } from "react";
 
 import Task from "./task";
 import Solution from "./solution";
@@ -29,8 +25,8 @@ interface InstructionsProps {
   setExpandInstructions: Dispatch<React.SetStateAction<boolean>>;
   instructionState: "task" | "solution";
   toggleInstructionState: () => void;
-  inputType: any;
-  outputType: any;
+  inputType: string;
+  outputType: string;
   inputName: string;
   exampleSolution: string;
   testResults: TestResultType[];
@@ -56,25 +52,6 @@ const Instructions: React.FC<InstructionsProps> = ({
   testResults,
   completeStatus,
 }) => {
-  const router = useRouter();
-
-  const CopyToClipboard = () => {
-    const [message, setMessage] = useState("");
-    const [showWarning, setShowWarning] = useState(false);
-
-    const copyText = (text: string) => {
-      navigator.clipboard
-        .writeText(text)
-        .then(() => {
-          setMessage("Text copied to clipboard!");
-          setTimeout(() => setMessage(""), 2000); // Clear message after 2 seconds
-        })
-        .catch((err) => {
-          setMessage("Failed to copy text!");
-          console.error("Error copying text: ", err);
-        });
-    };
-  };
 
   return (
     <div className={`container-els divider ${width}`}>

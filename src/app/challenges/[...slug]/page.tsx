@@ -1,21 +1,37 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import IDE from "../../components/ide/ide";
-import { useRouter } from 'next/navigation'
 
 export default function Challenge({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSolution, setIsSolution] = useState(false);
-  const [challenges, setChallenges] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSolution, setIsSolution] = useState<boolean>(false);
+  const [challenges, setChallenges] = useState<
+    {
+      id: number;
+      title: string;
+      description: string;
+      tags: string[];
+      dataTypes: {
+        input: string;
+        inputName: string;
+        output: string;
+      };
+      difficulty: string;
+      testCases: {
+        input: string;
+        output: string;
+      }[];
+      exampleSolution: string;
+    }[]
+  >([]);
   const [challenge, setChallenge] = useState<any | null>(null);
 
   const [isPlayground, setIsPlayground] = useState(false);
-
 
   useEffect(() => {
     const loadChallenges = async () => {
@@ -29,8 +45,8 @@ export default function Challenge({
           return;
         } else {
           if (Number.isInteger(parseInt(slug))) {
-            if (slug.length >= 2 && slug[1]=="solutoin") {
-              setIsSolution(true)
+            if (slug.length >= 2 && slug[1] == "solutoin") {
+              setIsSolution(true);
             }
           }
         }
@@ -54,31 +70,42 @@ export default function Challenge({
         // Parse XML into challenges
         const challengeNodes = xmlDoc.getElementsByTagName("challenge");
         const loadedChallenges = Array.from(challengeNodes).map((node) => ({
-            id: parseInt(node.getElementsByTagName("id")[0]?.textContent || "0"),
-            title: node.getElementsByTagName("title")[0]?.textContent || "",
-            description:
-              node.getElementsByTagName("description")[0]?.textContent || "",
-            tags: Array.from(node.getElementsByTagName("tag")).map(
-              (tagNode) => tagNode.textContent || ""
-            ),
-            dataTypes: {
-              input: node.getElementsByTagName("dataTypes")[0]?.getElementsByTagName("input")[0]?.textContent || "",
-              inputName: node.getElementsByTagName("dataTypes")[0]?.getElementsByTagName("inputName")[0]?.textContent || "",
-              output: node.getElementsByTagName("dataTypes")[0]?.getElementsByTagName("output")[0]?.textContent || "",
-            },
-            difficulty:
-              node.getElementsByTagName("difficulty")[0]?.textContent || "Easy",
-            testCases: Array.from(node.getElementsByTagName("testCase")).map(
-              (testCaseNode) => ({
-                input:
-                  testCaseNode.getElementsByTagName("input")[0]?.textContent || "",
-                output:
-                  testCaseNode.getElementsByTagName("output")[0]?.textContent || "",
-              })
-            ),
-            exampleSolution:
-              node.getElementsByTagName("exampleSolution")[0]?.textContent || "",
-          }));
+          id: parseInt(node.getElementsByTagName("id")[0]?.textContent || "0"),
+          title: node.getElementsByTagName("title")[0]?.textContent || "",
+          description:
+            node.getElementsByTagName("description")[0]?.textContent || "",
+          tags: Array.from(node.getElementsByTagName("tag")).map(
+            (tagNode) => tagNode.textContent || ""
+          ),
+          dataTypes: {
+            input:
+              node
+                .getElementsByTagName("dataTypes")[0]
+                ?.getElementsByTagName("input")[0]?.textContent || "",
+            inputName:
+              node
+                .getElementsByTagName("dataTypes")[0]
+                ?.getElementsByTagName("inputName")[0]?.textContent || "",
+            output:
+              node
+                .getElementsByTagName("dataTypes")[0]
+                ?.getElementsByTagName("output")[0]?.textContent || "",
+          },
+          difficulty:
+            node.getElementsByTagName("difficulty")[0]?.textContent || "Easy",
+          testCases: Array.from(node.getElementsByTagName("testCase")).map(
+            (testCaseNode) => ({
+              input:
+                testCaseNode.getElementsByTagName("input")[0]?.textContent ||
+                "",
+              output:
+                testCaseNode.getElementsByTagName("output")[0]?.textContent ||
+                "",
+            })
+          ),
+          exampleSolution:
+            node.getElementsByTagName("exampleSolution")[0]?.textContent || "",
+        }));
 
         setChallenges(loadedChallenges);
 
@@ -117,16 +144,17 @@ export default function Challenge({
   // Render the IDE
   return (
     <>
-      {isPlayground && (
-        {/*<IDE
+      {isPlayground &&
+        {
+          /*<IDE
           title="Playground"
           description="An IDE that runs pseudocode that has been converted to Python."
           tags={[]}
           difficulty=""
           testCases={[]}
           exampleCode=""
-        />*/}
-      )}
+        />*/
+        }}
       {!isPlayground && challenge && (
         <IDE
           id={challenge.id}

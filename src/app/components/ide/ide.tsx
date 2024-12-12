@@ -30,7 +30,7 @@ interface IDEProps {
   description: string;
   tags: string[];
   difficulty: string;
-  testCases: { input: any; output: any }[]; // Test case structure
+  testCases: { input: string; output: string }[]; // Test case structure
   exampleCode: string;
   inputType: any;
   outputType: any;

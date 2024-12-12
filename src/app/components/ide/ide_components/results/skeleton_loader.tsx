@@ -63,7 +63,7 @@ const SkeletonLoader: React.FC<{ input: any; expected: any; isLast: any }> = ({
             solution. Its input and expected output are not displayed. You will
             only see whether your solution passes or fails for this case, but
             not the specific values being tested. This ensures a fair assessment
-            of your code's correctness.
+            of your code&apos;s correctness.
           </div>
         )}{" "}
       </>

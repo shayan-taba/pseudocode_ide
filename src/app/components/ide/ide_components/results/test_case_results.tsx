@@ -8,18 +8,9 @@ const TestCaseResult: React.FC<{
   isLast: boolean;
 }> = ({ testCaseIndex, result, isLast }) => {
   const [isExpanded, setIsExpanded] = useState(false); // For collapsing the input/expected output
-  const [isHovered, setIsHovered] = useState(false); // For hover effects to show more details
 
   const handleExpandToggle = () => {
     setIsExpanded((prev) => !prev);
-  };
-
-  const handleHover = () => {
-    setIsHovered(true);
-  };
-
-  const handleHoverOut = () => {
-    setIsHovered(false);
   };
 
   const getStatusClass = (typeClass: "border" | "text") => {
@@ -84,7 +75,7 @@ const TestCaseResult: React.FC<{
                     your solution. Its input and expected output are not
                     displayed. You will only see whether your solution passes or
                     fails for this case, but not the specific values being
-                    tested. This ensures a fair assessment of your code's
+                    tested. This ensures a fair assessment of your code&apos;s
                     correctness.
                   </p>
                 )}
