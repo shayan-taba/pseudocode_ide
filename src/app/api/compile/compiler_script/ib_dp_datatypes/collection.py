@@ -108,4 +108,4 @@ class Collection:
         Returns:
             str: A string in the format 'Collection([item1, item2, ...])'.
         """
-        return f"Collection({', '.join(self._items)})"
+        return f"Collection({self._items})"

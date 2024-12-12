@@ -9,7 +9,7 @@ let isWaitingForInput = false;
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const { pseudocode, userInput, run, test_case_input, test_case_index } = body;
+  const { pseudocode, userInput, run, test_case_input_name, test_case_input_value, test_case_index } = body;
 
   // If no process exists, spawn a new one
 
@@ -23,8 +23,7 @@ export async function POST(req: Request) {
 
     const scriptPath = path.join(process.cwd(), "src/app/api/compile/compiler_script", "app.py");
 
-    console.log('hay test', test_case_input)
-    pythonProcess = spawn("python3", [scriptPath, pseudocode, JSON.stringify(test_case_input)]);
+    pythonProcess = spawn("python3", [scriptPath, pseudocode, JSON.stringify(test_case_input_name), JSON.stringify(test_case_input_value)]);
 
     // Collect output from the Python script
     if (pythonProcess.stdout) {

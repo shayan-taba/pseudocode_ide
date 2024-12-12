@@ -26,6 +26,7 @@ interface InstructionsProps {
   toggleInstructionState: () => void;
   inputType: any;
   outputType: any;
+  inputName: string;
 }
 
 const Instructions: React.FC<InstructionsProps> = ({
@@ -41,6 +42,7 @@ const Instructions: React.FC<InstructionsProps> = ({
   toggleInstructionState,
   inputType,
   outputType,
+  inputName
 }) => {
   const router = useRouter();
 
@@ -115,7 +117,7 @@ const Instructions: React.FC<InstructionsProps> = ({
                 <li>
                   Access the input for each test case using the variable{" "}
                   <code className="bg-slate-700 px-1 py-0.5 rounded">
-                    TEST_CASE
+                    {inputName}
                   </code>
                   .
                 </li>

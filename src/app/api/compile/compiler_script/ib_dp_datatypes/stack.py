@@ -61,4 +61,4 @@ class Stack:
 
     def __repr__(self):
         """When the object is used as an expression, it invokes this method to provide an output of the items of the LIFO stack"""
-        return f"Stack({', '.join(self._items)})"
+        return f"Stack({self._items})"

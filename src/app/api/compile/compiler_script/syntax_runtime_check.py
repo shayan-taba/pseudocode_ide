@@ -4,20 +4,13 @@ from ib_dp_datatypes.collection import Collection
 from ib_dp_datatypes.queue import Queue
 from ib_dp_datatypes.stack import Stack
 from pseudo_conversions_utils.assignment_utils import check_valid_variable_assignment
+from pseudo_conversions_utils.general_utils import parse_value
 
 
-def syntax_check_and_run_converted(code_string, test_case_input):
-    global_scope = {
-        "Array": Array,
-        "Collection": Collection,
-        "Stack": Stack,
-        "Queue": Queue,
-        "TEST_CASE": str(
-            test_case_input
-        ),  # This is the input variable for the code challenge, or "None" for the
-        # standard IDE "playground".
-    }
-    
+def syntax_check_and_run_converted(
+    code_string, test_case_input_name: str, test_case_input_value: str
+):
+
     try:
         # Syntax check using compile
         compile(code_string, "<string>", "exec")
@@ -41,6 +34,17 @@ def syntax_check_and_run_converted(code_string, test_case_input):
         return f"Syntax Error on line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}, must only contain uppercase alphabetic characters (A-Z) and underscores"
 
     try:
+        # Global scope with predefined classes
+        global_scope = {
+            "Array": Array,
+            "Collection": Collection,
+            "Stack": Stack,
+            "Queue": Queue,
+        }
+
+        # Parse and add the test case input value to the global scope
+        global_scope[test_case_input_name] = parse_value(test_case_input_value, global_scope)
+        
         # Syntax is valid as not errors have been raised, execute the code and handle input/output
         exec(code_string, global_scope)
     except Exception as e:
@@ -75,7 +79,7 @@ def syntax_check_and_run_converted(code_string, test_case_input):
                 return (
                     f"Runtime Error on Line {user_line_number}: {str(e)}\n"
                     # f"Line Number: {user_line_number}\n"
-                    f"{error_line.strip()}\n"
+                    # f"{error_line.strip()}\n"
                 )
         else:
             # Otherwise, the error comes from the ib_dp_database file code rather than directly the user's code. This is an extreme edge case.

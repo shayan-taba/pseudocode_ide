@@ -33,6 +33,7 @@ interface IDEProps {
   exampleCode: string;
   inputType: any;
   outputType: any;
+  inputName: string;
 }
 
 const IDE: React.FC<IDEProps> = ({
@@ -44,6 +45,7 @@ const IDE: React.FC<IDEProps> = ({
   exampleCode,
   inputType,
   outputType,
+  inputName
 }) => {
   console.log("MBH", inputType)
   const [code, setCode] = useState<string>("");
@@ -150,7 +152,8 @@ const IDE: React.FC<IDEProps> = ({
           pseudocode: code,
           userInput: input,
           run: run,
-          test_case_input: testCases[test_case_index].input,
+          test_case_input_name: inputName,
+          test_case_input_value: testCases[test_case_index].input,
           test_case_index: test_case_index,
         }),
       });
@@ -197,12 +200,13 @@ const IDE: React.FC<IDEProps> = ({
       return;
     }
 
-    setOutput((prev) => [...prev, data.output]); // Append new output
+    const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
+
+    setOutput((prev) => [...prev, data.output.replace(uuid + " ", "")]); // Append new output
 
     const currentTest = testCases[currentIndex];
 
     // Regex to extract outputs after the UUID
-    const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
     const outputRegex = new RegExp(`${uuid}\\s(.*?)(?:\\n|$)`, "g");
     const validOutputs: any = [];
     let match;
@@ -290,6 +294,7 @@ const IDE: React.FC<IDEProps> = ({
             toggleInstructionState={toggleInstructionState}
             inputType={inputType}
             outputType={outputType}
+            inputName={inputName}
           />
         )}
 
@@ -334,6 +339,7 @@ const IDE: React.FC<IDEProps> = ({
               toggleInstructionState={toggleInstructionState}
               inputType={inputType}
               outputType={outputType}
+              inputName={inputName}
             />
 
             <div className="divider flex flex-col flex-grow justify-between gap-6 w-[70%]">

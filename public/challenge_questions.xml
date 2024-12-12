@@ -128,13 +128,14 @@
     </tags>
     <dataTypes>
       <input>Collection of integers</input>
+      <inputName>COLLECTION_TEST_CASE</inputName>
       <output>Maximum integer value</output>
     </dataTypes>
     <difficulty>SL</difficulty>
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>Collection(1, 3, 2, 4)</input>
+        <input>"1"</input>
         <output>4</output>
       </testCase>
       <testCase>

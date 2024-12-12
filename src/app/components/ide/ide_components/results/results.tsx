@@ -15,6 +15,8 @@ import {
   CheckCircleIcon,
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
+  ExclamationCircleIcon,
+  XCircleIcon,
 } from "@heroicons/react/24/solid";
 import TestCaseResult from "./test_case_results";
 import { TestResultType } from "../../ide";
@@ -63,27 +65,44 @@ const Results: React.FC<ResultsProps> = ({
       (result) => result.status === "Fail" && result.actual !== result.expected
     );
 
-    if (allPassed) {
-      return <span className="text-green-300">All tests passed!</span>;
-    } else if (hasErrors) {
-      return (
-        <span className="text-red-300">
-          Syntax or runtime errors occurred on at least one "Test Case". Check the
-          output console for details on the error and to see on which Test
-          Case(s) this occurred.
-        </span>
-      );
-    } else if (hasMismatch) {
-      return (
-        <span className="text-yellow-300">
-          No errors occurred, but the output wasn't expected on at least one
-          "Test Case". Click on "Show Details" for further information in any of
-          the failed "Test Cases" below.
-        </span>
-      );
-    }
+    return (
+      <>
+        <div className="flex flex-col">
+          {allPassed && (
+            <>
+              <div className="text-green-300 w-[100%] items-center flex flex-row gap-2 font-bold">Overall Status: Pass{/*<CheckCircleIcon className="h-5 w-5 mr-2" />*/} </div>
+              <span className="text-green-300">All tests passed!</span>
+            </>
+          )}
 
-    return null;
+          {hasErrors && (
+            <>
+              <div className="text-yellow-300 w-[100%] items-center flex flex-row gap-2 font-bold">Overall Status: Error{/*<ExclamationCircleIcon className="h-5 w-5 mr-2" />*/} </div>
+              <span className="text-yellow-300">
+                Syntax or runtime errors occurred on at least one "Test Case".
+                Check the output console for details on the error and to see on
+                which Test Case(s) this occurred.
+              </span>
+            </>
+          )}
+          {hasMismatch && (
+            <>
+              <div className="text-red-300 w-[100%] items-center flex flex-row gap-2 font-bold">Overall Status: Fail{/*<XCircleIcon className="h-5 w-5 mr-2" />*/} </div>
+              <span className="text-red-300">
+                No errors occurred, but the output wasn't expected on at least
+                one "Test Case". Click on "Show Details" for further information
+                in any of the failed "Test Cases" below.
+              </span>
+            </>
+          )}
+          {
+            !allPassed && !hasErrors && !hasMismatch && (
+              <p className="text-lg font-bold">Run your code to see the results below.</p>
+            )
+          }
+        </div>
+      </>
+    );
   };
 
   return (
@@ -147,15 +166,15 @@ const Results: React.FC<ResultsProps> = ({
               {output.join("\n")}
             </pre>
             {!isComplete && (
-              <p className="text-yellow-200 mt-1">
+              <p className="text-yellow-200">
                 Waiting for Execution Completion
               </p>
             )}
             {isComplete &&
               (output.join("\n").includes("Code executed successfully.") ? (
-                <p className="text-green-200 mt-1">Execution Completed</p>
+                <p className="text-green-200">Execution Completed</p>
               ) : (
-                <p className="text-red-200 mt-1">
+                <p className="text-red-200">
                   Error on Conversion to Python
                 </p>
               ))}

@@ -1,3 +1,4 @@
+import ast
 import re
 
 indent_amount = 4
@@ -110,3 +111,44 @@ def has_whitespace_before(line: str, start: int) -> bool:
 
 def has_whitespace_after(line: str, end: int) -> bool:
     return not (end == len(line)) and line[end].isspace()
+
+import ast
+
+def parse_value(value, global_scope):
+    """
+    Parses a string and returns the appropriate data type or object.
+    
+    Args:
+        value (str): The input string to parse.
+        global_scope (dict): A dictionary of predefined classes or objects.
+
+    Returns:
+        Any: The parsed value (e.g., int, float, string, object, etc.).
+    """
+    # Case 1: Quoted strings (e.g., '"hi"', "'hello'")
+    if (value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'")):
+        return value[1:-1]  # Strip the quotes and return as a string
+    
+    # Case 2: Boolean values
+    if value == "True":
+        return True
+    if value == "False":
+        return False
+
+    # Case 3: Numeric values (int or float)
+    try:
+        # Evaluate numbers safely using ast.literal_eval
+        literal_value = ast.literal_eval(value)
+        if isinstance(literal_value, (int, float)):
+            return literal_value
+    except (ValueError, SyntaxError):
+        pass
+
+    # Case 4: Python objects (e.g., Collection(0,4,5), Queue(...))
+    try:
+        return eval(value, global_scope)
+    except Exception:
+        pass
+
+    # Case 5: If nothing matches, treat as a raw string
+    return value

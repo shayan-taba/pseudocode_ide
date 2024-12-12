@@ -11,11 +11,13 @@ def main():
     # Get pseudocode from command-line argument
     pseudocode = sys.argv[1]
     
-    test_case_input = None
+    test_case_input_value = None
+    test_case_input_name = None
     
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
         # Test_case_inputs are provided. This is a pseudocode challenge.
-        test_case_input = json.loads(sys.argv[2])
+        test_case_input_name = json.loads(sys.argv[2])
+        test_case_input_value = json.loads(sys.argv[3])
     else:
         # Test_case_inputs aren't provided. This is "playground" IDE mode.
         pass
@@ -35,7 +37,7 @@ def main():
     # Run the converted Python code
     try:
         print("Executing converted Python code...\n")
-        print(syntax_check_and_run_converted(python_code, test_case_input))
+        print(syntax_check_and_run_converted(python_code, test_case_input_name, test_case_input_value))
     except Exception as e:
         print(f"Runtime error: {e}")
 

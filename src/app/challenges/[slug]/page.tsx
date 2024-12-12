@@ -54,6 +54,7 @@ export default function Challenge({
             ),
             dataTypes: {
               input: node.getElementsByTagName("dataTypes")[0]?.getElementsByTagName("input")[0]?.textContent || "",
+              inputName: node.getElementsByTagName("dataTypes")[0]?.getElementsByTagName("inputName")[0]?.textContent || "",
               output: node.getElementsByTagName("dataTypes")[0]?.getElementsByTagName("output")[0]?.textContent || "",
             },
             difficulty:
@@ -127,6 +128,7 @@ export default function Challenge({
           exampleCode={challenge.exampleSolution} // Use exampleSolution as exampleCode
           inputType={challenge.dataTypes.input}
           outputType={challenge.dataTypes.output}
+          inputName={challenge.dataTypes.inputName}
         />
       )}
     </>
