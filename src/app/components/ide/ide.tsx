@@ -21,7 +21,7 @@ export type TestResultType = {
     | "Special Error";
   actual: string[]; // Array of actual outputs
   expected: any; // Expected output (type depends on your test case structure)
-  input: any; // Input for the test case
+  input: any[]; // Input for the test case
 };
 
 interface IDEProps {
@@ -67,7 +67,6 @@ const IDE: React.FC<IDEProps> = ({
     "task"
   );
 
-  console.log("OUTOUT", outputType)
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const pollerRef = useRef<NodeJS.Timeout | null>(null);
@@ -322,6 +321,7 @@ const IDE: React.FC<IDEProps> = ({
     toggleResultsState: toggleResultsState,
     testResults: testResults,
     setCompleteStatus: setCompleteStatus,
+    testInputsTypes: testInputsTypes
   };
 
   return (

@@ -6,7 +6,11 @@ const TestCaseResult: React.FC<{
   testCaseIndex: number;
   result: TestResultType;
   isLast: boolean;
-}> = ({ testCaseIndex, result, isLast }) => {
+  testInputsTypes: {
+    name: string;
+    type: string;
+  }[];
+}> = ({ testCaseIndex, result, isLast, testInputsTypes }) => {
   const [isExpanded, setIsExpanded] = useState(false); // For collapsing the input/expected output
 
   const handleExpandToggle = () => {
@@ -31,6 +35,8 @@ const TestCaseResult: React.FC<{
         return typeClass == "border" ? "border-gray-300" : "text-gray-300";
     }
   };
+
+  console.log(result,"resres")
 
   return (
     <div
@@ -82,15 +88,20 @@ const TestCaseResult: React.FC<{
                   </p>
                 )}
                 <div className="mt-2">
-                  <span className="font-bold">Input:</span>{" "}
-                  <span className="text-gray-300">
-                    {!isLast &&
-                      (JSON.stringify(result.input).length > 100
-                        ? `${JSON.stringify(result.input).slice(0, 100)}...`
-                        : JSON.stringify(result.input))}
-                    {isLast && "hidden"}
-                  </span>
-                </div>
+  <span className="font-bold">Input:</span>
+  <div className="text-gray-300 space-y-1">
+    {result.input.map((inputValue, index) => {
+      const variable = testInputsTypes[index]; // Get the variable name from the testInputsTypes
+      return (
+        <div key={index} className="flex items-center space-x-2">
+          <span className="font-medium text-blue-300">{variable.name}:</span>
+          <span>{inputValue}</span>
+        </div>
+      );
+    })}
+  </div>
+</div>
+
                 <div className="mt-2">
                   <span className="font-bold">Expected Output:</span>{" "}
                   <span className="text-gray-300">

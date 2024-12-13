@@ -27,6 +27,10 @@ interface ResultsProps {
   toggleResultsState: () => void;
   testResults: TestResultType[];
   setCompleteStatus: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  testInputsTypes: {
+    name: string;
+    type: string;
+  }[];
 }
 
 const Results: React.FC<ResultsProps> = ({
@@ -41,6 +45,7 @@ const Results: React.FC<ResultsProps> = ({
   onClearOutput,
   testResults,
   setCompleteStatus,
+  testInputsTypes
 }) => {
   const preRef = useRef<HTMLPreElement>(null);
 
@@ -208,6 +213,7 @@ const Results: React.FC<ResultsProps> = ({
                 testCaseIndex={index}
                 result={result}
                 isLast={index === testResults.length - 1}
+                testInputsTypes={testInputsTypes}
               />
             ))}
           </div>

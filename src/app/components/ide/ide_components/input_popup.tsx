@@ -12,8 +12,6 @@ interface PopupProps {
 const Popup: React.FC<PopupProps> = ({ isOpen, userInput, onInputChange, onSubmit, message }) => {
   if (!isOpen) return null;
 
-  console.log(message.split("\n"), typeof message.split("\n"))
-
   return ReactDOM.createPortal(
     <div className="fixed inset-0 bg-black text-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded shadow-lg w-1/3">
