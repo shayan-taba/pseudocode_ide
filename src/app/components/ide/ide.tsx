@@ -30,11 +30,13 @@ interface IDEProps {
   description: string;
   tags: string[];
   difficulty: string;
-  testCases: { input: string; output: string }[]; // Test case structure
+  testCases: { inputs: string[]; output: string }[]; // Test case structure
   exampleCode: string;
-  inputType: any;
   outputType: any;
-  inputName: string;
+  testInputsTypes: {
+    name: string;
+    type: string;
+  }[];
 }
 
 const IDE: React.FC<IDEProps> = ({
@@ -45,9 +47,8 @@ const IDE: React.FC<IDEProps> = ({
   difficulty,
   testCases,
   exampleCode,
-  inputType,
   outputType,
-  inputName,
+  testInputsTypes,
 }) => {
   const [completeStatus, setCompleteStatus] = useState<boolean | undefined>();
   const [code, setCode] = useState<string>("");
@@ -66,6 +67,7 @@ const IDE: React.FC<IDEProps> = ({
     "task"
   );
 
+  console.log("OUTOUT", outputType)
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const pollerRef = useRef<NodeJS.Timeout | null>(null);
@@ -90,7 +92,7 @@ const IDE: React.FC<IDEProps> = ({
       status: "Pending",
       actual: [],
       expected: testCase.output,
-      input: testCase.input,
+      input: testCase.inputs,
     }))
   );
 
@@ -154,8 +156,8 @@ const IDE: React.FC<IDEProps> = ({
           pseudocode: code,
           userInput: input,
           run: run,
-          test_case_input_name: inputName,
-          test_case_input_value: testCases[test_case_index].input,
+          test_case_input_name: testInputsTypes,
+          test_case_input_value: testCases[test_case_index].inputs,
           test_case_index: test_case_index,
         }),
       });
@@ -180,7 +182,7 @@ const IDE: React.FC<IDEProps> = ({
         status: "Pending",
         actual: [],
         expected: testCase.output,
-        input: testCase.input,
+        input: testCase.inputs,
       }))
     ); // Reset test results to their initial state
 
@@ -204,7 +206,11 @@ const IDE: React.FC<IDEProps> = ({
 
     const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
 
-    setOutput((prev) => [...prev, data.output.replace(uuid + " ", "")]); // Append new output
+    setOutput((prev) => [
+      ...prev,
+      data.output.replace(new RegExp(uuid + " ", "g"), ""),
+    ]); // Append new output
+    
 
     const currentTest = testCases[currentIndex];
 
@@ -289,12 +295,12 @@ const IDE: React.FC<IDEProps> = ({
     setExpandInstructions: setExpandInstructions,
     instructionState: instructionState,
     toggleInstructionState: toggleInstructionState,
-    inputType: inputType,
     outputType: outputType,
-    inputName: inputName,
+    inputName: testInputsTypes,
     exampleSolution: exampleCode,
     testResults: testResults,
     completeStatus: completeStatus,
+    testInputsTypes: testInputsTypes
   };
 
   const editorArgs = {
@@ -315,7 +321,6 @@ const IDE: React.FC<IDEProps> = ({
     resultState: resultState,
     toggleResultsState: toggleResultsState,
     testResults: testResults,
-    testCases: testCases,
     setCompleteStatus: setCompleteStatus,
   };
 
@@ -333,9 +338,9 @@ const IDE: React.FC<IDEProps> = ({
 
         {!expandInstructions && !expandEditor && !expandResults && (
           <>
-            <Instructions width={"w-[35%]"} {...instructionArgs} />
+            <Instructions width={"w-[40%]"} {...instructionArgs} />
 
-            <div className="divider flex flex-col flex-grow justify-between gap-6 w-[65%]">
+            <div className="divider flex flex-col flex-grow justify-between gap-6 w-[60%]">
               <div className="h-[49%]">
                 <Editor width={"flex-grow"} {...editorArgs} />
               </div>

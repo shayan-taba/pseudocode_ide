@@ -8,7 +8,7 @@ from pseudo_conversions_utils.general_utils import parse_value
 
 
 def syntax_check_and_run_converted(
-    code_string, test_case_input_name: str, test_case_input_value: str
+    code_string, test_case_input_names: str, test_case_input_values: str
 ):
 
     try:
@@ -43,8 +43,12 @@ def syntax_check_and_run_converted(
         }
 
         # Parse and add the test case input value to the global scope
-        global_scope[test_case_input_name] = parse_value(test_case_input_value, global_scope)
+        #print('d name', test_case_input_names, type(test_case_input_names))
+        #print('d val', test_case_input_values, type(test_case_input_values))
         
+        for index, input_type in enumerate(test_case_input_names):
+            global_scope[input_type["name"]] = parse_value(test_case_input_values[index], global_scope)
+                
         # Syntax is valid as not errors have been raised, execute the code and handle input/output
         exec(code_string, global_scope)
     except Exception as e:

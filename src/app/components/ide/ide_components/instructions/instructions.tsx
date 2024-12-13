@@ -20,14 +20,16 @@ interface InstructionsProps {
   description: string;
   tags: string[];
   difficulty: string;
-  testCases: { input: string; output: string }[]; // Test case structure
+  testCases: { inputs: string[]; output: string; }[]; // Test case structure
   expandInstructions: boolean;
   setExpandInstructions: Dispatch<React.SetStateAction<boolean>>;
   instructionState: "task" | "solution";
   toggleInstructionState: () => void;
-  inputType: string;
   outputType: string;
-  inputName: string;
+  testInputsTypes: {
+    name: string;
+    type: string;
+}[];
   exampleSolution: string;
   testResults: TestResultType[];
   completeStatus: boolean | undefined;
@@ -45,9 +47,8 @@ const Instructions: React.FC<InstructionsProps> = ({
   setExpandInstructions,
   instructionState,
   toggleInstructionState,
-  inputType,
   outputType,
-  inputName,
+  testInputsTypes,
   exampleSolution,
   testResults,
   completeStatus,
@@ -99,9 +100,7 @@ const Instructions: React.FC<InstructionsProps> = ({
             description={description}
             difficulty={difficulty}
             tags={tags}
-            inputName={inputName}
-            inputType={inputType}
-            testResults={testResults}
+            testInputsTypes={testInputsTypes}
             completeStatus={completeStatus}
           />
         )}

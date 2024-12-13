@@ -26,7 +26,6 @@ interface ResultsProps {
   resultState: "outcome" | "output";
   toggleResultsState: () => void;
   testResults: TestResultType[];
-  testCases: { input: string; output: string }[];
   setCompleteStatus: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
 

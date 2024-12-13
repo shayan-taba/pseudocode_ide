@@ -8,27 +8,29 @@ export default function Challenge({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  interface Challenge {
+    id: number;
+    title: string;
+    description: string;
+    tags: string[];
+    dataTypes: {
+      inputs: {
+        name: string;
+        type: string;
+      }[];
+      outputType: string;
+    };
+    difficulty: string;
+    testCases: {
+      inputs: string[];
+      output: string;
+    }[];
+    exampleSolution: string;
+  }
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSolution, setIsSolution] = useState<boolean>(false);
-  const [challenges, setChallenges] = useState<
-    {
-      id: number;
-      title: string;
-      description: string;
-      tags: string[];
-      dataTypes: {
-        input: string;
-        inputName: string;
-        output: string;
-      };
-      difficulty: string;
-      testCases: {
-        input: string;
-        output: string;
-      }[];
-      exampleSolution: string;
-    }[]
-  >([]);
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [challenge, setChallenge] = useState<any | null>(null);
 
   const [isPlayground, setIsPlayground] = useState(false);
@@ -45,7 +47,7 @@ export default function Challenge({
           return;
         } else {
           if (Number.isInteger(parseInt(slug))) {
-            if (slug.length >= 2 && slug[1] == "solutoin") {
+            if (slug.length >= 2 && slug[1] == "solution") {
               setIsSolution(true);
             }
           }
@@ -69,43 +71,55 @@ export default function Challenge({
 
         // Parse XML into challenges
         const challengeNodes = xmlDoc.getElementsByTagName("challenge");
-        const loadedChallenges = Array.from(challengeNodes).map((node) => ({
-          id: parseInt(node.getElementsByTagName("id")[0]?.textContent || "0"),
-          title: node.getElementsByTagName("title")[0]?.textContent || "",
-          description:
-            node.getElementsByTagName("description")[0]?.textContent || "",
-          tags: Array.from(node.getElementsByTagName("tag")).map(
-            (tagNode) => tagNode.textContent || ""
-          ),
-          dataTypes: {
-            input:
-              node
-                .getElementsByTagName("dataTypes")[0]
-                ?.getElementsByTagName("input")[0]?.textContent || "",
-            inputName:
-              node
-                .getElementsByTagName("dataTypes")[0]
-                ?.getElementsByTagName("inputName")[0]?.textContent || "",
-            output:
-              node
-                .getElementsByTagName("dataTypes")[0]
-                ?.getElementsByTagName("output")[0]?.textContent || "",
-          },
-          difficulty:
-            node.getElementsByTagName("difficulty")[0]?.textContent || "Easy",
-          testCases: Array.from(node.getElementsByTagName("testCase")).map(
-            (testCaseNode) => ({
-              input:
-                testCaseNode.getElementsByTagName("input")[0]?.textContent ||
-                "",
-              output:
-                testCaseNode.getElementsByTagName("output")[0]?.textContent ||
-                "",
+        const loadedChallenges = Array.from(challengeNodes).map((node) => {
+          const inputTypeNodes = node
+            .getElementsByTagName("dataTypes")[0]
+            ?.getElementsByTagName("inputType");
+          const inputNameNodes = node
+            .getElementsByTagName("dataTypes")[0]
+            ?.getElementsByTagName("inputName");
+
+          const inputs = Array.from(inputTypeNodes || []).map(
+            (inputNode, index) => ({
+              name: inputNameNodes?.[index]?.textContent || `Input${index + 1}`,
+              type: inputNode?.textContent || "",
             })
-          ),
-          exampleSolution:
-            node.getElementsByTagName("exampleSolution")[0]?.textContent || "",
-        }));
+          );
+
+          return {
+            id: parseInt(
+              node.getElementsByTagName("id")[0]?.textContent || "0"
+            ),
+            title: node.getElementsByTagName("title")[0]?.textContent || "",
+            description:
+              node.getElementsByTagName("description")[0]?.textContent || "",
+            tags: Array.from(node.getElementsByTagName("tag")).map(
+              (tagNode) => tagNode.textContent || ""
+            ),
+            dataTypes: {
+              inputs,
+              outputType:
+                node
+                  .getElementsByTagName("dataTypes")[0]
+                  ?.getElementsByTagName("outputType")[0]?.textContent || "",
+            },
+            difficulty:
+              node.getElementsByTagName("difficulty")[0]?.textContent || "Easy",
+            testCases: Array.from(node.getElementsByTagName("testCase")).map(
+              (testCaseNode) => ({
+                inputs: Array.from(
+                  testCaseNode.getElementsByTagName("input")
+                ).map((inputNode) => inputNode?.textContent || ""),
+                output:
+                  testCaseNode.getElementsByTagName("output")[0]?.textContent ||
+                  "",
+              })
+            ),
+            exampleSolution:
+              node.getElementsByTagName("exampleSolution")[0]?.textContent ||
+              "",
+          };
+        });
 
         setChallenges(loadedChallenges);
 
@@ -142,6 +156,7 @@ export default function Challenge({
     );
   }
   // Render the IDE
+
   return (
     <>
       {isPlayground &&
@@ -164,9 +179,8 @@ export default function Challenge({
           difficulty={challenge.difficulty}
           testCases={challenge.testCases}
           exampleCode={challenge.exampleSolution} // Use exampleSolution as exampleCode
-          inputType={challenge.dataTypes.input}
-          outputType={challenge.dataTypes.output}
-          inputName={challenge.dataTypes.inputName}
+          testInputsTypes={challenge.dataTypes.inputs}
+          outputType={challenge.dataTypes.outputType}
         />
       )}
     </>

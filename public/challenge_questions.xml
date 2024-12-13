@@ -2,30 +2,30 @@
   <challenge>
     <id>1</id>
     <title>Count Numbers in Range</title>
-    <description>Write an algorithm to count how many numbers in a collection are in the range [-1, 1].</description>
+    <description>Write an algorithm to count how many numbers in a collection are odd negative integers.</description>
     <tags>
       <tag>Collections</tag>
       <tag>Loops</tag>
     </tags>
     <dataTypes>
-      <input>Collection of numbers</input>
+      <inputType>Collection of numbers</inputType>
       <inputName>NUMBERS</inputName>
-      <output>Integer count</output>
+      <outputType>Integer count</outputType>
     </dataTypes>
     <difficulty>SL</difficulty>
     <type>Algorithm</type>
     <testCases>
       <testCase>
         <input>Collection(-0.5, 0.8, 2, -1, 1.5)</input>
+        <output>1</output>
+      </testCase>
+      <testCase>
+        <input>Collection(-5, -2, 3,-7)</input>
         <output>3</output>
       </testCase>
       <testCase>
-        <input>Collection(5, -2, 3)</input>
-        <output>0</output>
-      </testCase>
-      <testCase>
-        <input>Collection(1, -1, 0)</input>
-        <output>3</output>
+        <input>Collection(1, -1, -23)</input>
+        <output>2</output>
       </testCase>
     </testCases>
   </challenge>
@@ -39,9 +39,9 @@
       <tag>Stacks</tag>
     </tags>
     <dataTypes>
-      <input>Queue of strings</input>
+      <inputType>Queue of strings</inputType>
       <inputName>QUEUE</inputName>
-      <output>Queue of strings in reverse order</output>
+      <outputType>Queue of strings in reverse order</outputType>
     </dataTypes>
     <difficulty>HL</difficulty>
     <type>Algorithm</type>
@@ -64,17 +64,17 @@
   <challenge>
     <id>3</id>
     <title>Find Common IDs</title>
-    <description>Write an algorithm to find the count of students who are in both tennis and football teams using isIn method.</description>
+    <description>Write an algorithm to find the number of students who study both math and economics.</description>
     <tags>
       <tag>Collections</tag>
       <tag>Conditionals</tag>
     </tags>
     <dataTypes>
-      <input>Collection of student IDs for tennis</input>
-      <inputName>TENNIS</inputName>
-      <input>Collection of student IDs for football</input>
-      <inputName>FOOTBALL</inputName>
-      <output>Integer count</output>
+      <inputType>Collection of student IDs of math students.</inputType>
+      <inputName>MATH</inputName>
+      <inputType>Collection of student IDs for economics students.</inputType>
+      <inputName>ECONOMICS</inputName>
+      <outputType>Integer count</outputType>
     </dataTypes>
     <difficulty>SL</difficulty>
     <type>Algorithm</type>
@@ -106,9 +106,9 @@
       <tag>Sorting</tag>
     </tags>
     <dataTypes>
-      <input>Stack of integers</input>
+      <inputType>Stack of integers</inputType>
       <inputName>STACK</inputName>
-      <output>Stack of integers in ascending order</output>
+      <outputType>Stack of integers in ascending order</outputType>
     </dataTypes>
     <difficulty>HL</difficulty>
     <type>Algorithm</type>
@@ -137,9 +137,9 @@
       <tag>Simulation</tag>
     </tags>
     <dataTypes>
-      <input>Queue of integers</input>
+      <inputType>Queue of integers</inputType>
       <inputName>FLOORS</inputName>
-      <output>Sequence of elevator stops</output>
+      <outputType>Sequence of elevator stops</outputType>
     </dataTypes>
     <difficulty>HL</difficulty>
     <type>Algorithm</type>
@@ -168,9 +168,9 @@
       <tag>Conditionals</tag>
     </tags>
     <dataTypes>
-      <input>String of brackets</input>
+      <inputType>String of brackets</inputType>
       <inputName>BRACKETS</inputName>
-      <output>Boolean indicating if brackets are balanced</output>
+      <outputType>Boolean indicating if brackets are balanced</outputType>
     </dataTypes>
     <difficulty>HL</difficulty>
     <type>Algorithm</type>
@@ -199,11 +199,11 @@
       <tag>Loops</tag>
     </tags>
     <dataTypes>
-      <input>Collection of integers</input>
+      <inputType>Collection of integers</inputType>
       <inputName>COLLECTION1</inputName>
-      <input>Collection of integers</input>
+      <inputType>Collection of integers</inputType>
       <inputName>COLLECTION2</inputName>
-      <output>Collection of unique integers</output>
+      <outputType>Collection of unique integers</outputType>
     </dataTypes>
     <difficulty>SL</difficulty>
     <type>Algorithm</type>
@@ -235,11 +235,11 @@
       <tag>Random</tag>
     </tags>
     <dataTypes>
-      <input>Integer size</input>
+      <inputType>Integer size</inputType>
       <inputName>SIZE</inputName>
-      <input>Integer range</input>
+      <inputType>Integer range</inputType>
       <inputName>RANGE</inputName>
-      <output>Queue of random integers</output>
+      <outputType>Queue of random integers</outputType>
     </dataTypes>
     <difficulty>SL</difficulty>
     <type>Algorithm</type>
