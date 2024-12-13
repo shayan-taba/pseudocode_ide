@@ -297,12 +297,12 @@ const IDE: React.FC<IDEProps> = ({
     outputType: outputType,
     inputName: testInputsTypes,
     exampleSolution: exampleCode,
-    testResults: testResults,
     completeStatus: completeStatus,
     testInputsTypes: testInputsTypes
   };
 
   const editorArgs = {
+    id:id,
     code: code,
     onCodeChange: setCode,
     onRun: handleRunCode,
@@ -323,6 +323,7 @@ const IDE: React.FC<IDEProps> = ({
     setCompleteStatus: setCompleteStatus,
     testInputsTypes: testInputsTypes
   };
+  console.log("EXC", exampleCode)
 
   return (
     <div id="IDE" className="flex flex-col h-screen bg-zinc-950">

@@ -32,6 +32,7 @@ export default function Challenge({
   const [isSolution, setIsSolution] = useState<boolean>(false);
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [challenge, setChallenge] = useState<any | null>(null);
+  const [exampleSolutions, setExampleSolutions] = useState<any | null>(null);
 
   const [isPlayground, setIsPlayground] = useState(false);
 
@@ -53,24 +54,24 @@ export default function Challenge({
           }
         }
 
-        // Fetch challenges from XML
-        const response = await fetch("/challenge_questions.xml");
-        const text = await response.text();
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(text, "application/xml");
+        // Fetch challenges from XML (challenge questions)
+        const challengeResponse = await fetch("/challenge_questions.xml");
+        const challengeText = await challengeResponse.text();
+        const challengeParser = new DOMParser();
+        const challengeXmlDoc = challengeParser.parseFromString(challengeText, "application/xml");
 
         // Handle XML parsing errors
-        if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+        if (challengeXmlDoc.getElementsByTagName("parsererror").length > 0) {
           console.error(
             "XML Parsing Error:",
-            xmlDoc.getElementsByTagName("parsererror")[0].textContent
+            challengeXmlDoc.getElementsByTagName("parsererror")[0].textContent
           );
           setIsLoading(false);
           return;
         }
 
-        // Parse XML into challenges
-        const challengeNodes = xmlDoc.getElementsByTagName("challenge");
+        // Parse challenge questions into challenges
+        const challengeNodes = challengeXmlDoc.getElementsByTagName("challenge");
         const loadedChallenges = Array.from(challengeNodes).map((node) => {
           const inputTypeNodes = node
             .getElementsByTagName("dataTypes")[0]
@@ -115,17 +116,49 @@ export default function Challenge({
                   "",
               })
             ),
-            exampleSolution:
-              node.getElementsByTagName("exampleSolution")[0]?.textContent ||
-              "",
+            exampleSolution: "", // Example solutions will be handled separately
           };
         });
 
         setChallenges(loadedChallenges);
 
+        // Now, fetch example solutions from another XML file
+        const solutionResponse = await fetch("/example_solutions.xml");
+        const solutionText = await solutionResponse.text();
+        const solutionParser = new DOMParser();
+        const solutionXmlDoc = solutionParser.parseFromString(solutionText, "application/xml");
+
+        if (solutionXmlDoc.getElementsByTagName("parsererror").length > 0) {
+          console.error(
+            "XML Parsing Error:",
+            solutionXmlDoc.getElementsByTagName("parsererror")[0].textContent
+          );
+          setIsLoading(false);
+          return;
+        }
+
+        // Parse the example solutions into a dictionary by id
+        const solutionNodes = solutionXmlDoc.getElementsByTagName("solution");
+        const loadedSolutions = Array.from(solutionNodes).reduce((acc: any, node) => {
+          const id = parseInt(node.getElementsByTagName("id")[0]?.textContent || "0");
+          const code = node.getElementsByTagName("code")[0]?.textContent || "";
+          acc[id] = code; // Store by challenge ID
+          return acc;
+        }, {});
+
+        setExampleSolutions(loadedSolutions);
+
+        // Now, associate example solution with challenges based on ID
+        const updatedChallenges = loadedChallenges.map((ch) => ({
+          ...ch,
+          exampleSolution: loadedSolutions[ch.id] || "",
+        }));
+
+        setChallenges(updatedChallenges);
+
         // Find the challenge based on slug
         const challengeId = parseInt(slug);
-        const foundChallenge = loadedChallenges.find(
+        const foundChallenge = updatedChallenges.find(
           (ch) => ch.id === challengeId
         );
 
@@ -155,13 +188,13 @@ export default function Challenge({
       </div>
     );
   }
-  // Render the IDE
 
+  // Render the IDE with the updated challenge data
   return (
     <>
-      {isPlayground &&
-        {
-          /*<IDE
+      {isPlayground && (
+        // Placeholder for Playground IDE component
+        /*<IDE
           title="Playground"
           description="An IDE that runs pseudocode that has been converted to Python."
           tags={[]}
@@ -169,7 +202,8 @@ export default function Challenge({
           testCases={[]}
           exampleCode=""
         />*/
-        }}
+        null
+      )}
       {!isPlayground && challenge && (
         <IDE
           id={challenge.id}
@@ -178,7 +212,7 @@ export default function Challenge({
           tags={challenge.tags}
           difficulty={challenge.difficulty}
           testCases={challenge.testCases}
-          exampleCode={challenge.exampleSolution} // Use exampleSolution as exampleCode
+          exampleCode={challenge.exampleSolution} // Use exampleSolution from the new XML file
           testInputsTypes={challenge.dataTypes.inputs}
           outputType={challenge.dataTypes.outputType}
         />

@@ -31,7 +31,6 @@ interface InstructionsProps {
     type: string;
 }[];
   exampleSolution: string;
-  testResults: TestResultType[];
   completeStatus: boolean | undefined;
 }
 
@@ -50,7 +49,6 @@ const Instructions: React.FC<InstructionsProps> = ({
   outputType,
   testInputsTypes,
   exampleSolution,
-  testResults,
   completeStatus,
 }) => {
 

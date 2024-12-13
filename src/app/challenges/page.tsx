@@ -6,7 +6,6 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
 
 export type Challenge = {
   id: number;

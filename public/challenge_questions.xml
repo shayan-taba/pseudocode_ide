@@ -29,7 +29,6 @@
       </testCase>
     </testCases>
   </challenge>
-
   <challenge>
     <id>2</id>
     <title>Reverse Queue Elements</title>
@@ -60,7 +59,6 @@
       </testCase>
     </testCases>
   </challenge>
-
   <challenge>
     <id>3</id>
     <title>Find Common IDs</title>
@@ -96,7 +94,6 @@
       </testCase>
     </testCases>
   </challenge>
-
   <challenge>
     <id>4</id>
     <title>Stack Sort</title>
@@ -127,40 +124,8 @@
       </testCase>
     </testCases>
   </challenge>
-
   <challenge>
     <id>5</id>
-    <title>Simulate Elevator</title>
-    <description>Write an algorithm to simulate the operations of an elevator using a queue. Assume the queue holds the floor numbers where the elevator must stop.</description>
-    <tags>
-      <tag>Queues</tag>
-      <tag>Simulation</tag>
-    </tags>
-    <dataTypes>
-      <inputType>Queue of integers</inputType>
-      <inputName>FLOORS</inputName>
-      <outputType>Sequence of elevator stops</outputType>
-    </dataTypes>
-    <difficulty>HL</difficulty>
-    <type>Algorithm</type>
-    <testCases>
-      <testCase>
-        <input>Queue(1, 3, 5, 2)</input>
-        <output>Queue([1, 3, 5, 2])</output>
-      </testCase>
-      <testCase>
-        <input>Queue(10, 1, 7)</input>
-        <output>Queue([10, 1, 7])</output>
-      </testCase>
-      <testCase>
-        <input>Queue(2)</input>
-        <output>Queue([2])</output>
-      </testCase>
-    </testCases>
-  </challenge>
-
-  <challenge>
-    <id>6</id>
     <title>Bracket Matching</title>
     <description>Write an algorithm to check if the brackets in a string are balanced using a stack.</description>
     <tags>
@@ -189,9 +154,8 @@
       </testCase>
     </testCases>
   </challenge>
-
   <challenge>
-    <id>7</id>
+    <id>6</id>
     <title>Merge Two Collections</title>
     <description>Write an algorithm to merge two collections into one and remove duplicates.</description>
     <tags>
@@ -225,40 +189,351 @@
       </testCase>
     </testCases>
   </challenge>
-
   <challenge>
-    <id>8</id>
-    <title>Generate Random Queue</title>
-    <description>Write an algorithm to generate a queue of random integers given a specified size and range.</description>
+    <id>7</id>
+    <title>Bubble Sort and Identify</title>
+    <description>Sort an array of integers using bubble sort and identify the median value.</description>
     <tags>
-      <tag>Queues</tag>
-      <tag>Random</tag>
+      <tag>Arrays</tag>
+      <tag>Bubble Sort</tag>
     </tags>
     <dataTypes>
-      <inputType>Integer size</inputType>
-      <inputName>SIZE</inputName>
-      <inputType>Integer range</inputType>
-      <inputName>RANGE</inputName>
-      <outputType>Queue of random integers</outputType>
+      <inputType>Array of unsorted integers.</inputType>
+      <inputName>NUMBERS</inputName>
+      <outputType>Integer representing the median value.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>Array(5, 3, 8, 6, 2)</input>
+        <output>5</output>
+      </testCase>
+      <testCase>
+        <input>Array(10, 1, 3, 5, 2)</input>
+        <output>3</output>
+      </testCase>
+      <testCase>
+        <input>Array(4, 7, 1, 2)</input>
+        <output>3</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>8</id>
+    <title>Nearest Locations Queue</title>
+    <description>Given a 2D array of locations with names and coordinates, return a queue of location names ordered by proximity to a given reference point.</description>
+    <tags>
+      <tag>2D Arrays</tag>
+      <tag>Queues</tag>
+      <tag>Sorting</tag>
+    </tags>
+    <dataTypes>
+      <inputType>2D Array of strings and integers (location names and x, y coordinates).</inputType>
+      <inputName>LOCATIONS</inputName>
+      <inputType>Array of integers representing the reference x, y coordinates.</inputType>
+      <inputName>REFERENCE</inputName>
+      <outputType>Queue of strings representing location names in order of proximity.</outputType>
+    </dataTypes>
+    <difficulty>HL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>Array([["Park", 2, 3], ["Mall", 5, 1], ["Cafe", 1, 2]])</input>
+        <input>Array(0, 0)</input>
+        <output>Queue(["Cafe", "Park", "Mall"])</output>
+      </testCase>
+      <testCase>
+        <input>Array([["Home", 0, 0], ["School", 10, 10], ["Shop", 5, 5]])</input>
+        <input>Array(3, 3)</input>
+        <output>Queue(["Shop", "Home", "School"])</output>
+      </testCase>
+      <testCase>
+        <input>Array([["Lake", 4, 4], ["Mountain", 8, 8], ["Museum", 6, 5]])</input>
+        <input>Array(5, 5)</input>
+        <output>Queue(["Museum", "Lake", "Mountain"])</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>9</id>
+    <title>Bubble Sort for Even Numbers</title>
+    <description>Given an array of integers, filter out the even numbers and sort them in ascending order using bubble sort.</description>
+    <tags>
+      <tag>Arrays</tag>
+      <tag>Bubble Sort</tag>
+      <tag>Filtering</tag>
+    </tags>
+    <dataTypes>
+      <inputType>Array of integers.</inputType>
+      <inputName>NUMBERS</inputName>
+      <outputType>Array of sorted even integers.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>Array(7, 2, 4, 9, 6)</input>
+        <output>Array(2, 4, 6)</output>
+      </testCase>
+      <testCase>
+        <input>Array(1, 3, 5, 7)</input>
+        <output>Array()</output>
+      </testCase>
+      <testCase>
+        <input>Array(8, 6, 2, 10)</input>
+        <output>Array(2, 6, 8, 10)</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>10</id>
+    <title>Sum of Unique Elements</title>
+    <description>Calculate the sum of all unique elements in an array.</description>
+    <tags>
+      <tag>Arrays</tag>
+      <tag>Conditionals</tag>
+    </tags>
+    <dataTypes>
+      <inputType>Array of integers.</inputType>
+      <inputName>NUMBERS</inputName>
+      <outputType>Integer sum.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>Array(1, 2, 2, 3, 4)</input>
+        <output>8</output>
+      </testCase>
+      <testCase>
+        <input>Array(10, 10, 10, 20)</input>
+        <output>20</output>
+      </testCase>
+      <testCase>
+        <input>Array(5, 6, 7, 8)</input>
+        <output>26</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>11</id>
+    <title>Filter Multiples of X</title>
+    <description>Filter out numbers that are multiples of a given integer X from an array.</description>
+    <tags>
+      <tag>Arrays</tag>
+      <tag>Conditionals</tag>
+    </tags>
+    <dataTypes>
+      <inputType>Array of integers.</inputType>
+      <inputName>NUMBERS</inputName>
+      <inputType>Integer X.</inputType>
+      <inputName>X</inputName>
+      <outputType>Array of integers that are not multiples of X.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>Array(10, 15, 20, 25)</input>
+        <input>5</input>
+        <output>Array()</output>
+      </testCase>
+      <testCase>
+        <input>Array(1, 3, 6, 9)</input>
+        <input>2</input>
+        <output>Array(1, 3, 9)</output>
+      </testCase>
+      <testCase>
+        <input>Array(12, 18, 24, 30)</input>
+        <input>4</input>
+        <output>Array(18, 30)</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>12</id>
+    <title>Reverse Characters in Words</title>
+    <description>Reverse the characters in each word of a given array of strings.</description>
+    <tags>
+      <tag>Strings</tag>
+      <tag>Arrays</tag>
+    </tags>
+    <dataTypes>
+      <inputType>Array of strings.</inputType>
+      <inputName>WORDS</inputName>
+      <outputType>Array of strings with reversed characters.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>Array("cat", "dog", "fish")</input>
+        <output>Array("tac", "god", "hsif")</output>
+      </testCase>
+      <testCase>
+        <input>Array("hello", "world")</input>
+        <output>Array("olleh", "dlrow")</output>
+      </testCase>
+      <testCase>
+        <input>Array("racecar", "level", "radar")</input>
+        <output>Array("racecar", "level", "radar")</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>13</id>
+    <title>Palindrome Identifier</title>
+    <description>Determine if a given string is a palindrome (reads the same backward as forward).</description>
+    <tags>
+      <tag>Strings</tag>
+      <tag>Conditionals</tag>
+    </tags>
+    <dataTypes>
+      <inputType>String to check.</inputType>
+      <inputName>INPUT_STRING</inputName>
+      <outputType>Boolean.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>"racecar"</input>
+        <output>True</output>
+      </testCase>
+      <testCase>
+        <input>"hello"</input>
+        <output>False</output>
+      </testCase>
+      <testCase>
+        <input>"madam"</input>
+        <output>True</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>14</id>
+    <title>Sum of Factors</title>
+    <description>Calculate the sum of all factors of a given integer.</description>
+    <tags>
+      <tag>Math</tag>
+      <tag>Conditionals</tag>
+    </tags>
+    <dataTypes>
+      <inputType>Integer for which factors need to be summed.</inputType>
+      <inputName>NUMBER</inputName>
+      <outputType>Integer representing the sum of factors.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>12</input>
+        <output>28</output>
+      </testCase>
+      <testCase>
+        <input>7</input>
+        <output>8</output>
+      </testCase>
+      <testCase>
+        <input>20</input>
+        <output>42</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>15</id>
+    <title>Check Prime Number</title>
+    <description>Determine if a given integer is a prime number.</description>
+    <tags>
+      <tag>Math</tag>
+      <tag>Conditionals</tag>
+    </tags>
+    <dataTypes>
+      <inputType>Integer to check.</inputType>
+      <inputName>NUMBER</inputName>
+      <outputType>Boolean.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>11</input>
+        <output>True</output>
+      </testCase>
+      <testCase>
+        <input>18</input>
+        <output>False</output>
+      </testCase>
+      <testCase>
+        <input>29</input>
+        <output>True</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>16</id>
+    <title>Greatest Common Divisor</title>
+    <description>Find the greatest common divisor (GCD) of two integers using the Euclidean algorithm.</description>
+    <tags>
+      <tag>Math</tag>
+      <tag>Algorithm</tag>
+    </tags>
+    <dataTypes>
+      <inputType>First integer.</inputType>
+      <inputName>NUMBER1</inputName>
+      <inputType>Second integer.</inputType>
+      <inputName>NUMBER2</inputName>
+      <outputType>Integer representing the GCD.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <type>Algorithm</type>
+    <testCases>
+      <testCase>
+        <input>48</input>
+        <input>18</input>
+        <output>6</output>
+      </testCase>
+      <testCase>
+        <input>7</input>
+        <input>3</input>
+        <output>1</output>
+      </testCase>
+      <testCase>
+        <input>56</input>
+        <input>98</input>
+        <output>14</output>
+      </testCase>
+    </testCases>
+</challenge>
+<challenge>
+    <id>17</id>
+    <title>Factorial Finder</title>
+    <description>Calculate the factorial of a given non-negative integer.</description>
+    <tags>
+      <tag>Math</tag>
+      <tag>Algorithm</tag>
+    </tags>
+    <dataTypes>
+      <inputType>Non-negative integer.</inputType>
+      <inputName>NUMBER</inputName>
+      <outputType>Integer representing the factorial.</outputType>
     </dataTypes>
     <difficulty>SL</difficulty>
     <type>Algorithm</type>
     <testCases>
       <testCase>
         <input>5</input>
-        <input>10</input>
-        <output>Queue([random])</output>
+        <output>120</output>
       </testCase>
       <testCase>
-        <input>3</input>
-        <input>100</input>
-        <output>Queue([random])</output>
+        <input>0</input>
+        <output>1</output>
       </testCase>
       <testCase>
-        <input>1</input>
-        <input>50</input>
-        <output>Queue([random])</output>
+        <input>7</input>
+        <output>5040</output>
       </testCase>
     </testCases>
-  </challenge>
+</challenge>
 </challenges>

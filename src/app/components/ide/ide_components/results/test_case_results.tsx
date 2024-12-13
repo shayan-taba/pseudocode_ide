@@ -36,8 +36,6 @@ const TestCaseResult: React.FC<{
     }
   };
 
-  console.log(result,"resres")
-
   return (
     <div
       className={
@@ -47,7 +45,9 @@ const TestCaseResult: React.FC<{
       <div className="font-bold underline underline-offset-3">
         {!isLast && `Test Case ${testCaseIndex + 1}`}
         {isLast && (
-          <span className="">Test Case {testCaseIndex + 1} (Hidden Test Case)</span>
+          <span className="">
+            Test Case {testCaseIndex + 1} (Hidden Test Case)
+          </span>
         )}
       </div>
 
@@ -88,19 +88,24 @@ const TestCaseResult: React.FC<{
                   </p>
                 )}
                 <div className="mt-2">
-  <span className="font-bold">Input:</span>
-  <div className="text-gray-300 space-y-1">
-    {result.input.map((inputValue, index) => {
-      const variable = testInputsTypes[index]; // Get the variable name from the testInputsTypes
-      return (
-        <div key={index} className="flex items-center space-x-2">
-          <span className="font-medium text-blue-300">{variable.name}:</span>
-          <span>{inputValue}</span>
-        </div>
-      );
-    })}
-  </div>
-</div>
+                  <span className="font-bold">Input:</span>
+                  <div className="text-gray-300 space-y-1">
+                    {result.input.map((inputValue, index) => {
+                      const variable = testInputsTypes[index]; // Get the variable name from the testInputsTypes
+                      return (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-2"
+                        >
+                          <span className="font-medium text-blue-300">
+                            {variable.name}:
+                          </span>
+                          <span>{inputValue}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
 
                 <div className="mt-2">
                   <span className="font-bold">Expected Output:</span>{" "}

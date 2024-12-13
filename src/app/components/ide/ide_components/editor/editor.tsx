@@ -50,6 +50,7 @@ const myTheme = createTheme({
 });
 
 interface EditorProps {
+  id: number;
   width: string;
   code: string;
   onCodeChange: (value: string) => void; // Update this to expect only a string
@@ -59,16 +60,39 @@ interface EditorProps {
 }
 
 const Editor: React.FC<EditorProps> = ({
+  id,
   width,
   code,
   onCodeChange,
   onRun,
   expandEditor,
-  setExpandEditor
+  setExpandEditor,
 }) => {
+  // Function to save code in localStorage
+  const handleSave = () => {
+    const key = `challenge-${id}`;
+    const existingData = localStorage.getItem(key);
+    const newData = { code }; // Data to save
+
+    if (existingData) {
+      try {
+        const parsedData = JSON.parse(existingData);
+        // Merge with existing data, preserving non-overwritten keys
+        const mergedData = { ...parsedData, ...newData };
+        localStorage.setItem(key, JSON.stringify(mergedData));
+      } catch (error) {
+        console.error("Error parsing existing data:", error);
+      }
+    } else {
+      // Save new data if nothing exists
+      localStorage.setItem(key, JSON.stringify(newData));
+    }
+
+    alert("Code saved successfully!");
+  };
 
   return (
-    <div className={`z-10 container-els ${!expandEditor ? "h-[100%]":""} ${width}`}>
+    <div className={`z-10 container-els ${!expandEditor ? "h-[100%]" : ""} ${width}`}>
       <div className="container-headings text-green-400">
         <div className="container-nav-box">
           <div className={"container-navs"}>
@@ -84,7 +108,14 @@ const Editor: React.FC<EditorProps> = ({
             <PlayIcon className="nav-icons" />
             Run
           </button>
-          
+
+          <button
+            onClick={handleSave}
+            className="nav-btns px-3 bg-blue-600 hover:bg-blue-700"
+          >
+            Save
+          </button>
+
           <button
             onClick={() => setExpandEditor(!expandEditor)}
             className={`nav-btns`}
@@ -105,15 +136,15 @@ const Editor: React.FC<EditorProps> = ({
             python(),
             autocompletion({ activateOnTyping: false }),
             indentUnit.of("    "),
-            EditorView.lineWrapping
+            EditorView.lineWrapping,
           ]}
           theme={myTheme}
           onChange={(value) => onCodeChange(value || "")} // Ensure `value` is never `undefined`
-          
         />
       </div>
     </div>
   );
 };
+
 
 export default Editor;

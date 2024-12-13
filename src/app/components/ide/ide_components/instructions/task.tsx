@@ -248,7 +248,7 @@ const Task: React.FC<TaskProps> = ({
                     Expected Output:
                   </strong>
                   <span className="text-purple-300">
-                    {JSON.stringify(testCases[0].output)}
+                    {/*JSON.stringify(*/testCases[0].output/*)*/}
                   </span>
                 </p>
               </div>
