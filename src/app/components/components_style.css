@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --container-heading-height: 50px;
+}
+
+@layer components {
+
+  .nav-els {
+    @apply flex items-center space-x-4 outline-1 justify-between;
+  }
+
+  .nav-icons {
+    @apply size-6;
+  }
+
+  .nav-btns {
+    @apply !ml-0 p-1 hover:bg-blue-100 hover:bg-opacity-10 rounded flex flex-row gap-2 font-bold;
+  }
+}
+

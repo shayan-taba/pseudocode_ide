@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Navbar from "./ide_components/nav_bar";
+import Navbar from "../../../components/nav_bar";
 import Instructions from "./ide_components/instructions/instructions";
 import Editor from "./ide_components/editor/editor";
 import Results from "./ide_components/results/results";

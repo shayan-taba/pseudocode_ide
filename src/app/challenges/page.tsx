@@ -6,6 +6,7 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
+import Navbar from "../components/nav_bar";
 
 export type Challenge = {
   id: number;
@@ -114,6 +115,7 @@ export default function ChallengesPage() {
     .sort((a, b) => (sortBy === "title" ? a.title.localeCompare(b.title) : 0));
 
   return (
+    <><Navbar />
     <div className="bg-zinc-950 min-h-screen p-8 text-cyan-50">
       <h1 className="text-3xl font-bold mb-8">Pseudocode Challenges</h1>
 
@@ -199,6 +201,6 @@ export default function ChallengesPage() {
       {filteredChallenges.length === 0 && (
         <div className="text-center text-gray-500 mt-6">No challenges found.</div>
       )}
-    </div>
+    </div></>
   );
 }

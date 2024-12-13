@@ -1,5 +1,4 @@
-// components/Editor.tsx
-import React, { Dispatch } from "react";
+import React, { Dispatch, useEffect } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 import { indentUnit } from "@codemirror/language";
@@ -13,9 +12,9 @@ import {
   PlayIcon,
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
+  ArrowDownOnSquareIcon, // Load icon
+  ArrowUpOnSquareIcon,   // Save icon
 } from "@heroicons/react/24/solid";
-
-import { CodeBracketIcon } from "@heroicons/react/24/solid";
 
 const myTheme = createTheme({
   theme: "light",
@@ -23,7 +22,7 @@ const myTheme = createTheme({
     background: "",
     backgroundImage: "",
     foreground: "",
-    caret: "#ffffff", // this is the cursor colour
+    caret: "#ffffff", // this is the cursor color
     selection: "#000000",
     selectionMatch: "#000000",
     lineHighlight: "#8a91991a",
@@ -53,7 +52,7 @@ interface EditorProps {
   id: number;
   width: string;
   code: string;
-  onCodeChange: (value: string) => void; // Update this to expect only a string
+  onCodeChange: (value: string) => void;
   onRun: () => void;
   expandEditor: boolean;
   setExpandEditor: Dispatch<React.SetStateAction<boolean>>;
@@ -68,7 +67,22 @@ const Editor: React.FC<EditorProps> = ({
   expandEditor,
   setExpandEditor,
 }) => {
-  // Function to save code in localStorage
+  useEffect(() => {
+    // Load saved code from localStorage on initial render
+    const key = `challenge-${id}`;
+    const savedData = localStorage.getItem(key);
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData);
+        if (parsedData.code) {
+          onCodeChange(parsedData.code);
+        }
+      } catch (error) {
+        console.error("Error parsing saved data:", error);
+      }
+    }
+  }, [id, onCodeChange]);
+
   const handleSave = () => {
     const key = `challenge-${id}`;
     const existingData = localStorage.getItem(key);
@@ -77,18 +91,33 @@ const Editor: React.FC<EditorProps> = ({
     if (existingData) {
       try {
         const parsedData = JSON.parse(existingData);
-        // Merge with existing data, preserving non-overwritten keys
         const mergedData = { ...parsedData, ...newData };
         localStorage.setItem(key, JSON.stringify(mergedData));
       } catch (error) {
         console.error("Error parsing existing data:", error);
       }
     } else {
-      // Save new data if nothing exists
       localStorage.setItem(key, JSON.stringify(newData));
     }
+  };
 
-    alert("Code saved successfully!");
+  const handleLoad = () => {
+    const key = `challenge-${id}`;
+    const savedData = localStorage.getItem(key);
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData);
+        if (parsedData.code) {
+          onCodeChange(parsedData.code);
+        } else {
+          alert("No saved code found.");
+        }
+      } catch (error) {
+        console.error("Error parsing saved data:", error);
+      }
+    } else {
+      alert("No saved code found.");
+    }
   };
 
   return (
@@ -97,10 +126,25 @@ const Editor: React.FC<EditorProps> = ({
         <div className="container-nav-box">
           <div className={"container-navs"}>
             <h1>Pseudocode</h1>
-            <CodeBracketIcon className="nav-icons" />
           </div>
         </div>
         <div className="container-utils-box">
+          <button
+            onClick={handleSave}
+            className="nav-btns px-3 bg-blue-600 hover:bg-blue-700"
+          >
+            <ArrowUpOnSquareIcon className="nav-icons" />
+            Save
+          </button>
+
+          <button
+            onClick={handleLoad}
+            className="nav-btns px-3 bg-yellow-600 hover:bg-yellow-700"
+          >
+            <ArrowDownOnSquareIcon className="nav-icons" />
+            Load Saved
+          </button>
+
           <button
             onClick={onRun}
             className="nav-btns px-3 bg-green-600 hover:bg-green-700"
@@ -108,14 +152,7 @@ const Editor: React.FC<EditorProps> = ({
             <PlayIcon className="nav-icons" />
             Run
           </button>
-
-          <button
-            onClick={handleSave}
-            className="nav-btns px-3 bg-blue-600 hover:bg-blue-700"
-          >
-            Save
-          </button>
-
+          
           <button
             onClick={() => setExpandEditor(!expandEditor)}
             className={`nav-btns`}
@@ -145,6 +182,5 @@ const Editor: React.FC<EditorProps> = ({
     </div>
   );
 };
-
 
 export default Editor;

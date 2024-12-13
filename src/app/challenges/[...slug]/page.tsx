@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import IDE from "../../components/ide/ide";
+import IDE from "./components/ide";
 
 export default function Challenge({
   params,
