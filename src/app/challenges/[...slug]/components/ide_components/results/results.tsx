@@ -115,7 +115,7 @@ const Results: React.FC<ResultsProps> = ({
                 {/*<XCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
               </div>
               <span className="text-red-300">
-                No errors occurred, but the output wasn't expected on at least
+                No errors occurred, but the output wasn&apos;t expected on at least
                 one &quot;Test Case&quot;. Click on &quot;Show Details&quot; for further information
                 in any of the failed &quot;Test Cases&quot; below.
               </span>

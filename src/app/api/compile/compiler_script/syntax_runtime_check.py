@@ -67,7 +67,7 @@ def syntax_check_and_run_converted(
             user_line_number = relevant_frame.lineno
             error_line = code_string.splitlines()[
                 user_line_number - 1
-            ]  # Assuming each line in psuedocode and python are corresponding,
+            ]  # Assuming each line in pseuedocode and python are corresponding,
             # this code gets the pseudocode line relevant to  the Python runtime error
 
             if custom_error := special_runtime_errors(str(e)):
@@ -96,8 +96,8 @@ def syntax_check_and_run_converted(
 
 def special_runtime_errors(error: str) -> str:
     if error == "name 'output' is not defined":
-        return "IB Psuedocode does not have an output function; rather, use `output expression` where `expression` is an expression."
+        return "IB Pseuedocode does not have an output function; rather, use `output expression` where `expression` is an expression."
     if error == "name 'input' is not defined":
-        return "IB Psuedocode does not have an input function; rather, use `input VARIABLE_NAME` where `VARIABLE_NAME` is the name of the variable."
+        return "IB Pseuedocode does not have an input function; rather, use `input VARIABLE_NAME` where `VARIABLE_NAME` is the name of the variable."
     else:
         return None

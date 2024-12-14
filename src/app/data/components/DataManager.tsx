@@ -2,7 +2,7 @@ import React from "react";
 import SavedItem from "./SavedItem";
 
 interface DataManagerProps {
-  data: { key: string; value: any }[];
+  data: { key: string; value: object }[];
   onRefresh: () => void;
 }
 

@@ -1,5 +1,6 @@
 from typing import Any
 
+
 class Queue:
     """A class representing an IB Pseudocde FIFO queue.
 
@@ -10,17 +11,20 @@ class Queue:
         length (int): The number of items in the collection which is greater than or equal to zero.
     """
 
-
     def __init__(self, *items):
         """
         Initialize an empty Queue object and populate it with values if they are are provided as arguments.
         Args:
             items (tuple): a tuple representing all the arguments passed, however, only one is expected to be enqueued.
         """
-        self._items = [] # Internal attribute property that stores the items in a Python list.
+        self._items = (
+            []
+        )  # Internal attribute property that stores the items in a Python list.
 
         for item in items:
-            self._items.append(item) # The first arguments passed with be in the front of the queue and first to be dequeued.
+            self._items.append(
+                item
+            )  # The first arguments passed with be in the front of the queue and first to be dequeued.
 
     @property
     def length(self) -> int:
@@ -30,7 +34,7 @@ class Queue:
             int: The number of items in the collection.
         """
         print(len(self._items))
-        
+
     def enqueue(self, *items: tuple) -> None:
         """adds an item to the end of the queue that would be last to be dequeued due to FIFO
 
@@ -72,7 +76,7 @@ class Queue:
 
     def isEmpty(self) -> bool:
         """Check if the queue is empty.
-        
+
         Returns:
             A boolean that is True if the queue is empty, otherwise False.
         """
@@ -82,7 +86,7 @@ class Queue:
         """Return a string representation of the Queue object with any items.
 
         It is ordered in ascending order of order in which items were queued.
-        
+
         Returns:
         --------
         str

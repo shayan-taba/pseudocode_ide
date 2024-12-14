@@ -14,7 +14,7 @@ class Array:
     """
 
     def __init__(self, *values):
-        """Initializes an empty array with no values.
+        """Initializes an array. If no values are provided, it is empty and must be furher initalized through the method set_length or initialize_values.
 
         The following variables are for private use only.
         """
@@ -57,7 +57,7 @@ class Array:
         self._initialized = True
 
     def initialize_values(self, *values) -> None:
-        """Initializes the array with the provided values.
+        """Initializes the array with the provided values and automatically sets the length.
 
         Args:
             values (tuple): A tuple of values to initialize the array. Each value should only be a supported type.

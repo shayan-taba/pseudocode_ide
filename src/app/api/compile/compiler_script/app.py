@@ -36,7 +36,7 @@ def main():
 
     # Run the converted Python code
     try:
-        print("Executing converted Python code...\n")
+        print("Executing converted Python code...\n",python_code)
         print(syntax_check_and_run_converted(python_code, test_case_input_name, test_case_input_value))
     except Exception as e:
         print(f"Runtime error: {e}")

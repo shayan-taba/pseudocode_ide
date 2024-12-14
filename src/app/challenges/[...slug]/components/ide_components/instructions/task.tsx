@@ -14,7 +14,7 @@ interface TaskProps {
   tags: string[];
   difficulty: string;
   testCases: { inputs: string[]; output: string }[]; // Test case structure
-  outputType: any;
+  outputType: string;
   completeStatus: boolean | undefined;
   testInputsTypes: {
     name: string;

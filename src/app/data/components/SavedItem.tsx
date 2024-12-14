@@ -1,7 +1,7 @@
 import React from "react";
 
 interface SavedItemProps {
-  item: { key: string; value: any };
+  item: { key: string; value: object };
   onRefresh: () => void;
 }
 

@@ -29,10 +29,10 @@ export default function Challenge({
   }
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isSolution, setIsSolution] = useState<boolean>(false);
-  const [challenges, setChallenges] = useState<Challenge[]>([]);
+  //const [isSolution, setIsSolution] = useState<boolean>(false);
+  //const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [challenge, setChallenge] = useState<any | null>(null);
-  const [exampleSolutions, setExampleSolutions] = useState<any | null>(null);
+  //const [exampleSolutions, setExampleSolutions] = useState<any | null>(null);
 
   const [isPlayground, setIsPlayground] = useState(false);
 
@@ -49,7 +49,7 @@ export default function Challenge({
         } else {
           if (Number.isInteger(parseInt(slug))) {
             if (slug.length >= 2 && slug[1] == "solution") {
-              setIsSolution(true);
+              //setIsSolution(true);
             }
           }
         }
@@ -120,7 +120,7 @@ export default function Challenge({
           };
         });
 
-        setChallenges(loadedChallenges);
+        //setChallenges(loadedChallenges);
 
         // Now, fetch example solutions from another XML file
         const solutionResponse = await fetch("/example_solutions.xml");
@@ -146,7 +146,7 @@ export default function Challenge({
           return acc;
         }, {});
 
-        setExampleSolutions(loadedSolutions);
+        //setExampleSolutions(loadedSolutions);
 
         // Now, associate example solution with challenges based on ID
         const updatedChallenges = loadedChallenges.map((ch) => ({
@@ -154,7 +154,7 @@ export default function Challenge({
           exampleSolution: loadedSolutions[ch.id] || "",
         }));
 
-        setChallenges(updatedChallenges);
+        //setChallenges(updatedChallenges);
 
         // Find the challenge based on slug
         const challengeId = parseInt(slug);

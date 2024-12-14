@@ -11,10 +11,10 @@ const Navbar: React.FC = ({}) => {
       <button onClick={() => router.push("/challenges")} className="nav-btns">
         <HomeIcon className="nav-icons" /> Home
       </button>
-      <button onClick={() => router.push("/challenges")} className="nav-btns">
+      <button onClick={() => router.push("/documentation")} className="nav-btns">
         <DocumentTextIcon className="nav-icons" /> Documentation
       </button>
-      <button onClick={() => router.push("/challenges")} className="nav-btns">
+      <button onClick={() => router.push("/data")} className="nav-btns">
         <CircleStackIcon className="nav-icons" /> Manage Data
       </button>
     </nav>

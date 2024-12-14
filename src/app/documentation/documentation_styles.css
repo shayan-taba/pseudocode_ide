@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+p code {
+  @apply bg-slate-800;
+}
+
+#array {
+    @apply pt-0
+}

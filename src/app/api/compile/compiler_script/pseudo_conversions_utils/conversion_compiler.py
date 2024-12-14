@@ -77,7 +77,7 @@ def ib_specific_pseudocode_conversion(pseudocode: str):
 
                 python_converted_line = replace_and_check_from_loop_construct(
                     pseudocode_part, string_ranges
-                )  # passes a line of psuedocode except for comments to the function tha converts for loops
+                )  # passes a line of pseudocode except for comments to the function tha converts for loops
 
                 pseudocode_part += "comment_part"
 
