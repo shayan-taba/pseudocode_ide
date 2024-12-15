@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
   const pathname = usePathname();
 
   const navItems = [
-    { href: "/challenges", label: "Home", icon: <HomeIcon className="nav-icons" /> },
+    { href: "/", label: "Home", icon: <HomeIcon className="nav-icons" /> },
     { href: "/documentation", label: "Documentation", icon: <DocumentTextIcon className="nav-icons" /> },
     { href: "/data", label: "Manage Data", icon: <CircleStackIcon className="nav-icons" /> },
   ];

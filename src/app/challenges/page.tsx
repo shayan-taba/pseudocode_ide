@@ -16,7 +16,7 @@ export type Challenge = {
   difficulty: "SL" | "HL";
   type: string;
 };
-
+ 
 const getCompletionStatus = (id: number): { status: boolean } => {
   const storedData = localStorage.getItem(`challenge-${id}`);
   return storedData

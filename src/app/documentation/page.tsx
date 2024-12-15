@@ -34,8 +34,8 @@ const DocumentationPage: React.FC = () => {
 
   return (
     <div id="documentationPage" className="flex bg-slate-900 text-white min-h-screen w-[100vw]">
-      <aside className="bg-slate-900 p-8 w-[20%] z-10 relative">
-        <div className="fixed w-100%">
+      <aside className="bg-slate-900 p-8 w-[25%] z-10 absolute">
+        <div className="relative w-100%">
         <h2 className="text-4xl font-bold mb-4">Table of Contents</h2>
         <nav className="space-y-2">
           {toc.map((item, index) => (
@@ -52,7 +52,7 @@ const DocumentationPage: React.FC = () => {
       </aside>
 
 
-      <main className="flex-1 p-6 bg-zinc-950">
+      <main className="flex-1 p-6 bg-zinc-950 absolute left-[25%] overflow-scroll">
         <Navbar/>
         <h1 className="text-4xl font-extrabold m-6">
           Pseudocode Documentation

@@ -14,7 +14,7 @@ p {
   @apply text-lg leading-relaxed;
 }
 
-main a {
+main a:not(nav a) {
   @apply text-blue-400 hover:text-blue-500 underline;
 }
 

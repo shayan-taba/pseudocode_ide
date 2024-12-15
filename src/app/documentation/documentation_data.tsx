@@ -261,7 +261,8 @@ output "Double of your number is: " + (number * 2)`,
           <p>
             To convert a datatype to other data types, you can use standard
             Python methods such as <code>int()</code>, <code>float()</code>, or{" "}
-            <code>bool()</code>. Refer to the official Python 3.13.1 documentation.
+            <code>bool()</code>. Refer to the official Python 3.13.1
+            documentation.
           </p>
         ),
       },
@@ -282,13 +283,121 @@ output IS_TRUE  # Output: True`,
   {
     title: "Conditionals",
     id: "conditionals",
-    items: [],
+    items: [
+      {
+        type: "description",
+        content: (
+          <>
+            <p>
+              Conditional blocks must begin in the following format:
+              <code>
+                if <em>boolean_condition</em> then
+              </code>
+              . The code inside the block must be indented using a single tab (4
+              spaces).
+            </p>
+            <p>
+              Optionally, you can include a series of{" "}
+              <code>
+                else if <em>boolean_condition</em> then
+              </code>{" "}
+              statements, each following the same indentation rules. To conclude
+              the conditional block, you can add an <code>else</code> statement
+              if necessary, and the entire block must end with{" "}
+              <code>end if</code>.
+            </p>
+            <p>
+              Syntax errors may occur if statements are used in the wrong order,
+              if <code>end if</code> is missing, or if indentation is incorrect.
+            </p>
+          </>
+        ),
+      },
+      {
+        type: "code",
+        content: `if x > 0 then
+    output "x is positive"
+end if`,
+      },
+      {
+        type: "code",
+        content: `if x > 0 then
+    output "x is positive"
+else if x == 0 then
+    output "x is zero"
+else
+    output "x is negative"
+end if`,
+      },
+      {
+        type: "code",
+        content: `if x > 0 then
+    if x > 10 then
+        output "x is greater than 10"
+    else
+        output "x is between 1 and 10"
+    end if
+else
+    output "x is zero or negative"
+end if`,
+      },
+    ],
   },
   {
     title: "Loops",
     id: "loops",
-    items: [],
-  },
+    items: [
+      {
+        type: "description",
+        content: (
+          <>
+            <p>
+              Loops allow you to repeat a block of code under specific conditions. There are three primary types of loops supported on this platform:
+            </p>
+            <ul>
+              <li>
+                <code>
+                  loop <em>X</em> from <em>START</em> to <em>END</em>
+                </code>: Iterates over a range of values where <em>START</em> and <em>END</em> are inclusive and are integers, incrementing the variable by 1 with each iteration.
+              </li>
+              <li>
+                <code>loop while <em>condition</em></code>: Repeats the block as long as the condition evaluates to <code>True</code>.
+              </li>
+              <li>
+                <code>loop until <em>condition</em></code>: Repeats the block until the condition evaluates to <code>True</code>.
+              </li>
+            </ul>
+            <p>
+              Loops must follow the appropriate syntax, with the block indented using a single tab (4 spaces), and must conclude with{" "}
+              <code>end loop</code>. Variables used in loops must adhere to the platform's <a href="#variable">variable</a> naming conventions which is like the convention in IB Pseudocode.
+            </p>
+            <p>
+              Syntax errors may occur if <code>end loop</code> is missing or in the wrong location, indentation is incorrect, or the loop condition is invalid.
+            </p>
+          </>
+        ),
+      },
+      {
+        type: "code",
+        content: `loop X from 0 to 10 # The start and end are inclusive in the range, so there are effectively 11 values.
+    output X  # Outputs 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+end loop`,
+      },
+      {
+        type: "code",
+        content: `loop while X == True
+    # Perform some actions
+end loop`,
+      },
+      {
+        type: "code",
+        content: `loop until X <= 10
+    # Perform some actions
+end loop`,
+      },
+    ],
+  }
+  
 ];
 
 export const dataTypes = [
@@ -318,17 +427,20 @@ PREFERRED_STRING = CustomString("abc") # Subclass of Python string with addition
         name: "str methods",
         description:
           "All the methods of Python strings. Refer to the official Python 3.13.1 documentation. This is not recommended to use in pseudocode-challenges.",
-      }
+      },
     ],
     attributes: [
-      { name: "length", description: "The amount of characters of the string (read-only)." },
+      {
+        name: "length",
+        description: "The amount of characters of the string (read-only).",
+      },
     ],
     errors: [
       {
         name: "",
         description:
           "All the errors associated with Python strings. Refer to the official Python 3.13.1 documentation",
-      }
+      },
     ],
   },
 
@@ -343,7 +455,7 @@ PREFERRED_STRING = CustomString("abc") # Subclass of Python string with addition
     ),
     constructorDescription: (
       <>
-        <p className="text-lg leading-relaxed">
+        <p>
           Arrays must be initialized immediately upon creation. During
           initialization, the array acquires a fixed size and can optionally be
           populated with values. To initialize an array, you must use one of the
@@ -355,7 +467,7 @@ PREFERRED_STRING = CustomString("abc") # Subclass of Python string with addition
             <code>ARRAY = Array(3, 5, 1, 2)</code>.
           </li>
         </ul>
-        <p className="text-lg leading-relaxed">
+        <p>
           It is important to note that only one of these initialization methods
           can be applied to a single array
         </p>

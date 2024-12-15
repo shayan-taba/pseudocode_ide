@@ -1,9 +1,5 @@
 // components/Output.tsx
-import React, {
-  Dispatch,
-  useEffect,
-  useRef,
-} from "react";
+import React, { Dispatch, useEffect, useRef } from "react";
 
 import {
   TrashIcon,
@@ -14,6 +10,7 @@ import {
 } from "@heroicons/react/24/solid";
 import TestCaseResult from "./test_case_results";
 import { TestResultType } from "../../ide";
+import Link from "next/link";
 
 interface ResultsProps {
   id: number;
@@ -45,7 +42,7 @@ const Results: React.FC<ResultsProps> = ({
   onClearOutput,
   testResults,
   setCompleteStatus,
-  testInputsTypes
+  testInputsTypes,
 }) => {
   const preRef = useRef<HTMLPreElement>(null);
 
@@ -102,9 +99,11 @@ const Results: React.FC<ResultsProps> = ({
                 {/*<ExclamationCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
               </div>
               <span className="text-yellow-300">
-                Syntax or runtime errors occurred on at least one &quot;Test Case&quot;.
-                Check the output console for details on the error and to see on
-                which Test Case(s) this occurred.
+                Syntax or runtime errors occurred on at least one &quot;Test
+                Case&quot;. Check the output console for details on the error
+                and to see on which Test Case(s) this occurred.<br/><br/>Refer to the{" "}
+                <Link className="text-blue-300 underline hover:text-blue-500" href={"/documentation"}>Documentation</Link> to understand
+                the potential runtime and syntax errors.
               </span>
             </>
           )}
@@ -115,15 +114,17 @@ const Results: React.FC<ResultsProps> = ({
                 {/*<XCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
               </div>
               <span className="text-red-300">
-                No errors occurred, but the output wasn&apos;t expected on at least
-                one &quot;Test Case&quot;. Click on &quot;Show Details&quot; for further information
-                in any of the failed &quot;Test Cases&quot; below.
+                No errors occurred, but the output wasn&apos;t expected on at
+                least one &quot;Test Case&quot;. Click on &quot;Show
+                Details&quot; for further information in any of the failed
+                &quot;Test Cases&quot; below.
               </span>
             </>
           )}
           {!allPassed && !hasErrors && !hasMismatch && (
             <p className="text-lg font-bold">
-              Run your code to see the results below. For more information, go to <em>"output"</em>.
+              Run your code to see the results below. For more information, go
+              to <em>"output"</em>.
             </p>
           )}
         </div>
@@ -193,7 +194,8 @@ const Results: React.FC<ResultsProps> = ({
             </pre>
             {!isComplete && (
               <p className="text-yellow-200">
-                Waiting for Execution Completion - either no output has been given or the code hasn't been run.
+                Waiting for Execution Completion - either no output has been
+                given or the code hasn't been run.
               </p>
             )}
             {isComplete &&
