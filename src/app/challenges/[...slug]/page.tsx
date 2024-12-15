@@ -3,14 +3,12 @@ import ChallengeLoader from "./challenge_loader";
 import { generateMetadataFunc } from "./metadata_loader";
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export const generateMetadata = async ({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> => {
+}: Props): Promise<Metadata> => {
   console.log("here12", await params);
   // Directly pass the resolved params to generateMetadataFunc
   return await generateMetadataFunc({ params });

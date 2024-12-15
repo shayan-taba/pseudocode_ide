@@ -6,7 +6,7 @@ import IDE from "./components/ide";
 export default function ChallengeLoader({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   interface Challenge {
     id: number;
