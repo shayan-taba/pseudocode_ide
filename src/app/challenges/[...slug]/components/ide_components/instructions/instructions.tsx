@@ -18,6 +18,7 @@ interface InstructionsProps {
   width: string;
   title: string;
   description: string;
+  hint: string;
   tags: string[];
   difficulty: string;
   testCases: { inputs: string[]; output: string; }[]; // Test case structure
@@ -39,6 +40,7 @@ const Instructions: React.FC<InstructionsProps> = ({
   width,
   title,
   description,
+  hint,
   tags,
   difficulty,
   testCases,
@@ -96,6 +98,7 @@ const Instructions: React.FC<InstructionsProps> = ({
             testCases={testCases}
             title={title}
             description={description}
+            hint={hint}
             difficulty={difficulty}
             tags={tags}
             testInputsTypes={testInputsTypes}

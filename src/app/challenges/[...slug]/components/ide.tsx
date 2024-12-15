@@ -28,6 +28,7 @@ interface IDEProps {
   id: number;
   title: string;
   description: string;
+  hint: string;
   tags: string[];
   difficulty: string;
   testCases: { inputs: string[]; output: string }[]; // Test case structure
@@ -43,6 +44,7 @@ const IDE: React.FC<IDEProps> = ({
   id,
   title,
   description,
+  hint,
   tags,
   difficulty,
   testCases,
@@ -287,6 +289,7 @@ const IDE: React.FC<IDEProps> = ({
     id: id,
     title: title,
     description: description,
+    hint: hint,
     tags: tags,
     difficulty: difficulty,
     testCases: testCases,

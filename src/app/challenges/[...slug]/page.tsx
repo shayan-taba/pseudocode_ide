@@ -12,6 +12,7 @@ export default function Challenge({
     id: number;
     title: string;
     description: string;
+    hint: string;
     tags: string[];
     dataTypes: {
       inputs: {
@@ -58,7 +59,10 @@ export default function Challenge({
         const challengeResponse = await fetch("/challenge_questions.xml");
         const challengeText = await challengeResponse.text();
         const challengeParser = new DOMParser();
-        const challengeXmlDoc = challengeParser.parseFromString(challengeText, "application/xml");
+        const challengeXmlDoc = challengeParser.parseFromString(
+          challengeText,
+          "application/xml"
+        );
 
         // Handle XML parsing errors
         if (challengeXmlDoc.getElementsByTagName("parsererror").length > 0) {
@@ -71,7 +75,8 @@ export default function Challenge({
         }
 
         // Parse challenge questions into challenges
-        const challengeNodes = challengeXmlDoc.getElementsByTagName("challenge");
+        const challengeNodes =
+          challengeXmlDoc.getElementsByTagName("challenge");
         const loadedChallenges = Array.from(challengeNodes).map((node) => {
           const inputTypeNodes = node
             .getElementsByTagName("dataTypes")[0]
@@ -94,6 +99,7 @@ export default function Challenge({
             title: node.getElementsByTagName("title")[0]?.textContent || "",
             description:
               node.getElementsByTagName("description")[0]?.textContent || "",
+            hint: node.getElementsByTagName("hint")[0]?.textContent || "",
             tags: Array.from(node.getElementsByTagName("tag")).map(
               (tagNode) => tagNode.textContent || ""
             ),
@@ -126,7 +132,10 @@ export default function Challenge({
         const solutionResponse = await fetch("/example_solutions.xml");
         const solutionText = await solutionResponse.text();
         const solutionParser = new DOMParser();
-        const solutionXmlDoc = solutionParser.parseFromString(solutionText, "application/xml");
+        const solutionXmlDoc = solutionParser.parseFromString(
+          solutionText,
+          "application/xml"
+        );
 
         if (solutionXmlDoc.getElementsByTagName("parsererror").length > 0) {
           console.error(
@@ -139,12 +148,18 @@ export default function Challenge({
 
         // Parse the example solutions into a dictionary by id
         const solutionNodes = solutionXmlDoc.getElementsByTagName("solution");
-        const loadedSolutions = Array.from(solutionNodes).reduce((acc: any, node) => {
-          const id = parseInt(node.getElementsByTagName("id")[0]?.textContent || "0");
-          const code = node.getElementsByTagName("code")[0]?.textContent || "";
-          acc[id] = code; // Store by challenge ID
-          return acc;
-        }, {});
+        const loadedSolutions = Array.from(solutionNodes).reduce(
+          (acc: any, node) => {
+            const id = parseInt(
+              node.getElementsByTagName("id")[0]?.textContent || "0"
+            );
+            const code =
+              node.getElementsByTagName("code")[0]?.textContent || "";
+            acc[id] = code; // Store by challenge ID
+            return acc;
+          },
+          {}
+        );
 
         //setExampleSolutions(loadedSolutions);
 
@@ -192,7 +207,7 @@ export default function Challenge({
   // Render the IDE with the updated challenge data
   return (
     <>
-      {isPlayground && (
+      {isPlayground &&
         // Placeholder for Playground IDE component
         /*<IDE
           title="Playground"
@@ -202,13 +217,13 @@ export default function Challenge({
           testCases={[]}
           exampleCode=""
         />*/
-        null
-      )}
+        null}
       {!isPlayground && challenge && (
         <IDE
           id={challenge.id}
           title={challenge.title}
           description={challenge.description}
+          hint={challenge.hint}
           tags={challenge.tags}
           difficulty={challenge.difficulty}
           testCases={challenge.testCases}

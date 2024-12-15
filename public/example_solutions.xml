@@ -107,8 +107,8 @@ output MERGED
     </solution>
     <solution>
         <id>7</id>
-        <code>loop I from 0 to length(NUMBERS) - 2
-    loop J from 0 to length(NUMBERS) - I - 2
+        <code>loop I from 0 to NUMBERS.length - 2
+    loop J from 0 to NUMBERS.length - I - 2
         if NUMBERS[J] &gt; NUMBERS[J + 1] then
             TEMP = NUMBERS[J]
             NUMBERS[J] = NUMBERS[J + 1]
@@ -116,13 +116,13 @@ output MERGED
         end if
     end loop
 end loop
-MEDIAN_INDEX = length(NUMBERS) div 2
-if length(NUMBERS) mod 2 == 0 then
-    output (NUMBERS[MEDIAN_INDEX - 1] + NUMBERS[MEDIAN_INDEX]) / 2
+MEDIAN_INDEX = NUMBERS.length div 2
+if NUMBERS.length mod 2 == 0 then
+    output int((NUMBERS[MEDIAN_INDEX - 1] + NUMBERS[MEDIAN_INDEX]) / 2)
 else
     output NUMBERS[MEDIAN_INDEX]
 end if
-        </code>
+</code>
     </solution>
     <solution>
         <id>8</id>

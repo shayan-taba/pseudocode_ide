@@ -5,12 +5,16 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/24/solid";
 
-import {ExclamationCircleIcon} from "@heroicons/react/24/outline";
+import {
+  ExclamationCircleIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/outline";
 
 interface TaskProps {
   id: number; // Task ID to fetch the completion status
   title: string;
   description: string;
+  hint: string;
   tags: string[];
   difficulty: string;
   testCases: { inputs: string[]; output: string }[]; // Test case structure
@@ -25,6 +29,7 @@ const Task: React.FC<TaskProps> = ({
   id,
   title,
   description,
+  hint,
   tags,
   difficulty,
   testCases,
@@ -95,13 +100,22 @@ const Task: React.FC<TaskProps> = ({
               completionStatus.status ? "text-green-300" : "text-red-300"
             }`}
           >
-          {completionStatus.message}
+            {completionStatus.message}
           </span>
         </div>
       </div>
 
       {/*<h3 className="text-2xl font-semibold mb-2">Task</h3>*/}
-      <p className="text-base mb-4">{description}</p>
+
+      <div className="mb-4 flex flex-col gap-4">
+        <p className="text-base">{description}</p>
+        {hint != "" && (
+          <div className="flex flex-row gap-4">
+            {/*<InformationCircleIcon className="h-6 w-6" />*/}
+            <p className="text-base"><strong>Hint:</strong> {hint}</p>
+          </div>
+        )}
+      </div>
 
       {/* Tags and Difficulty */}
       <div className="flex flex-wrap gap-2 mb-4">
@@ -248,7 +262,7 @@ const Task: React.FC<TaskProps> = ({
                     Expected Output:
                   </strong>
                   <span className="text-purple-300">
-                    {/*JSON.stringify(*/testCases[0].output/*)*/}
+                    {/*JSON.stringify(*/ testCases[0].output /*)*/}
                   </span>
                 </p>
               </div>
