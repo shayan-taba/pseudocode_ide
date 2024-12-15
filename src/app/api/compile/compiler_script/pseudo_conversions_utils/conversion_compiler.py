@@ -144,12 +144,17 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
 
             continue
         # Perform conversion only on the pseudocode part
+        
+        line_removed_comments = line = re.sub(r"#.*$", "", line)  # Remove # comments
+        line_removed_comments = re.sub(r"//.*$", "", line)  # Remove // comments
+ 
 
         if line.strip().startswith("loop") and " from " not in line.strip():
             endWithColon = True
         elif (
             line.strip().startswith("if") or line.strip().startswith("else if")
-        ) and not (line.strip().endswith("then")):
+        ) and not (line_removed_comments.strip().endswith("then")): 
+            # This makes sure that if/else if statements must end with "then", accounting for in-line comments
             raise Exception(
                 f'Syntax Error on Line {line_number+1}: If statements starting with "if" or "else if" must end with "then"'
             )
