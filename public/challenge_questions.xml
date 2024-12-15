@@ -319,7 +319,7 @@
 <challenge>
     <id>11</id>
     <title>Filter Multiples of X</title>
-    <description>Filter out numbers that are multiples of a given integer X from an array.</description>
+    <description>Remove numbers that are multiples of a given integer X from an array.</description>
     <tags>
       <tag>Arrays</tag>
       <tag>Conditionals</tag>
@@ -337,17 +337,17 @@
       <testCase>
         <input>Array(10, 15, 20, 25)</input>
         <input>5</input>
-        <output>Array()</output>
+        <output>Array([])</output>
       </testCase>
       <testCase>
         <input>Array(1, 3, 6, 9)</input>
         <input>2</input>
-        <output>Array(1, 3, 9)</output>
+        <output>Array([1, 3, 9])</output>
       </testCase>
       <testCase>
         <input>Array(12, 18, 24, 30)</input>
         <input>4</input>
-        <output>Array(18, 30)</output>
+        <output>Array([18, 30])</output>
       </testCase>
     </testCases>
 </challenge>
@@ -444,7 +444,8 @@
 <challenge>
     <id>15</id>
     <title>Check Prime Number</title>
-    <description>Determine if a given integer is a prime number. You can use the "math.sqrt&#40;NUMBER&#41;" in your solution to obtain the square root of any number. </description>
+    <description>Determine if a given integer is a prime number. HINT: You can use the "math.sqrt&#40;NUMBER&#41;" in your solution to obtain the square root of any number as a float. If you wish to use the square_root it as an integer, use "int(FLOAT)" to cnovert it.
+    </description>
     <tags>
       <tag>Math</tag>
       <tag>Conditionals</tag>

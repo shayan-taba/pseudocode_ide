@@ -188,14 +188,31 @@ output SUM
     </solution>
     <solution>
         <id>11</id>
-        <code>RESULT = Array()
-loop I from 0 to length(NUMBERS) - 1
+        <code># Part 1: Count how many numbers are not multiples of X
+COUNT = 0
+loop I from 0 to NUMBERS.length - 1
     if NUMBERS[I] mod X != 0 then
-        RESULT.append(NUMBERS[I])
+        COUNT = COUNT + 1
     end if
 end loop
+
+# Part 2: Create a fixed-size array to store the result
+RESULT = Array() 
+RESULT.set_length(COUNT)
+# Allocate space for the RESULT array
+
+# Part 3: Populate the RESULT array with qualifying elements
+INDEX = 0
+loop I from 0 to NUMBERS.length - 1
+    if NUMBERS[I] mod X != 0 then
+        RESULT[INDEX] = NUMBERS[I]
+        INDEX = INDEX + 1
+    end if
+end loop
+
+# Part 4: Output the result
 output RESULT
-        </code>
+</code>
     </solution>
     <solution>
         <id>12</id>
