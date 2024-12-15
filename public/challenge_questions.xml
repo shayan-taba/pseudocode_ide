@@ -46,16 +46,16 @@
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>Queue(CustomString("a"),CustomString("b"),CustomString("c"))</input>
-        <output>Queue(["c"),CustomString("b"),CustomString("a"])</output>
-      </testCase>
-      <testCase>
-        <input>Queue("1"),CustomString("2"),CustomString("3"),CustomString("4")</input>
-        <output>Queue(["4"),CustomString("3"),CustomString("2"),CustomString("1"])</output>
+        <input>Queue("a", "b", "c")</input>
+        <output>Queue(['c', 'b', 'a'])</output>
       </testCase>
       <testCase>
         <input>Queue("cat")</input>
-        <output>Queue(["cat"])</output>
+        <output>Queue(['cat'])</output>
+      </testCase>
+      <testCase>
+        <input>Queue("1","2","3","4")</input>
+        <output>Queue(['4', '3', '2', '1'])</output>
       </testCase>
     </testCases>
   </challenge>
@@ -141,15 +141,15 @@
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>"()[]{}"</input>
+        <input>CustomString("()[]{}")</input>
         <output>True</output>
       </testCase>
       <testCase>
-        <input>"([)]"</input>
+        <input>CustomString("([)]")</input>
         <output>False</output>
       </testCase>
       <testCase>
-        <input>"((()))"</input>
+        <input>CustomString("((()))")</input>
         <output>True</output>
       </testCase>
     </testCases>
@@ -224,6 +224,7 @@
     <id>8</id>
     <title>Nearest Locations Queue</title>
     <description>Given a 2D array of locations with names and coordinates, return a queue of location names ordered by proximity to a given reference point.</description>
+    <hint>Use can use the function "pow&#40;X, Y&#41;" to obtain X to the power of Y as in integer provided that X and Y are integers.</hint>
     <tags>
       <tag>2D Arrays</tag>
       <tag>Queues</tag>
@@ -240,20 +241,21 @@
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>Array([[CustomString("Park"), 2, 3], [CustomString("Mall"), 5, 1], [CustomString("Cafe"), 1, 2]])</input>
+        <input>Array(['Park', 2, 3], ['Mall', 5, 1], ['Cafe', 1, 2])</input>
         <input>Array(0, 0)</input>
-        <output>Queue([CustomString("Cafe"),CustomString("Park"),CustomString("Mall")])</output>
+        <output>Queue(['Cafe', 'Park', 'Mall'])</output>
       </testCase>
       <testCase>
-        <input>Array([[CustomString("Home"), 0, 0], [CustomString("School"), 10, 10], [CustomString("Shop"), 5, 5]])</input>
-        <input>Array(3, 3)</input>
-        <output>Queue([CustomString("Shop"),CustomString("Home"),CustomString("School")])</output>
-      </testCase>
-      <testCase>
-        <input>Array([[CustomString("Lake"), 4, 4], [CustomString("Mountain"), 8, 8], [CustomString("Museum"), 6, 5]])</input>
+        <input>Array(["Lake", 4, 4], ["Mountain", 8, 8], ["Museum", 6, 5])</input>
         <input>Array(5, 5)</input>
-        <output>Queue([CustomString("Museum"),CustomString("Lake"),CustomString("Mountain")])</output>
+        <output>Queue(['Museum', 'Lake', 'Mountain'])</output>
       </testCase>
+      <testCase>
+        <input>Array(["Home", 0, 0], ["School", 10, 10], ["Shop", 5, 5])</input>
+        <input>Array(3, 3)</input>
+        <output>Queue(['Shop', 'Home', 'School'])</output>
+      </testCase>
+    
     </testCases>
 </challenge>
 <challenge>
@@ -448,7 +450,7 @@
     <id>15</id>
     <title>Check Prime Number</title>
     <description>Determine if a given integer is a prime number.</description>
-    <hint>You can use the "math.sqrt&#40;NUMBER&#41;" in your solution to obtain the square root of any number as a float. If you wish to use the square_root it as an integer, use "int(FLOAT)" to cnovert it.</hint>
+    <hint>You can use the "get_sqrt&#40;NUMBER&#41;" in your solution to obtain the square root of any number as a float. If you wish to use the square_root it as an integer, use "int(FLOAT)" to cnovert it.</hint>
     <tags>
       <tag>Math</tag>
       <tag>Conditionals</tag>

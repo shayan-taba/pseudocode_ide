@@ -15,8 +15,7 @@ output COUNT
     <solution>
         <id>2</id>
         <code>STACK = Stack() # Temporary stack
-QUEUE.resetNext()
-loop while QUEUE.hasNext()
+loop while not QUEUE.isEmpty()
     STACK.push(QUEUE.dequeue())
 end loop
 loop while not STACK.isEmpty()
@@ -72,14 +71,14 @@ output TEMP_STACK
 CONTINUE = True
 loop CHAR from 0 to len(BRACKETS) - 1
     if CONTINUE then
-        if BRACKETS[CHAR] == "(" OR BRACKETS[CHAR] == "{" OR BRACKETS[CHAR] == "[" then
+        if BRACKETS[CHAR] == "(" or BRACKETS[CHAR] == "{" or BRACKETS[CHAR] == "[" then
             STACK.push(BRACKETS[CHAR])
         else if BRACKETS[CHAR] == ")" or BRACKETS[CHAR] == "}" or BRACKETS[CHAR] == "]" then
             if STACK.isEmpty() then
                 CONTINUE = False
             else
                 OPEN_BRACKET = STACK.pop()
-                if (OPEN_BRACKET == "(" AND BRACKETS[CHAR] != ")") OR (OPEN_BRACKET == "{" AND BRACKETS[CHAR] != "}") OR (OPEN_BRACKET == "[" AND BRACKETS[CHAR] != "]") then
+                if (OPEN_BRACKET == "(" and BRACKETS[CHAR] != ")") or (OPEN_BRACKET == "{" and BRACKETS[CHAR] != "}") or (OPEN_BRACKET == "[" and BRACKETS[CHAR] != "]") then
                     CONTINUE = False
                 end if
             end if
@@ -87,7 +86,6 @@ loop CHAR from 0 to len(BRACKETS) - 1
     end if
 end loop
 output STACK.isEmpty()
-
 </code>
     </solution>
      <solution>
@@ -166,27 +164,39 @@ end if
     </solution>
     <solution>
         <id>8</id>
-        <code>DISTANCES = Array(length(LOCATIONS))
-loop I from 0 to length(LOCATIONS) - 1
-    DISTANCES[I] = sqrt((LOCATIONS[I][1] - REFERENCE[0])^2 + (LOCATIONS[I][2] - REFERENCE[1])^2)
+        <code>DISTANCES = Array()
+DISTANCES.set_length(LOCATIONS.length)
+
+# Compute distances
+loop I from 0 to LOCATIONS.length - 1
+    DISTANCES[I] = get_sqrt(pow(LOCATIONS[I][1] - REFERENCE[0], 2) + pow(LOCATIONS[I][2] - REFERENCE[1],2))
 end loop
-loop I from 0 to length(DISTANCES) - 2
-    loop J from 0 to length(DISTANCES) - I - 2
+
+# Sort LOCATIONS based on DISTANCES using Bubble Sort
+loop I from 0 to DISTANCES.length - 2
+    loop J from 0 to DISTANCES.length - I - 2
         if DISTANCES[J] &gt; DISTANCES[J + 1] then
+            # Swap distances
             TEMP_DIST = DISTANCES[J]
-            TEMP_LOC = LOCATIONS[J]
             DISTANCES[J] = DISTANCES[J + 1]
-            LOCATIONS[J] = LOCATIONS[J + 1]
             DISTANCES[J + 1] = TEMP_DIST
+
+            # Swap locations
+            TEMP_LOC = LOCATIONS[J]
+            LOCATIONS[J] = LOCATIONS[J + 1]
             LOCATIONS[J + 1] = TEMP_LOC
         end if
     end loop
 end loop
+
+# Create a Queue of location names
 QUEUE = Queue()
-loop I from 0 to length(LOCATIONS) - 1
+loop I from 0 to LOCATIONS.length - 1
     QUEUE.enqueue(LOCATIONS[I][0]) # Enqueue the name
 end loop
+
 output QUEUE
+
 </code>
     </solution>
     <solution>
