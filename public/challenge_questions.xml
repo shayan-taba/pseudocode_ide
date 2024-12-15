@@ -2,7 +2,7 @@
   <challenge>
     <id>1</id>
     <title>Count Numbers in Range</title>
-    <description>Write an algorithm to count how many numbers in a collection are odd negative integers.</description>
+    <description>Write an algorithm to count how many numbers in a collection are both even and negative numbers.</description>
     <tags>
       <tag>Collections</tag>
       <tag>Loops</tag>
@@ -16,15 +16,15 @@
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>Collection(-0.5, 0.8, 2, -1, 1.5)</input>
+        <input>Collection(-2, 0.8, 2, -1, 1.5)</input>
         <output>1</output>
       </testCase>
       <testCase>
-        <input>Collection(-5, -2, 3,-7)</input>
-        <output>3</output>
+        <input>Collection(-5, 1, 3,-7)</input>
+        <output>0</output>
       </testCase>
       <testCase>
-        <input>Collection(1, -1, -23)</input>
+        <input>Collection(1, -1, -2, -4)</input>
         <output>2</output>
       </testCase>
     </testCases>
@@ -191,7 +191,7 @@
   </challenge>
   <challenge>
     <id>7</id>
-    <title>Bubble Sort and Identify</title>
+    <title>Bubble Sort and Median</title>
     <description>Sort an array of integers using bubble sort and identify the median value as an integer.</description>
     <hint>If calculations are used on numbers, then a float may be returned. However, the expected output is of an integer, so "int&#40;FLOAT&#41;" may be used.</hint>
     <tags>
@@ -260,6 +260,7 @@
     <id>9</id>
     <title>Bubble Sort for Even Numbers</title>
     <description>Given an array of integers, filter out the even numbers and sort them in ascending order using bubble sort.</description>
+    <hint>Arrays must be initialized with a fixed length. Refer to the documentation for more information</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Bubble Sort</tag>
@@ -279,7 +280,7 @@
       </testCase>
       <testCase>
         <input>Array(1, 3, 5, 7)</input>
-        <output>Array()</output>
+        <output>Array([])</output>
       </testCase>
       <testCase>
         <input>Array(8, 6, 2, 10)</input>
@@ -321,6 +322,7 @@
     <id>11</id>
     <title>Filter Multiples of X</title>
     <description>Remove numbers that are multiples of a given integer X from an array.</description>
+    <hint>Arrays must be initialized with a fixed length. Refer to the documentation for more information</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Conditionals</tag>

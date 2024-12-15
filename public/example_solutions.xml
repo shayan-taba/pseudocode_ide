@@ -5,12 +5,12 @@
 NUMBERS.resetNext()
 loop while NUMBERS.hasNext()
     ITEM = NUMBERS.getNext()
-    if ITEM &lt; 0 AND ITEM mod 2 != 0 then
+    if ITEM &lt; 0 and ITEM mod 2 == 0 then
         COUNT = COUNT + 1
     end if
 end loop
 output COUNT
-        </code>
+</code>
     </solution>
     <solution>
         <id>2</id>
@@ -23,7 +23,7 @@ loop while not STACK.isEmpty()
     QUEUE.enqueue(STACK.pop())
 end loop
 output QUEUE
-        </code>
+</code>
     </solution>
     <solution>
         <id>3</id>
@@ -36,7 +36,7 @@ loop while ECONOMICS.hasNext()
     end if
 end loop
 output COUNT
-        </code>
+</code>
     </solution>
     <solution>
         <id>4</id>
@@ -59,7 +59,7 @@ loop while not STACK.isEmpty()
 end loop
 
 output TEMP_STACK
-        </code>
+</code>
     </solution>
     <solution>
         <id>5</id>
@@ -83,7 +83,7 @@ loop CHAR from 0 to len(BRACKETS) - 1
 end loop
 output STACK.isEmpty()
 
-        </code>
+</code>
     </solution>
      <solution>
         <id>6</id>
@@ -103,7 +103,7 @@ loop while COLLECTION2.hasNext()
     end if
 end loop
 output MERGED
-        </code>
+</code>
     </solution>
     <solution>
         <id>7</id>
@@ -147,34 +147,51 @@ loop I from 0 to length(LOCATIONS) - 1
     QUEUE.enqueue(LOCATIONS[I][0]) # Enqueue the name
 end loop
 output QUEUE
-        </code>
+</code>
     </solution>
     <solution>
         <id>9</id>
-        <code>EVEN_NUMBERS = Array()
-loop I from 0 to length(NUMBERS) - 1
+        <code># Part 1: Count how many even numbers are in NUMBERS
+COUNT = 0
+loop I from 0 to NUMBERS.length - 1
     if NUMBERS[I] mod 2 == 0 then
-        EVEN_NUMBERS.append(NUMBERS[I])
+        COUNT = COUNT + 1
     end if
 end loop
-loop I from 0 to length(EVEN_NUMBERS) - 2
-    loop J from 0 to length(EVEN_NUMBERS) - I - 2
-        if EVEN_NUMBERS[J] &gt; EVEN_NUMBERS[J + 1] then
+
+# Part 2: Create an array of the correct length to store the even numbers
+EVEN_NUMBERS = Array()
+EVEN_NUMBERS.set_length(COUNT)  # Pre-allocate an array of fixed size
+
+# Part 3: Populate the EVEN_NUMBERS array with the even numbers
+INDEX = 0
+loop I from 0 to NUMBERS.length - 1
+    if NUMBERS[I] mod 2 == 0 then
+        EVEN_NUMBERS[INDEX] = NUMBERS[I]
+        INDEX = INDEX + 1
+    end if
+end loop
+
+# Part 4: Perform bubble sort on the EVEN_NUMBERS array
+loop I from 0 to EVEN_NUMBERS.length - 2
+    loop J from 0 to EVEN_NUMBERS.length - I - 2
+        if EVEN_NUMBERS[J] &lt; EVEN_NUMBERS[J + 1] then
             TEMP = EVEN_NUMBERS[J]
             EVEN_NUMBERS[J] = EVEN_NUMBERS[J + 1]
             EVEN_NUMBERS[J + 1] = TEMP
         end if
     end loop
 end loop
-output EVEN_NUMBERS
-        </code>
+
+# Step 5: Output the sorted EVEN_NUMBERS array
+output EVEN_NUMBERS</code>
     </solution>
     <solution>
         <id>10</id>
         <code>SUM = 0
-loop I from 0 to length(NUMBERS) - 1
+loop I from 0 to NUMBERS.length - 1
     UNIQUE = true
-    loop J from 0 to length(NUMBERS) - 1
+    loop J from 0 to NUMBERS.length - 1
         if I != J AND NUMBERS[I] == NUMBERS[J] then
             UNIQUE = false
         end if
@@ -183,8 +200,7 @@ loop I from 0 to length(NUMBERS) - 1
         SUM = SUM + NUMBERS[I]
     end if
 end loop
-output SUM
-        </code>
+output SUM</code>
     </solution>
     <solution>
         <id>11</id>
@@ -226,7 +242,7 @@ loop I from 0 to length(WORDS) - 1
     REVERSED_WORDS.append(REVERSED)
 end loop
 output REVERSED_WORDS
-        </code>
+</code>
     </solution>
     <solution>
         <id>13</id>
@@ -238,7 +254,7 @@ loop I from 0 to LOOP_END - 1
     end if
 end loop
 output True
-        </code>
+</code>
     </solution>
     <solution>
         <id>14</id>
@@ -249,7 +265,7 @@ loop I from 1 to NUMBER
     end if
 end loop
 output SUM
-        </code>
+</code>
     </solution>
     <solution>
         <id>15</id>
@@ -278,7 +294,7 @@ end loop
 if CONTINUE then
     output True
 end if
-        </code>
+</code>
     </solution>
     <solution>
         <id>16</id>
@@ -288,7 +304,7 @@ end if
     NUMBER1 = TEMP
 end loop
 output NUMBER1
-        </code>
+</code>
     </solution>
     <solution>
         <id>17</id>
@@ -297,6 +313,6 @@ loop I from 1 to NUMBER
     FACTORIAL = FACTORIAL * I
 end loop
 output FACTORIAL
-        </code>
+</code>
     </solution>
 </solutions>
