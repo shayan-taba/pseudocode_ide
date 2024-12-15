@@ -93,16 +93,16 @@ output STACK.isEmpty()
      <solution>
         <id>6</id>
         <code>MERGED = Collection()
-COLLECTION1.resetNext()
-loop while COLLECTION1.hasNext()
-    ITEM = COLLECTION1.getNext()
+COLLECTION_ONE.resetNext()
+loop while COLLECTION_ONE.hasNext()
+    ITEM = COLLECTION_ONE.getNext()
     if not MERGED.contains(ITEM) then
         MERGED.addItem(ITEM)
     end if
 end loop
-COLLECTION2.resetNext()
-loop while COLLECTION2.hasNext()
-    ITEM = COLLECTION2.getNext()
+COLLECTION_TWO.resetNext()
+loop while COLLECTION_TWO.hasNext()
+    ITEM = COLLECTION_TWO.getNext()
     if not MERGED.contains(ITEM) then
         MERGED.addItem(ITEM)
     end if
@@ -238,27 +238,36 @@ output RESULT
     <solution>
         <id>12</id>
         <code>REVERSED_WORDS = Array()
-loop I from 0 to length(WORDS) - 1
+REVERSED_WORDS.set_length(WORDS.length)
+
+loop I from 0 to WORDS.length - 1
     WORD = WORDS[I]
     REVERSED = ""
-    loop J from length(WORD) - 1 to 0 step -1
-        REVERSED = REVERSED + WORD[J]
+    loop J from 0 to WORD.length - 1
+        REVERSED = WORD[J] + REVERSED
     end loop
-    REVERSED_WORDS.append(REVERSED)
+    REVERSED_WORDS[I] = REVERSED
 end loop
 output REVERSED_WORDS
 </code>
     </solution>
     <solution>
         <id>13</id>
-        <code>LOOP_END = length(INPUT_STRING) div 2
+        <code>LOOP_END = INPUT_STRING.length div 2
+CONTINUE = True
+
 loop I from 0 to LOOP_END - 1
-    if INPUT_STRING[I] != INPUT_STRING[length(INPUT_STRING) - I - 1] then
-        output False
-        return
+    if CONTINUE then
+        if INPUT_STRING[I] != INPUT_STRING[INPUT_STRING.length - I - 1] then
+            output False
+            CONTINUE = False
+        end if
     end if
 end loop
-output True
+
+if CONTINUE then
+    output True
+end if
 </code>
     </solution>
     <solution>

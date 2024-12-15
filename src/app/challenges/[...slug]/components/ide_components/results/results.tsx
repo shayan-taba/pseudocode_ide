@@ -123,7 +123,7 @@ const Results: React.FC<ResultsProps> = ({
           )}
           {!allPassed && !hasErrors && !hasMismatch && (
             <p className="text-lg font-bold">
-              Run your code to see the results below.
+              Run your code to see the results below. For more information, go to <em>"output"</em>.
             </p>
           )}
         </div>
@@ -193,7 +193,7 @@ const Results: React.FC<ResultsProps> = ({
             </pre>
             {!isComplete && (
               <p className="text-yellow-200">
-                Waiting for Execution Completion
+                Waiting for Execution Completion - either no output has been given or the code hasn't been run.
               </p>
             )}
             {isComplete &&

@@ -46,7 +46,7 @@
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>Queue(CustomString("a"),CustomString("b"),CustomString("c")</input>
+        <input>Queue(CustomString("a"),CustomString("b"),CustomString("c"))</input>
         <output>Queue(["c"),CustomString("b"),CustomString("a"])</output>
       </testCase>
       <testCase>
@@ -164,9 +164,9 @@
     </tags>
     <dataTypes>
       <inputType>Collection of integers</inputType>
-      <inputName>COLLECTION1</inputName>
+      <inputName>COLLECTION_ONE</inputName>
       <inputType>Collection of integers</inputType>
-      <inputName>COLLECTION2</inputName>
+      <inputName>COLLECTION_TWO</inputName>
       <outputType>Collection of unique integers</outputType>
     </dataTypes>
     <difficulty>SL</difficulty>
@@ -372,15 +372,15 @@
     <testCases>
       <testCase>
         <input>Array(CustomString("cat"),CustomString("dog"),CustomString("fish"))</input>
-        <output>Array([CustomString("tac"),CustomString("god"),CustomString("hsif")])</output>
+        <output>Array(['tac', 'god', 'hsif'])</output>
       </testCase>
       <testCase>
         <input>Array(CustomString("hello"),CustomString("world"))</input>
-        <output>Array([("olleh"),CustomString("dlrow")])</output>
+        <output>Array(['olleh', 'dlrow'])</output>
       </testCase>
       <testCase>
-        <input>Array("racecar"),CustomString("level"),CustomString("radar")</input>
-        <output>Array([("racecar"),CustomString("level"),CustomString("radar")])</output>
+        <input>Array(CustomString("racecar"),CustomString("level"),CustomString("radar"))</input>
+        <output>Array(['racecar', 'level', 'radar'])</output>
       </testCase>
     </testCases>
 </challenge>
@@ -401,15 +401,15 @@
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>"racecar"</input>
+        <input>CustomString("racecar")</input>
         <output>True</output>
       </testCase>
       <testCase>
-        <input>"hello"</input>
+        <input>CustomString("hello")</input>
         <output>False</output>
       </testCase>
       <testCase>
-        <input>"madam"</input>
+        <input>CustomString("madam")</input>
         <output>True</output>
       </testCase>
     </testCases>
