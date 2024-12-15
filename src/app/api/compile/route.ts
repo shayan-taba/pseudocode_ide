@@ -8,26 +8,21 @@ let bufferedOutput = ""; // Accumulate stdout output
 let isWaitingForInput = false;
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { pseudocode, userInput, run, test_case_input_name, test_case_input_value, test_case_index } = body;
+  try {
+    const body = await req.json();
+    const { pseudocode, userInput, run, test_case_input_name, test_case_input_value, test_case_index } = body;
 
-  // If no process exists, spawn a new one
+    // If no process exists, spawn a new one
+    if (run) {
+      bufferedOutput = `________________________________________________\nRUNNING TEST CASE ${test_case_index + 1}\n`;
+      isWaitingForInput = false;
 
-  //console.log("pythonProcess STAT", pythonProcess);
+      const scriptPath = path.join(__dirname, "compiler_script", "app.py");  // Use __dirname for path resolution
 
-  if (run) {
+      pythonProcess = spawn("python3", [scriptPath, pseudocode, JSON.stringify(test_case_input_name), JSON.stringify(test_case_input_value)]);
 
-    bufferedOutput = `________________________________________________\nRUNNING TEST CASE ${test_case_index+1}\n`
-
-    isWaitingForInput = false
-
-    const scriptPath = path.join(process.cwd(), "src/app/api/compile/compiler_script", "app.py");
-
-    pythonProcess = spawn("python3", [scriptPath, pseudocode, JSON.stringify(test_case_input_name), JSON.stringify(test_case_input_value)]);
-
-    // Collect output from the Python script
-    if (pythonProcess.stdout) {
-      pythonProcess.stdout.on("data", (data) => {
+      // Collect output from the Python script
+      pythonProcess.stdout?.on("data", (data) => {
         const outputChunk = data.toString();
         bufferedOutput += outputChunk;
 
@@ -36,63 +31,51 @@ export async function POST(req: Request) {
         // Detect if Python script is requesting input
         if (outputChunk.includes("The code is requesting your input on line")) {
           isWaitingForInput = true;
-          console.log("SETTING TRUE AND", bufferedOutput)
+          console.log("Waiting for input:", bufferedOutput);
         }
       });
-    } else {
-      console.error("Python process stdout is null.");
-    }
 
-    // Handle errors
-    if (pythonProcess.stderr) {
-      pythonProcess.stderr.on("data", (data) => {
+      // Handle errors
+      pythonProcess.stderr?.on("data", (data) => {
         console.error("Python Error:", data.toString());
       });
-    } else {
-      console.error("Python process stderr is null.");
+
+      pythonProcess.on("close", () => {
+        console.log("Python process closed.");
+        pythonProcess = null;
+        isWaitingForInput = false;
+      });
     }
 
-    // Reset process on close
-    pythonProcess.on("close", () => {
-      pythonProcess = null;
-      isWaitingForInput = false;
-      //bufferedOutput = "";
-    });
-  }
-
-  if (pythonProcess) {
-
-    // If the process is waiting for input, send the user input
-    if (isWaitingForInput && userInput) {
+    // If process is waiting for input, write the user input
+    if (pythonProcess && isWaitingForInput && userInput) {
       if (pythonProcess.stdin) {
-        isWaitingForInput = false; // Reset waiting state
         pythonProcess.stdin.write(userInput + "\n");
-        isWaitingForInput = false; // Reset waiting state
+        isWaitingForInput = false;  // Reset waiting state
       } else {
         console.error("Python process stdin is null.");
       }
     }
 
-    // Wait for more output if the process is still running
+    // Wait for more output if process is still running
     if (!isWaitingForInput && pythonProcess) {
-      // Check if there’s new output
-      await new Promise((resolve) => setTimeout(resolve, 100)); // Delay to gather output
+      await new Promise((resolve) => setTimeout(resolve, 100)); // Adjust waiting strategy if needed
     }
 
     // Return accumulated output to the frontend
-    console.log("FR")
     const response = {
       output: bufferedOutput,
       requestingInput: isWaitingForInput,
       isComplete: !pythonProcess || pythonProcess.killed,
     };
 
-    console.log(response, "IS BEING SENT")
-
     // Clear buffered output after sending it
     bufferedOutput = "";
 
     return NextResponse.json(response);
+
+  } catch (error) {
+    console.error("Error in compile API:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-  return NextResponse.json("");
 }
