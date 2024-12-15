@@ -276,6 +276,7 @@ const IDE: React.FC<IDEProps> = ({
   const processNextTestCase = async () => {
     if (testIndexRef.current >= testCases.length) {
       console.log("All test cases processed");
+      setIsComplete(true)
       return; // All test cases are processed
     }
 

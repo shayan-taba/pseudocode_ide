@@ -92,22 +92,57 @@ output STACK.isEmpty()
     </solution>
      <solution>
         <id>6</id>
-        <code>MERGED = Collection()
-COLLECTION_ONE.resetNext()
+        <code>COLLECTION_ONE.resetNext() # Reset the iterator for the first collection
+
+MY_TEMP_COLLECTION = Collection() # Initialize an empty collection to store unique elements
+
+# Loop through each element in COLLECTION_ONE
 loop while COLLECTION_ONE.hasNext()
-    ITEM = COLLECTION_ONE.getNext()
-    if not MERGED.contains(ITEM) then
-        MERGED.addItem(ITEM)
+
+    CURRENT = COLLECTION_ONE.getNext() # Get the next element from COLLECTION_ONE
+    DUPLICATE = False # Flag to track if the element is already in MY_TEMP_COLLECTION
+
+    MY_TEMP_COLLECTION.resetNext() # Reset the iterator for MY_TEMP_COLLECTION
+
+    # Check if CURRENT already exists in MY_TEMP_COLLECTION
+    loop while MY_TEMP_COLLECTION.hasNext() and not DUPLICATE
+        CHECK_EL = MY_TEMP_COLLECTION.getNext() # Get the next element from MY_TEMP_COLLECTION
+
+        if CHECK_EL == CURRENT then
+            DUPLICATE = True # Mark as duplicate if CURRENT is found
+        end if
+    end loop
+
+    if not DUPLICATE then
+        MY_TEMP_COLLECTION.addItem(CURRENT) # Add the unique element to MY_TEMP_COLLECTION
     end if
 end loop
-COLLECTION_TWO.resetNext()
+
+COLLECTION_TWO.resetNext() # Reset the iterator for the second collection
+
+# Loop through each element in COLLECTION_TWO
 loop while COLLECTION_TWO.hasNext()
-    ITEM = COLLECTION_TWO.getNext()
-    if not MERGED.contains(ITEM) then
-        MERGED.addItem(ITEM)
+
+    CURRENT = COLLECTION_TWO.getNext() # Get the next element from COLLECTION_TWO
+    DUPLICATE = False # Flag to track if the element is already in MY_TEMP_COLLECTION
+
+    MY_TEMP_COLLECTION.resetNext() # Reset the iterator for MY_TEMP_COLLECTION
+
+    # Check if CURRENT already exists in MY_TEMP_COLLECTION
+    loop while MY_TEMP_COLLECTION.hasNext() and not DUPLICATE
+        CHECK_EL = MY_TEMP_COLLECTION.getNext() # Get the next element from MY_TEMP_COLLECTION
+
+        if CHECK_EL == CURRENT then
+            DUPLICATE = True # Mark as duplicate if CURRENT is found
+        end if
+    end loop
+
+    if not DUPLICATE then
+        MY_TEMP_COLLECTION.addItem(CURRENT) # Add the unique element to MY_TEMP_COLLECTION
     end if
 end loop
-output MERGED
+
+output MY_TEMP_COLLECTION # Output the final collection with unique elements
 </code>
     </solution>
     <solution>
@@ -166,7 +201,7 @@ end loop
 
 # Part 2: Create an array of the correct length to store the even numbers
 EVEN_NUMBERS = Array()
-EVEN_NUMBERS.set_length(COUNT)  # Pre-allocate an array of fixed size
+EVEN_NUMBERS.set_length(COUNT) # Pre-allocate an array of fixed size
 
 # Part 3: Populate the EVEN_NUMBERS array with the even numbers
 INDEX = 0
