@@ -96,9 +96,9 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
         "≠": "!=",
         "mod": "%",
         "div": "//",
-        "AND": "and",
-        "OR": "or",
-        "NOT": "not",
+        " AND ": "and", # The surronding spaces ensure variable names with "AND" inside aren't replaced
+        " OR ": "or",
+        " NOT ": "not",
         "false": "False",
         "true": "True",
     }
