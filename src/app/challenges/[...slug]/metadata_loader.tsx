@@ -4,7 +4,7 @@ import path from "path";
 import { parseStringPromise } from "xml2js";
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export const generateMetadataFunc = async ({
