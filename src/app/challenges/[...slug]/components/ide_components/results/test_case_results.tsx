@@ -81,7 +81,7 @@ const TestCaseResult: React.FC<{
                   <p className="text-justify">
                     The hidden test case is a special test case used to verify
                     your solution. Its input and expected output are not
-                    displayed. You will only see whether your solution passes or
+                    displayed. You will only see the output and whether your solution passes or
                     fails for this case, but not the specific values being
                     tested. This ensures a fair assessment of your code&apos;s
                     correctness.

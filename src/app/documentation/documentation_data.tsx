@@ -99,6 +99,31 @@ output "you were born in", CURRENT_YEAR - int(AGE), "or" , CURRENT_YEAR - int(AG
       },
     ],
   },
+  {
+    title: "Length",
+    items: [],
+  },
+  {
+    title: "Data Types",
+    items: [
+      {
+        type: "description",
+        content: (
+          <p className="text-lg leading-relaxed">
+            All datatypes &#40;i.e., booleans, arrays, string, collections, etc.&#41;, as seen in the two IB pseudocode guide documents, are available and generally work exactly as specified in the documents. Noteworthy exceptions to this rule of thumb apply to the <em>array</em> datatypes and these are explained in the <a href="#array">array</a>.
+            All datatypes with custom IB methods &#40;i.e., arrays, collections, queues, stacks&#40; have detailed documentation on this page.
+          </p>
+        ),
+      },
+      {
+        type: "code",
+        content: `output "Please enter your age"
+input AGE
+CURRENT_YEAR = 2024
+output "you were born in", CURRENT_YEAR - int(AGE), "or" , CURRENT_YEAR - int(AGE) - 1`,
+      },
+    ],
+  },
 ];
 
 export const dataTypes = [

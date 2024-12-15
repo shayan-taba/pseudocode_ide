@@ -30,10 +30,15 @@ output QUEUE
         <code>COUNT = 0
 ECONOMICS.resetNext()
 loop while ECONOMICS.hasNext()
-    ITEM = ECONOMICS.getNext()
-    if MATH.contains(ITEM) then
-        COUNT = COUNT + 1
-    end if
+    ID = ECONOMICS.getNext()
+
+    MATH.resetNext()
+    loop while MATH.hasNext()
+        MATH_ID = MATH.getNext()
+        if MATH_ID == ID then
+            COUNT = COUNT + 1
+        end if
+    end loop
 end loop
 output COUNT
 </code>
@@ -298,12 +303,12 @@ end if
     </solution>
     <solution>
         <id>16</id>
-        <code>loop while NUMBER2 != 0
-    TEMP = NUMBER2
-    NUMBER2 = NUMBER1 mod NUMBER2
-    NUMBER1 = TEMP
+        <code>loop while NUMBER_TWO != 0
+    TEMP = NUMBER_TWO
+    NUMBER_TWO = NUMBER_ONE mod NUMBER_TWO
+    NUMBER_ONE = TEMP
 end loop
-output NUMBER1
+output NUMBER_ONE
 </code>
     </solution>
     <solution>

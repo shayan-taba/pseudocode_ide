@@ -46,12 +46,12 @@
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>Queue("a", "b", "c")</input>
-        <output>Queue(["c", "b", "a"])</output>
+        <input>Queue(CustomString("a"),CustomString("b"),CustomString("c")</input>
+        <output>Queue(["c"),CustomString("b"),CustomString("a"])</output>
       </testCase>
       <testCase>
-        <input>Queue("1", "2", "3", "4")</input>
-        <output>Queue(["4", "3", "2", "1"])</output>
+        <input>Queue("1"),CustomString("2"),CustomString("3"),CustomString("4")</input>
+        <output>Queue(["4"),CustomString("3"),CustomString("2"),CustomString("1"])</output>
       </testCase>
       <testCase>
         <input>Queue("cat")</input>
@@ -240,19 +240,19 @@
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>Array([["Park", 2, 3], ["Mall", 5, 1], ["Cafe", 1, 2]])</input>
+        <input>Array([[CustomString("Park"), 2, 3], [CustomString("Mall"), 5, 1], [CustomString("Cafe"), 1, 2]])</input>
         <input>Array(0, 0)</input>
-        <output>Queue(["Cafe", "Park", "Mall"])</output>
+        <output>Queue([CustomString("Cafe"),CustomString("Park"),CustomString("Mall")])</output>
       </testCase>
       <testCase>
-        <input>Array([["Home", 0, 0], ["School", 10, 10], ["Shop", 5, 5]])</input>
+        <input>Array([[CustomString("Home"), 0, 0], [CustomString("School"), 10, 10], [CustomString("Shop"), 5, 5]])</input>
         <input>Array(3, 3)</input>
-        <output>Queue(["Shop", "Home", "School"])</output>
+        <output>Queue([CustomString("Shop"),CustomString("Home"),CustomString("School")])</output>
       </testCase>
       <testCase>
-        <input>Array([["Lake", 4, 4], ["Mountain", 8, 8], ["Museum", 6, 5]])</input>
+        <input>Array([[CustomString("Lake"), 4, 4], [CustomString("Mountain"), 8, 8], [CustomString("Museum"), 6, 5]])</input>
         <input>Array(5, 5)</input>
-        <output>Queue(["Museum", "Lake", "Mountain"])</output>
+        <output>Queue([CustomString("Museum"),CustomString("Lake"),CustomString("Mountain")])</output>
       </testCase>
     </testCases>
 </challenge>
@@ -371,16 +371,16 @@
     <type>Algorithm</type>
     <testCases>
       <testCase>
-        <input>Array("cat", "dog", "fish")</input>
-        <output>Array("tac", "god", "hsif")</output>
+        <input>Array(CustomString("cat"),CustomString("dog"),CustomString("fish"))</input>
+        <output>Array([CustomString("tac"),CustomString("god"),CustomString("hsif")])</output>
       </testCase>
       <testCase>
-        <input>Array("hello", "world")</input>
-        <output>Array("olleh", "dlrow")</output>
+        <input>Array(CustomString("hello"),CustomString("world"))</input>
+        <output>Array([("olleh"),CustomString("dlrow")])</output>
       </testCase>
       <testCase>
-        <input>Array("racecar", "level", "radar")</input>
-        <output>Array("racecar", "level", "radar")</output>
+        <input>Array("racecar"),CustomString("level"),CustomString("radar")</input>
+        <output>Array([("racecar"),CustomString("level"),CustomString("radar")])</output>
       </testCase>
     </testCases>
 </challenge>
@@ -485,9 +485,9 @@
     </tags>
     <dataTypes>
       <inputType>First integer.</inputType>
-      <inputName>NUMBER1</inputName>
+      <inputName>NUMBER_ONE</inputName>
       <inputType>Second integer.</inputType>
-      <inputName>NUMBER2</inputName>
+      <inputName>NUMBER_TWO</inputName>
       <outputType>Integer representing the GCD.</outputType>
     </dataTypes>
     <difficulty>SL</difficulty>

@@ -3,6 +3,7 @@ from ib_dp_datatypes.array import Array
 from ib_dp_datatypes.collection import Collection
 from ib_dp_datatypes.queue import Queue
 from ib_dp_datatypes.stack import Stack
+from ib_dp_datatypes.custom_string import CustomString
 from pseudo_conversions_utils.assignment_utils import check_valid_variable_assignment
 from pseudo_conversions_utils.general_utils import parse_value
 from pseudo_conversions_utils.predefined_functions import get_sqrt
@@ -41,6 +42,7 @@ def syntax_check_and_run_converted(
             "Collection": Collection,
             "Stack": Stack,
             "Queue": Queue,
+            "CustomString": CustomString,
             "get_sqrt": get_sqrt
         }
 
