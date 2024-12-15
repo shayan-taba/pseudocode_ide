@@ -55,7 +55,7 @@ const DataTypeSection: React.FC<DataTypeSectionProps> = ({
           <ul className="list-disc list-inside mb-4">
             {methods.map((method) => (
               <li key={method.name}>
-                <strong>{method.name}:</strong> {method.description}
+                <code>{method.name}:</code><p>{method.description}</p>
               </li>
             ))}
           </ul>
@@ -64,7 +64,7 @@ const DataTypeSection: React.FC<DataTypeSectionProps> = ({
           <ul className="list-disc list-inside mb-4">
             {attributes.map((attribute) => (
               <li key={attribute.name}>
-                <strong>{attribute.name}:</strong> {attribute.description}
+                <code>{attribute.name}:</code><p>{attribute.description}</p>
               </li>
             ))}
           </ul>
@@ -73,7 +73,7 @@ const DataTypeSection: React.FC<DataTypeSectionProps> = ({
           <ul className="list-disc list-inside">
             {errors.map((error) => (
               <li key={error.name}>
-                <strong>{error.name}:</strong> {error.description}
+                {error.name != "" && (<code>{error.name}:</code>)} <p>{error.description}</p>
               </li>
             ))}
           </ul>

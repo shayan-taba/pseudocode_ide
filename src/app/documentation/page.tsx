@@ -34,15 +34,15 @@ const DocumentationPage: React.FC = () => {
 
   return (
     <div id="documentationPage" className="flex bg-slate-900 text-white min-h-screen w-[100vw]">
-      <aside className="bg-slate-900 p-4 w-[20%] z-10 relative">
+      <aside className="bg-slate-900 p-8 w-[20%] z-10 relative">
         <div className="fixed w-100%">
-        <h2 className="text-xl font-bold mb-4">Table of Contents</h2>
+        <h2 className="text-4xl font-bold mb-4">Table of Contents</h2>
         <nav className="space-y-2">
           {toc.map((item, index) => (
             <a
               key={`${item.id}-${index}`}
               href={`#${item.id}`} // This links to the dynamically generated id
-              className={`block pl-${item.level * 4} hover:text-zinc-300`}
+              className={`block pl-${item.level * 4} hover:text-zinc-300 hover:underline text-xl`}
             >
               {item.title}
             </a>

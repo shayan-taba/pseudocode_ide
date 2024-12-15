@@ -2,10 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-p code {
-  @apply bg-slate-800;
+*:not(pre) > code {
+  @apply bg-slate-800 px-1 py-0.5;
 }
 
-#array {
-    @apply pt-0
+#string {
+  @apply pt-0;
+}
+
+p {
+  @apply text-lg leading-relaxed;
+}
+
+main a {
+  @apply text-blue-400 hover:text-blue-500 underline;
+}
+
+main h3 {
+  @apply text-lg font-semibold mb-2;
+}
+
+main ul {
+  @apply list-disc list-inside mb-6;
+}
+
+main li {
+  @apply text-lg leading-relaxed;
 }

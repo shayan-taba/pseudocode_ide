@@ -2,19 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
-
-interface DocumentationItem {
-  type: "description" | "code"; // To differentiate between description and code
-  content: React.ReactNode | string; // Could be a React component or a string (for code)
-}
-
-interface DocumentationSection {
-  title: string;
-  items: DocumentationItem[]; // Array of optional descriptions and code blocks
-}
+import { GeneralDocumentationSection } from "../documentation_data";
 
 interface GeneralDocumentationProps {
-  sections: DocumentationSection[];
+  sections: GeneralDocumentationSection[];
 }
 
 const GeneralDocumentation: React.FC<GeneralDocumentationProps> = ({
@@ -30,7 +21,7 @@ const GeneralDocumentation: React.FC<GeneralDocumentationProps> = ({
 };
 
 // Accordion Section Component
-const AccordionSection: React.FC<{ section: DocumentationSection }> = ({
+const AccordionSection: React.FC<{ section: GeneralDocumentationSection }> = ({
   section,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +33,7 @@ const AccordionSection: React.FC<{ section: DocumentationSection }> = ({
   }, [section.title]);
 
   return (
-    <section className="mb-12">
+    <section id={section.id} className="mb-12">
       <div className="flex items-center mb-4 flex-row-reverse gap-4">
         <h2 className="text-3xl font-bold flex-1">{section.title}</h2>
         <button onClick={() => setIsOpen(!isOpen)}>
