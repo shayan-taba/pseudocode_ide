@@ -61,7 +61,7 @@ const Solution: React.FC<SolutionProps> = ({ exampleSolution }) => {
             </div>
           ) : (
             <>
-              You have acknowledged the warning. Proceed with caution.
+              You have acknowledged the warning.
               <div className="flex flex-col mt-2 space-y-2">
                 {/*<button
                   onClick={() => {

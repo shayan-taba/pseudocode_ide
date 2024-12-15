@@ -41,33 +41,48 @@ output COUNT
     <solution>
         <id>4</id>
         <code>TEMP_STACK = Stack() # Temporary stack for sorting
+
+# Transfer items from STACK to TEMP_STACK in ascending order
 loop while not STACK.isEmpty()
     ITEM = STACK.pop()
-    while not TEMP_STACK.isEmpty() AND TEMP_STACK.peek() &gt; ITEM
-        STACK.push(TEMP_STACK.pop())
-    end while
-    TEMP_STACK.push(ITEM)
+    CONTINUE = true
+    loop while not TEMP_STACK.isEmpty() and CONTINUE
+        TEMP_TOP = TEMP_STACK.pop() # Remove the top item of TEMP_STACK
+        if TEMP_TOP &gt; ITEM then
+            STACK.push(TEMP_TOP) # Push back smaller items to STACK
+        else
+            TEMP_STACK.push(TEMP_TOP) # Restore the removed item to TEMP_STACK
+            CONTINUE = false
+        end if
+    end loop
+    TEMP_STACK.push(ITEM) # Place ITEM in the correct position
 end loop
-loop while not TEMP_STACK.isEmpty()
-    STACK.push(TEMP_STACK.pop())
-end loop
-output STACK
+
+output TEMP_STACK
         </code>
     </solution>
     <solution>
         <id>5</id>
         <code>STACK = Stack()
-loop CHAR from 0 to length(BRACKETS) - 1
-    if BRACKETS[CHAR] in &quot;({[&quot; then
-        STACK.push(BRACKETS[CHAR])
-    else if BRACKETS[CHAR] in &quot;)}]&quot; then
-        if STACK.isEmpty() OR not matches(STACK.pop(), BRACKETS[CHAR]) then
-            output False
-            return
+CONTINUE = True
+loop CHAR from 0 to len(BRACKETS) - 1
+    if CONTINUE then
+        if BRACKETS[CHAR] == "(" OR BRACKETS[CHAR] == "{" OR BRACKETS[CHAR] == "[" then
+            STACK.push(BRACKETS[CHAR])
+        else if BRACKETS[CHAR] == ")" or BRACKETS[CHAR] == "}" or BRACKETS[CHAR] == "]" then
+            if STACK.isEmpty() then
+                CONTINUE = False
+            else
+                OPEN_BRACKET = STACK.pop()
+                if (OPEN_BRACKET == "(" AND BRACKETS[CHAR] != ")") OR (OPEN_BRACKET == "{" AND BRACKETS[CHAR] != "}") OR (OPEN_BRACKET == "[" AND BRACKETS[CHAR] != "]") then
+                    CONTINUE = False
+                end if
+            end if
         end if
     end if
 end loop
 output STACK.isEmpty()
+
         </code>
     </solution>
      <solution>
@@ -221,26 +236,40 @@ output SUM
     </solution>
     <solution>
         <id>15</id>
-        <code>if NUMBER &lt;= 1 then
+        <code># Check if the number is less than or equal to 1
+# Numbers ≤ 1 are not prime by definition
+if INTEGER &lt;= 1 then
     output False
-    return
 end if
-loop I from 2 to sqrt(NUMBER)
-    if NUMBER mod I == 0 then
-        output False
-        return
+
+# Initialize a flag to determine if the number is prime
+CONTINUE = true
+
+# Loop through possible divisors from 2 up to the integer part of the square root of the number
+loop I from 2 to int(get_sqrt(INTEGER))
+    if CONTINUE then # Only proceed if CONTINUE is still true
+        # Check if the current divisor divides the number evenly
+        if INTEGER mod I == 0 then
+            # If a divisor is found, set CONTINUE to false and output False (not prime)
+            CONTINUE = false
+            output False
+        end if
     end if
 end loop
-output True
+
+# If no divisors were found and CONTINUE is still true, the number is prime
+if CONTINUE then
+    output True
+end if
         </code>
     </solution>
     <solution>
         <id>16</id>
-        <code>while NUMBER2 != 0
+        <code>loop while NUMBER2 != 0
     TEMP = NUMBER2
     NUMBER2 = NUMBER1 mod NUMBER2
     NUMBER1 = TEMP
-end while
+end loop
 output NUMBER1
         </code>
     </solution>

@@ -147,7 +147,7 @@ const Task: React.FC<TaskProps> = ({
             </li>
             <li>
               Ensure your code outputs the expected result using{" "}
-              <code className="bg-slate-700 px-1 py-0.5 rounded">output</code>.
+              <code className="bg-slate-800 px-1 py-0.5 rounded">output</code>.
             </li>
             <li>
               Once ready, press <strong>Run Code</strong> to execute your code

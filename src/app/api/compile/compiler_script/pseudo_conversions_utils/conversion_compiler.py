@@ -1,21 +1,12 @@
-import traceback
-from ib_dp_datatypes.array import Array
-from ib_dp_datatypes.collection import Collection
-from ib_dp_datatypes.queue import Queue
-from ib_dp_datatypes.stack import Stack
+
 from pseudo_conversions_utils.general_utils import *
 from pseudo_conversions_utils.input_output_utils import (
     pseudo_input_to_python_input,
     pseudo_output_to_python_print,
-    modify_input_statements,
 )
 from pseudo_conversions_utils.loop_utils import replace_and_check_from_loop_construct
-from pseudo_conversions_utils.assignment_utils import check_valid_variable_assignment
 
 from syntax_runtime_check import syntax_check_and_run_converted
-
-import re
-
 
 def pseudocode_to_python(pseudocode: str):
     try:

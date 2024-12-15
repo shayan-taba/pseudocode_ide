@@ -112,8 +112,6 @@ def has_whitespace_before(line: str, start: int) -> bool:
 def has_whitespace_after(line: str, end: int) -> bool:
     return not (end == len(line)) and line[end].isspace()
 
-import ast
-
 def parse_value(value, global_scope):
     """
     Parses a string and returns the appropriate data type or object.

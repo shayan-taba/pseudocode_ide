@@ -34,4 +34,4 @@ def check_valid_variable_assignment(code: str) -> tuple:
             check_valid_variable_name(defined_variable[0])
     except Exception as e:
         return (False, defined_variable[1], defined_variable[0]) # Return False, and the line number of the first insatnce of invalid variable names, and the variable name
-    return (True, None) # No issues with any variable names
+    return (True, None) # No issues with any variable names 

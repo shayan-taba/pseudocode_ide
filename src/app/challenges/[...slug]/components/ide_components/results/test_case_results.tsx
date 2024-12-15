@@ -90,7 +90,7 @@ const TestCaseResult: React.FC<{
                 <div className="mt-2">
                   <span className="font-bold">Input:</span>
                   <div className="text-gray-300 space-y-1">
-                    {result.input.map((inputValue, index) => {
+                    {!isLast && result.input.map((inputValue, index) => {
                       const variable = testInputsTypes[index]; // Get the variable name from the testInputsTypes
                       return (
                         <div
@@ -104,6 +104,7 @@ const TestCaseResult: React.FC<{
                         </div>
                       );
                     })}
+                    {isLast && "hidden"}
                   </div>
                 </div>
 

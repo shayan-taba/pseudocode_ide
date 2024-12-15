@@ -5,6 +5,7 @@ from ib_dp_datatypes.queue import Queue
 from ib_dp_datatypes.stack import Stack
 from pseudo_conversions_utils.assignment_utils import check_valid_variable_assignment
 from pseudo_conversions_utils.general_utils import parse_value
+from pseudo_conversions_utils.predefined_functions import get_sqrt
 
 
 def syntax_check_and_run_converted(
@@ -34,12 +35,13 @@ def syntax_check_and_run_converted(
         return f"Syntax Error on line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}, must only contain uppercase alphabetic characters (A-Z) and underscores"
 
     try:
-        # Global scope with predefined classes
+        # Global scope with predefined classes and functions
         global_scope = {
             "Array": Array,
             "Collection": Collection,
             "Stack": Stack,
             "Queue": Queue,
+            "get_sqrt": get_sqrt
         }
 
         # Parse and add the test case input value to the global scope
@@ -97,7 +99,9 @@ def syntax_check_and_run_converted(
 def special_runtime_errors(error: str) -> str:
     if error == "name 'output' is not defined":
         return "IB Pseuedocode does not have an output function; rather, use `output expression` where `expression` is an expression."
-    if error == "name 'input' is not defined":
+    elif error == "name 'input' is not defined":
         return "IB Pseuedocode does not have an input function; rather, use `input VARIABLE_NAME` where `VARIABLE_NAME` is the name of the variable."
+    elif error == "'str' object has no attribute 'length'":
+        return "AttributeError: 'str' object has no attribute 'length'. For strings, use the `len` function similar to Python to obtain the length." 
     else:
         return None

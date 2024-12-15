@@ -127,13 +127,13 @@
   <challenge>
     <id>5</id>
     <title>Bracket Matching</title>
-    <description>Write an algorithm to check if the brackets in a string are balanced using a stack.</description>
+    <description>Write an algorithm to check if the brackets &#40;parentheses, square, curly&#41; in a string are balanced using a stack.</description>
     <tags>
       <tag>Stacks</tag>
       <tag>Conditionals</tag>
     </tags>
     <dataTypes>
-      <inputType>String of brackets</inputType>
+      <inputType>String of brackets &#40;parentheses, square, curly&#41;</inputType>
       <inputName>BRACKETS</inputName>
       <outputType>Boolean indicating if brackets are balanced</outputType>
     </dataTypes>
@@ -444,14 +444,14 @@
 <challenge>
     <id>15</id>
     <title>Check Prime Number</title>
-    <description>Determine if a given integer is a prime number.</description>
+    <description>Determine if a given integer is a prime number. You can use the "math.sqrt&#40;NUMBER&#41;" in your solution to obtain the square root of any number. </description>
     <tags>
       <tag>Math</tag>
       <tag>Conditionals</tag>
     </tags>
     <dataTypes>
       <inputType>Integer to check.</inputType>
-      <inputName>NUMBER</inputName>
+      <inputName>INTEGER</inputName>
       <outputType>Boolean.</outputType>
     </dataTypes>
     <difficulty>SL</difficulty>

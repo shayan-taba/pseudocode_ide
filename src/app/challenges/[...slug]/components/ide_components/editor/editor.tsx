@@ -88,16 +88,22 @@ const Editor: React.FC<EditorProps> = ({
     const existingData = localStorage.getItem(key);
     const newData = { code }; // Data to save
 
+    let errorOnSave:boolean = false;
     if (existingData) {
       try {
         const parsedData = JSON.parse(existingData);
         const mergedData = { ...parsedData, ...newData };
         localStorage.setItem(key, JSON.stringify(mergedData));
       } catch (error) {
+        errorOnSave = true;
         console.error("Error parsing existing data:", error);
       }
     } else {
       localStorage.setItem(key, JSON.stringify(newData));
+    }
+
+    if (!errorOnSave) {
+      alert("Code saved successfully")
     }
   };
 
