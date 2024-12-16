@@ -20,6 +20,9 @@ export async function POST(req: Request) {
       // Use path.join to point to the correct location of app.py
       const scriptPath = path.join(process.cwd(), "src", "app", "api", "compile", "compiler_script", "app.py");
 
+      console.log("THE PATH HERE NOT")
+      console.log("THE PATH HERE NOT", scriptPath)
+
       pythonProcess = spawn("python3", [scriptPath, pseudocode, JSON.stringify(test_case_input_name), JSON.stringify(test_case_input_value)]);
 
       // Collect output from the Python script
