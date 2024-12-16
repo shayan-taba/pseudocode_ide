@@ -160,9 +160,15 @@ const IDE: React.FC<IDEProps> = ({
           test_case_index: test_case_index,
         }),
       });
-
+      console.log("prior json", response, response.ok);
       const data = await response.json();
-      handleBackendResponse(data);
+
+      if (response.ok) {
+        handleBackendResponse(data);
+      } else {
+        console.error("Internal Server Error");
+        alert("Internal Server Error. Please reload and try again.");
+      }
     }
   };
 
@@ -191,12 +197,12 @@ const IDE: React.FC<IDEProps> = ({
   const handleSendInput = async () => {
     setIsPopupOpen(false);
     setWaitingForInput(false); // Hide input box while backend processes
-    await sendInputToBackend(userInput)
+    await sendInputToBackend(userInput);
     setUserInput(""); // Clear input field
   };
 
   const handleBackendResponse = (data: any) => {
-    console.log('may d', data, data.result)
+    console.log("may d", data, data.result);
 
     const currentIndex = testIndexRef.current;
 
@@ -207,7 +213,10 @@ const IDE: React.FC<IDEProps> = ({
 
     const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
 
-    console.log('replaceded', data.result.replace(new RegExp(uuid + " ", "g"), ""),)
+    console.log(
+      "replaceded",
+      data.result.replace(new RegExp(uuid + " ", "g"), "")
+    );
     setOutput((prev) => [
       ...prev,
       data.result.replace(new RegExp(uuid + " ", "g"), ""),
@@ -256,17 +265,16 @@ const IDE: React.FC<IDEProps> = ({
       return updatedResults;
     });
 
-    console.log('notisreq');
+    console.log("notisreq");
     // Once the test completes, move to the next test case
     testIndexRef.current += 1;
     // console.log(testCases[currentIndex]);
     processNextTestCase(); // Move to the next test case
-  
   };
 
   // Function to send input back to the backend
   async function sendInputToBackend(inputValue: string) {
-    console.log("SENDING INPUT", inputValue)
+    console.log("SENDING INPUT", inputValue);
     const response = await fetch("/api/index/send-input", {
       method: "POST",
       headers: {
@@ -276,43 +284,41 @@ const IDE: React.FC<IDEProps> = ({
         userInput: inputValue, // The input provided by the user
       }),
     });
-    console.log("GOT INPUT")
+    console.log("GOT INPUT");
     const data = await response.json();
-    console.log("GOT INPUTs")
+    console.log("GOT INPUTs");
     console.log(data.result);
   }
 
   async function pollForInput() {
     if (pollerRef.current !== null) return; // Avoid multiple pollers
-  
+
     try {
       pollerRef.current = window.setInterval(async () => {
         console.log("Polling for input...");
         const response = await fetch("/api/index/input-status");
         const data = await response.json();
-  
+
         if (data.input_prompt) {
           stopPolling(); // Stop polling if input is requested
-  
+
           setInputMessage(data.input_prompt);
           setIsPopupOpen(true);
           setWaitingForInput(true);
         }
-      }, 750); // Poll every 0.75 seconds
+      }, 2200); // Poll every 2.2 seconds
     } catch (error) {
       console.error("Error polling for input:", error);
       stopPolling(); // Ensure polling stops on error
     }
   }
-  
-  
+
   function stopPolling() {
     if (pollerRef.current !== null) {
       clearInterval(pollerRef.current); // No type mismatch now
       pollerRef.current = null; // Reset to null
     }
   }
-  
 
   // Start polling when the page loads or when needed
   pollForInput();

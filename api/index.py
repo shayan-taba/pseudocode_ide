@@ -62,7 +62,7 @@ def process_pseudocode():
             input_handler=input_handler,
         )
 
-        return jsonify({"result": result})
+        return jsonify({"result": result, "code": 200})
 
     except Exception as e:
         return jsonify({"error": f"Internal server error: {str(e)}", "code": 500})
