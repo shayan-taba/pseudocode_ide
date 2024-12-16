@@ -1,4 +1,6 @@
 import traceback
+import sys
+import io
 from ib_dp_datatypes.array import Array
 from ib_dp_datatypes.collection import Collection
 from ib_dp_datatypes.queue import Queue
@@ -12,28 +14,20 @@ from pseudo_conversions_utils.predefined_functions import get_sqrt
 def syntax_check_and_run_converted(
     code_string, test_case_input_names: str, test_case_input_values: str
 ):
+    output_capture = io.StringIO()  # Create an in-memory string buffer to capture the output
+    sys.stdout = output_capture  # Redirect stdout to capture print statements
 
     try:
         # Syntax check using compile
         compile(code_string, "<string>", "exec")
 
-        # Defining global execution with additional classes imported to help with defining advanced datatypes
-
     except SyntaxError as e:
-        error_line = code_string.splitlines()[
-            e.lineno - 1
-        ]  # Get the error containing line
-        return (
-            f"Syntax Error on line {e.lineno}: {e.msg}\n"
-            # f"Error in line:\n{error_line}\n"
-            # f"{' ' * (e.offset - 1)}^"
-            # Find where the error was from
-        )
+        error_line = code_string.splitlines()[e.lineno - 1]  # Get the error containing line
+        return f"Syntax Error on line {e.lineno}: {e.msg}"
 
     checked_variable_assignments = check_valid_variable_assignment(code_string)
-    # in tuple checked_variable_assignments, the first item is boolean of success, the second item is line number, the third item is variable name
     if not checked_variable_assignments[0]:
-        return f"Syntax Error on line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}, must only contain uppercase alphabetic characters (A-Z) and underscores"
+        return f"Syntax Error on line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}' must only contain uppercase alphabetic characters (A-Z) and underscores"
 
     try:
         # Global scope with predefined classes and functions
@@ -43,24 +37,22 @@ def syntax_check_and_run_converted(
             "Stack": Stack,
             "Queue": Queue,
             "CustomString": CustomString,
-            "get_sqrt": get_sqrt
+            "get_sqrt": get_sqrt,
         }
 
         # Parse and add the test case input value to the global scope
-        #print('d name', test_case_input_names, type(test_case_input_names))
-        #print('d val', test_case_input_values, type(test_case_input_values))
-        
         for index, input_type in enumerate(test_case_input_names):
             global_scope[input_type["name"]] = parse_value(test_case_input_values[index], global_scope)
-                
-        # Syntax is valid as not errors have been raised, execute the code and handle input/output
+
+        # Syntax is valid as no errors have been raised, execute the code and handle input/output
         exec(code_string, global_scope)
+    
     except Exception as e:
         # Extract the full traceback
         tb = traceback.TracebackException.from_exception(e)
         relevant_frame = None
 
-        # Search for th frame that corresponds to the user's input code rather than errors raised in ib_dp_datatype files
+        # Search for the frame that corresponds to the user's input code
         for frame in tb.stack:
             if frame.filename == "<string>":  # This corresponds to the user's code
                 relevant_frame = frame
@@ -69,33 +61,22 @@ def syntax_check_and_run_converted(
         if relevant_frame:
             # Extract the line of user code that caused the issue
             user_line_number = relevant_frame.lineno
-            error_line = code_string.splitlines()[
-                user_line_number - 1
-            ]  # Assuming each line in pseuedocode and python are corresponding,
-            # this code gets the pseudocode line relevant to  the Python runtime error
-
-            if custom_error := special_runtime_errors(str(e)):
-                return (
-                    f"Runtime Error on Line {user_line_number}: {custom_error}\n"
-                    # f"Error occurred in file: {frame_info.filename}, "
-                    # f"Line Number: {user_line_number}\n"
-                    # f"{error_line.strip()}\n"
-                    # f"in function {frame_info.function}"
-                )
-
+            error_line = code_string.splitlines()[user_line_number - 1]  # Assuming each line in pseudocode and Python correspond
+            custom_error = special_runtime_errors(str(e))
+            
+            if custom_error:
+                return f"Runtime Error on Line {user_line_number}: {custom_error}\n{error_line.strip()}"
             else:
-                return (
-                    f"Runtime Error on Line {user_line_number}: {str(e)}\n"
-                    # f"Line Number: {user_line_number}\n"
-                    # f"{error_line.strip()}\n"
-                )
+                return f"Runtime Error on Line {user_line_number}: {str(e)}\n{error_line.strip()}"
+
         else:
-            # Otherwise, the error comes from the ib_dp_database file code rather than directly the user's code. This is an extreme edge case.
             return f"This is a special error caused by the interpreter itself. Please contact the developer for support. Runtime error: {str(e)}\n{traceback.format_exc()}"
+    
+    finally:
+        sys.stdout = sys.__stdout__  # Restore the original stdout
 
-    else:
-
-        return "\nCode executed successfully."
+    # Return the captured output from exec
+    return output_capture.getvalue() if output_capture.getvalue() else "\nCode executed successfully."
 
 
 def special_runtime_errors(error: str) -> str:
@@ -103,7 +84,7 @@ def special_runtime_errors(error: str) -> str:
         return "IB Pseuedocode does not have an output function; rather, use `output expression` where `expression` is an expression."
     elif error == "name 'input' is not defined":
         return "IB Pseuedocode does not have an input function; rather, use `input VARIABLE_NAME` where `VARIABLE_NAME` is the name of the variable."
-    elif error == "'str' object has no attribute 'length'":
+    elif "'str' object has no attribute 'length'" in error:
         return "AttributeError: 'str' object has no attribute 'length'. For strings, use the `len` function similar to Python to obtain the length." 
     else:
         return None
