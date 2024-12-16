@@ -211,7 +211,6 @@ const IDE: React.FC<IDEProps> = ({
       ...prev,
       data.output.replace(new RegExp(uuid + " ", "g"), ""),
     ]); // Append new output
-    
 
     const currentTest = testCases[currentIndex];
 
@@ -273,10 +272,52 @@ const IDE: React.FC<IDEProps> = ({
     }
   };
 
+  // Function to send input back to the backend
+  async function sendInputToBackend(inputValue: string) {
+    const response = await fetch("/api/index/input", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pseudocode: "your pseudocode here",
+        userInput: inputValue, // The input provided by the user
+      }),
+    });
+    const data = await response.json();
+    console.log(data.result);
+  }
+
+  // Polling function to check if input is requested
+  async function pollForInput() {
+    try {
+      console.log("poller")
+      // Poll the backend every 1 second
+      const response = await fetch("/api/index/input-status");
+      const data = await response.json();
+
+      if (data.input_prompt) {
+        console.log("THERE IS")
+        // If there's an input prompt, ask the user for input
+        const userInput = prompt(data.input_prompt); // Use a native prompt or your custom input UI
+        await sendInputToBackend(userInput!);
+      } else {
+        console.log("THERE NOT IS")
+        // No input needed, continue polling
+        setTimeout(pollForInput, 1000); // Continue polling every second
+      }
+    } catch (error) {
+      console.error("Error polling for input:", error);
+    }
+  }
+
+  // Start polling when the page loads or when needed
+  pollForInput();
+
   const processNextTestCase = async () => {
     if (testIndexRef.current >= testCases.length) {
       console.log("All test cases processed");
-      setIsComplete(true)
+      setIsComplete(true);
       return; // All test cases are processed
     }
 
@@ -302,11 +343,11 @@ const IDE: React.FC<IDEProps> = ({
     inputName: testInputsTypes,
     exampleSolution: exampleCode,
     completeStatus: completeStatus,
-    testInputsTypes: testInputsTypes
+    testInputsTypes: testInputsTypes,
   };
 
   const editorArgs = {
-    id:id,
+    id: id,
     code: code,
     onCodeChange: setCode,
     onRun: handleRunCode,
@@ -325,9 +366,8 @@ const IDE: React.FC<IDEProps> = ({
     toggleResultsState: toggleResultsState,
     testResults: testResults,
     setCompleteStatus: setCompleteStatus,
-    testInputsTypes: testInputsTypes
+    testInputsTypes: testInputsTypes,
   };
-  console.log("EXC", exampleCode)
 
   return (
     <div id="IDE" className="flex flex-col h-screen bg-zinc-950">

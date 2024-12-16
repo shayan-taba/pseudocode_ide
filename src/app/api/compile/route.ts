@@ -39,9 +39,10 @@ export async function POST(req: Request) {
       }
     }
 
+    /*
     // If Flask is waiting for input, send the user input (mimicking the previous logic)
     if (isWaitingForInput && userInput) {
-      const response = await fetch("http://localhost:5328/api/index", {
+      const response = await fetch("/api/index", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,6 +64,7 @@ export async function POST(req: Request) {
     if (!isWaitingForInput) {
       await new Promise((resolve) => setTimeout(resolve, 100)); // Adjust waiting strategy if needed
     }
+    */
 
     // Return accumulated output to the frontend
     const response = {

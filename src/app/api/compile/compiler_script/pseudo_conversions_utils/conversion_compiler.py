@@ -6,8 +6,6 @@ from pseudo_conversions_utils.input_output_utils import (
 )
 from pseudo_conversions_utils.loop_utils import replace_and_check_from_loop_construct
 
-from syntax_runtime_check import syntax_check_and_run_converted
-
 def pseudocode_to_python(pseudocode: str):
     try:
         conversion = intial_pseudocode_conversion(pseudocode)
