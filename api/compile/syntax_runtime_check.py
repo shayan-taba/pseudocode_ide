@@ -46,7 +46,7 @@ def syntax_check_and_run_converted(
     except SyntaxError as e:
         error_line = code_string.splitlines()[e.lineno - 1]
         return f"Syntax Error on line {e.lineno}: {e.msg}"
-
+    print('a100')
     # Validate variable assignments
     checked_variable_assignments = check_valid_variable_assignment(code_string)
     if not checked_variable_assignments[0]:
@@ -61,7 +61,7 @@ def syntax_check_and_run_converted(
         "CustomString": CustomString,
         "get_sqrt": get_sqrt,
     }
-
+    print('a101')
     # Add test case inputs to the global scope
     for index, input_type in enumerate(test_case_input_names):
         global_scope[input_type["name"]] = parse_value(
@@ -81,7 +81,7 @@ def syntax_check_and_run_converted(
             import sys
 
             sys.stdout = output_buffer
-
+            print('a102')
             def input_paused(prompt):
                 # Await input from the provided handler
                 if input_handler:
@@ -92,7 +92,7 @@ def syntax_check_and_run_converted(
             # Replace the input function with the custom async handler
             exec_globals["input"] = input_paused
             exec(code_string, exec_globals, exec_locals)
-
+            print('a103')
             # Get the captured output from StringIO
             output = output_buffer.getvalue()
 

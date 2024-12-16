@@ -18,8 +18,9 @@ execution_state = {
 }
 
 
-@app.route("/api/index", methods=["POST"])
+@app.route("/api/index/run_code", methods=["POST"])
 def process_pseudocode():
+    print("374853", "api/index/run_code")
     try:
         execution_state["input_prompt"] = None
         execution_state["pending_input"] = None
@@ -70,6 +71,7 @@ def process_pseudocode():
 
 @app.route("/api/index/send-input", methods=["POST"])
 def handle_user_input():
+    print("374853", "api/index/send-input")
     try:
         data = request.get_json()
         user_input = data.get("userInput")
@@ -91,6 +93,7 @@ def handle_user_input():
 
 @app.route("/api/index/input-status", methods=["GET"])
 def get_input_status():
+    print("374853", "api/index/input-status")
     # Check if the backend is currently waiting for input
     if execution_state["input_prompt"]:
         return jsonify({"input_prompt": execution_state["input_prompt"]})

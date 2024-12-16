@@ -1,5 +1,5 @@
 import ast
-from .general_utils import *
+from api.compile.pseudo_conversions_utils.general_utils import *
 
 def check_valid_variable_name(name: str) -> bool:
 

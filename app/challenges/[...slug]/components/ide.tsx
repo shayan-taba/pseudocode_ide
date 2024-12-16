@@ -150,7 +150,7 @@ const IDE: React.FC<IDEProps> = ({
     test_case_index: number
   ) => {
     if (code.trim()) {
-      const response = await fetch("/api/index", {
+      const response = await fetch("/api/index/run_code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
