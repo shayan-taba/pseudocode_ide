@@ -17,7 +17,8 @@ export async function POST(req: Request) {
       bufferedOutput = `________________________________________________\nRUNNING TEST CASE ${test_case_index + 1}\n`;
       isWaitingForInput = false;
 
-      const scriptPath = path.join(__dirname, "compiler_script", "app.py");  // Use __dirname for path resolution
+      // Use path.join to point to the correct location of app.py
+      const scriptPath = path.join(process.cwd(), "src", "app", "api", "compile", "compiler_script", "app.py");
 
       pythonProcess = spawn("python3", [scriptPath, pseudocode, JSON.stringify(test_case_input_name), JSON.stringify(test_case_input_value)]);
 
