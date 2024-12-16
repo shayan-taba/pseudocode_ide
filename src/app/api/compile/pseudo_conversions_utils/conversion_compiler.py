@@ -1,10 +1,10 @@
 
-from pseudo_conversions_utils.general_utils import *
-from pseudo_conversions_utils.input_output_utils import (
+from compile.pseudo_conversions_utils.general_utils import *
+from compile.pseudo_conversions_utils.input_output_utils import (
     pseudo_input_to_python_input,
     pseudo_output_to_python_print,
 )
-from pseudo_conversions_utils.loop_utils import replace_and_check_from_loop_construct
+from compile.pseudo_conversions_utils.loop_utils import replace_and_check_from_loop_construct
 
 def pseudocode_to_python(pseudocode: str):
     try:

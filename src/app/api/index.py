@@ -2,8 +2,8 @@ import asyncio
 from flask import Flask, request, jsonify
 import json
 import time
-from syntax_runtime_check import syntax_check_and_run_converted
-from pseudo_conversions_utils.conversion_compiler import pseudocode_to_python
+from compile.syntax_runtime_check import syntax_check_and_run_converted
+from compile.pseudo_conversions_utils.conversion_compiler import pseudocode_to_python
 
 app = Flask(__name__)
 
