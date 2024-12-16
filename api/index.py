@@ -22,25 +22,26 @@ execution_state = {
 def process_pseudocode():
     print("374853", "api/index/run_code")
     try:
+        print('a1')
         execution_state["input_prompt"] = None
         execution_state["pending_input"] = None
-
+        print('a2')
         data = request.get_json()
         pseudocode = data.get("pseudocode")
         test_case_input_name = data.get("test_case_input_name", None)
         test_case_input_value = data.get("test_case_input_value", None)
         test_case_index = data.get("test_case_index", None)
-
+        print('a3')
         if not pseudocode:
             return jsonify({"error": "Pseudocode argument missing.", "code": 400})
-
+        print('a4')
         # Convert pseudocode to Python
         python_code = pseudocode_to_python(pseudocode)
         if not python_code:
             return jsonify(
                 {"error": "Failed to convert pseudocode to Python.", "code": 500}
             )
-
+        print('a5')
         # Simulate the input handling in the backend
         def input_handler(prompt):
             execution_state["input_prompt"] = prompt
@@ -54,7 +55,7 @@ def process_pseudocode():
             execution_state["pending_input"] = None
             
             return temporary_input
-
+        print('a6')
         # Start the execution
         result = syntax_check_and_run_converted(
             python_code,
@@ -62,7 +63,7 @@ def process_pseudocode():
             test_case_input_value,
             input_handler=input_handler,
         )
-
+        print('a7')
         return jsonify({"result": result, "code": 200})
 
     except Exception as e:

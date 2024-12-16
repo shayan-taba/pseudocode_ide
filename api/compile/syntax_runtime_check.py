@@ -70,6 +70,7 @@ def syntax_check_and_run_converted(
 
     def exec_with_input_pause():
         try:
+            print('102')
             # Create a generator to pause execution at input points
             exec_globals = global_scope.copy()
             exec_locals = {}
@@ -81,7 +82,7 @@ def syntax_check_and_run_converted(
             import sys
 
             sys.stdout = output_buffer
-            print('a102')
+            print('a103')
             def input_paused(prompt):
                 # Await input from the provided handler
                 if input_handler:
@@ -92,7 +93,7 @@ def syntax_check_and_run_converted(
             # Replace the input function with the custom async handler
             exec_globals["input"] = input_paused
             exec(code_string, exec_globals, exec_locals)
-            print('a103')
+            print('a104')
             # Get the captured output from StringIO
             output = output_buffer.getvalue()
 
@@ -102,6 +103,8 @@ def syntax_check_and_run_converted(
             return output
 
         except Exception as e:
+            print('a105')
+
             # Check for special runtime errors before returning the standard message
             special_error_message = special_runtime_errors(str(e))
             if special_error_message:
