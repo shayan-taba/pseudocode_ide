@@ -1,6 +1,6 @@
 import re
-from .general_utils import *
-from .assignment_utils import check_valid_variable_name
+from api.compile.pseudo_conversions_utils.general_utils import *
+from api.compile.pseudo_conversions_utils.assignment_utils import check_valid_variable_name
 
 
 def replace_and_check_from_loop_construct(line: str, string_ranges: list) -> str:

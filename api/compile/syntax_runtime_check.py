@@ -1,14 +1,14 @@
 import asyncio
 import traceback
 import io
-from compile.ib_dp_datatypes.array import Array
-from compile.ib_dp_datatypes.collection import Collection
-from compile.ib_dp_datatypes.queue import Queue
-from compile.ib_dp_datatypes.stack import Stack
-from compile.ib_dp_datatypes.custom_string import CustomString
-from compile.pseudo_conversions_utils.assignment_utils import check_valid_variable_assignment
-from compile.pseudo_conversions_utils.general_utils import parse_value
-from compile.pseudo_conversions_utils.predefined_functions import get_sqrt
+from api.compile.ib_dp_datatypes.array import Array
+from api.compile.ib_dp_datatypes.collection import Collection
+from api.compile.ib_dp_datatypes.queue import Queue
+from api.compile.ib_dp_datatypes.stack import Stack
+from api.compile.ib_dp_datatypes.custom_string import CustomString
+from api.compile.pseudo_conversions_utils.assignment_utils import check_valid_variable_assignment
+from api.compile.pseudo_conversions_utils.general_utils import parse_value
+from api.compile.pseudo_conversions_utils.predefined_functions import get_sqrt
 
 
 def special_runtime_errors(error: str) -> str:

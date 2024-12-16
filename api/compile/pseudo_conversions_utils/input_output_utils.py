@@ -1,6 +1,6 @@
 import re
-from .general_utils import *
-from .assignment_utils import check_valid_variable_name
+from api.compile.pseudo_conversions_utils.general_utils import *
+from api.compile.pseudo_conversions_utils.assignment_utils import check_valid_variable_name
 
 
 def pseudo_output_to_python_print(line: str) -> str:
