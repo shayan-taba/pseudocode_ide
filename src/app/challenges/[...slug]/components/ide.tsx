@@ -71,7 +71,7 @@ const IDE: React.FC<IDEProps> = ({
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const pollerRef = useRef<NodeJS.Timeout | null>(null);
+  const pollerRef = useRef<number | null>(null);
   const testIndexRef = useRef<number>(0);
 
   /*const [testResults, setTestResults] = useState<{ 
@@ -150,13 +150,11 @@ const IDE: React.FC<IDEProps> = ({
     test_case_index: number
   ) => {
     if (code.trim()) {
-      const response = await fetch("/api/compile", {
+      const response = await fetch("/api/index", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           pseudocode: code,
-          userInput: input,
-          run: run,
           test_case_input_name: testInputsTypes,
           test_case_input_value: testCases[test_case_index].inputs,
           test_case_index: test_case_index,
@@ -193,11 +191,13 @@ const IDE: React.FC<IDEProps> = ({
   const handleSendInput = async () => {
     setIsPopupOpen(false);
     setWaitingForInput(false); // Hide input box while backend processes
-    await fetchFromBackend(userInput, false, testIndexRef.current); // Send user input to backend
+    await sendInputToBackend(userInput)
     setUserInput(""); // Clear input field
   };
 
   const handleBackendResponse = (data: any) => {
+    console.log('may d', data, data.result)
+
     const currentIndex = testIndexRef.current;
 
     if (!testCases[currentIndex]) {
@@ -207,9 +207,10 @@ const IDE: React.FC<IDEProps> = ({
 
     const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
 
+    console.log('replaceded', data.result.replace(new RegExp(uuid + " ", "g"), ""),)
     setOutput((prev) => [
       ...prev,
-      data.output.replace(new RegExp(uuid + " ", "g"), ""),
+      data.result.replace(new RegExp(uuid + " ", "g"), ""),
     ]); // Append new output
 
     const currentTest = testCases[currentIndex];
@@ -219,33 +220,29 @@ const IDE: React.FC<IDEProps> = ({
     const validOutputs: any = [];
     let match;
 
-    while ((match = outputRegex.exec(data.output)) !== null) {
+    while ((match = outputRegex.exec(data.result)) !== null) {
       validOutputs.push(match[1]);
     }
 
     // Default to "pending" while waiting for input
     let status: TestResultType["status"] = "Pending";
 
-    if (data.output.includes("Syntax Error")) {
+    if (data.result.includes("Syntax Error")) {
       status = "Syntax Error";
-    } else if (data.output.includes("Runtime Error")) {
+    } else if (data.result.includes("Runtime Error")) {
       status = "Runtime Error";
     } else if (validOutputs.length > 1) {
       status = "Fail (Multiple Outputs)";
     } else if (
-      data.output.includes("Error: Pseudocode argument missing") ||
-      data.output.includes("Error: Failed to convert pseudocode to Python") ||
-      data.output.includes("Error during conversion")
+      data.result.includes("Error: Pseudocode argument missing") ||
+      data.result.includes("Error: Failed to convert pseudocode to Python") ||
+      data.result.includes("Error during conversion")
     ) {
       status = "Special Error";
     } else if (validOutputs[0] === currentTest.output) {
       status = "Pass";
     } else {
       status = "Fail";
-    }
-
-    if (!data.isComplete) {
-      status = "Pending";
     }
 
     // Update test results with the status of the current test
@@ -259,57 +256,63 @@ const IDE: React.FC<IDEProps> = ({
       return updatedResults;
     });
 
-    // Handle input requests or move to the next test case
-    if (data.requestingInput) {
-      setInputMessage("Please provide input for the program.");
-      setIsPopupOpen(true); // Show popup for user input
-      setWaitingForInput(true); // Indicate waiting state
-    } else if (data.isComplete) {
-      // Once the test completes, move to the next test case
-      testIndexRef.current += 1;
-      // console.log(testCases[currentIndex]);
-      processNextTestCase(); // Move to the next test case
-    }
+    console.log('notisreq');
+    // Once the test completes, move to the next test case
+    testIndexRef.current += 1;
+    // console.log(testCases[currentIndex]);
+    processNextTestCase(); // Move to the next test case
+  
   };
 
   // Function to send input back to the backend
   async function sendInputToBackend(inputValue: string) {
-    const response = await fetch("/api/index/input", {
+    console.log("SENDING INPUT", inputValue)
+    const response = await fetch("/api/index/send-input", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        pseudocode: "your pseudocode here",
         userInput: inputValue, // The input provided by the user
       }),
     });
+    console.log("GOT INPUT")
     const data = await response.json();
+    console.log("GOT INPUTs")
     console.log(data.result);
   }
 
-  // Polling function to check if input is requested
   async function pollForInput() {
+    if (pollerRef.current !== null) return; // Avoid multiple pollers
+  
     try {
-      console.log("poller")
-      // Poll the backend every 1 second
-      const response = await fetch("/api/index/input-status");
-      const data = await response.json();
-
-      if (data.input_prompt) {
-        console.log("THERE IS")
-        // If there's an input prompt, ask the user for input
-        const userInput = prompt(data.input_prompt); // Use a native prompt or your custom input UI
-        await sendInputToBackend(userInput!);
-      } else {
-        console.log("THERE NOT IS")
-        // No input needed, continue polling
-        setTimeout(pollForInput, 1000); // Continue polling every second
-      }
+      pollerRef.current = window.setInterval(async () => {
+        console.log("Polling for input...");
+        const response = await fetch("/api/index/input-status");
+        const data = await response.json();
+  
+        if (data.input_prompt) {
+          stopPolling(); // Stop polling if input is requested
+  
+          setInputMessage(data.input_prompt);
+          setIsPopupOpen(true);
+          setWaitingForInput(true);
+        }
+      }, 750); // Poll every 0.75 seconds
     } catch (error) {
       console.error("Error polling for input:", error);
+      stopPolling(); // Ensure polling stops on error
     }
   }
+  
+  
+  function stopPolling() {
+    if (pollerRef.current !== null) {
+      clearInterval(pollerRef.current); // No type mismatch now
+      pollerRef.current = null; // Reset to null
+    }
+  }
+  
 
   // Start polling when the page loads or when needed
   pollForInput();

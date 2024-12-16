@@ -1,3 +1,4 @@
+import asyncio
 import traceback
 import io
 from ib_dp_datatypes.array import Array
@@ -19,13 +20,16 @@ def special_runtime_errors(error: str) -> str:
     elif error == "name 'input' is not defined":
         return "IB Pseuedocode does not have an input function; rather, use `input VARIABLE_NAME` where `VARIABLE_NAME` is the name of the variable."
     elif error == "'str' object has no attribute 'length'":
-        return "AttributeError: 'str' object has no attribute 'length'. For strings, use the `len` function similar to Python to obtain the length." 
+        return "AttributeError: 'str' object has no attribute 'length'. For strings, use the `len` function similar to Python to obtain the length."
     else:
         return None
 
 
-async def syntax_check_and_run_converted(
-    code_string, test_case_input_names: str, test_case_input_values: str, input_handler=None
+def syntax_check_and_run_converted(
+    code_string,
+    test_case_input_names: str,
+    test_case_input_values: str,
+    input_handler=None,
 ):
     """
     Executes the converted pseudocode, handling pauses for user input.
@@ -43,6 +47,7 @@ async def syntax_check_and_run_converted(
         error_line = code_string.splitlines()[e.lineno - 1]
         return f"Syntax Error on line {e.lineno}: {e.msg}"
 
+    # Validate variable assignments
     checked_variable_assignments = check_valid_variable_assignment(code_string)
     if not checked_variable_assignments[0]:
         return f"Syntax Error on line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}', must only contain uppercase alphabetic characters (A-Z) and underscores."
@@ -59,9 +64,11 @@ async def syntax_check_and_run_converted(
 
     # Add test case inputs to the global scope
     for index, input_type in enumerate(test_case_input_names):
-        global_scope[input_type["name"]] = parse_value(test_case_input_values[index], global_scope)
+        global_scope[input_type["name"]] = parse_value(
+            test_case_input_values[index], global_scope
+        )
 
-    async def exec_with_input_pause():
+    def exec_with_input_pause():
         try:
             # Create a generator to pause execution at input points
             exec_globals = global_scope.copy()
@@ -72,19 +79,18 @@ async def syntax_check_and_run_converted(
 
             # Redirect standard output to the StringIO object
             import sys
+
             sys.stdout = output_buffer
 
-            async def input_paused(prompt):
-                # Yield control to the frontend when input is requested
+            def input_paused(prompt):
+                # Await input from the provided handler
                 if input_handler:
-                    user_input = await input_handler(prompt)  # Call the frontend API for input
-                    #exec_locals['user_input'] = user_input
-                    return user_input
+                    return input_handler(prompt)
                 else:
                     return input(prompt)
 
-            # Replace the input function with our custom one that yields control
-            exec_globals['input'] = await input_paused
+            # Replace the input function with the custom async handler
+            exec_globals["input"] = input_paused
             exec(code_string, exec_globals, exec_locals)
 
             # Get the captured output from StringIO
@@ -111,10 +117,9 @@ async def syntax_check_and_run_converted(
 
             if relevant_frame:
                 user_line_number = relevant_frame.lineno
-                error_line = code_string.splitlines()[user_line_number - 1]
                 return f"Runtime Error on Line {user_line_number}: {str(e)}"
 
             return f"Unexpected error: {str(e)}"
 
-    # Run the code with the possibility of pausing for input
-    return await exec_with_input_pause()
+    # Use `await` to directly run the async function
+    return exec_with_input_pause()
