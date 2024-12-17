@@ -9,7 +9,6 @@ type Props = {
 export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
-  console.log("here12", await params);
   // Directly pass the resolved params to generateMetadataFunc
   return await generateMetadataFunc({ params });
 };

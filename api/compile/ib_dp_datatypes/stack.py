@@ -17,7 +17,9 @@ class Stack:
         """
         self._items = []  # For internal use only, items are handled in a list.
         for item in items:
-            self._items.append(item) # The first arguments passed with be in the front of the stack and last to be poped.
+            self._items.append(
+                item
+            )  # The first arguments passed with be in the front of the stack and last to be poped.
 
     @property
     def length(self) -> int:
@@ -30,14 +32,14 @@ class Stack:
 
     def push(self, *items: tuple):
         """Push an item onto the end of the LIFO stack.
-        
+
         Raises:
             TypeError: occurs if more than one argument is provided
-            
+
         Args:
-            items (tuple): a tuple representing values to be added to the end of the stack, however, only one should be given. 
+            items (tuple): a tuple representing values to be added to the end of the stack, however, only one should be given.
         """
-        
+
         if len(items) != 1:
             raise ValueError(
                 f"Expected 1 item to be pushed to the end of the stack, but {len(items)} items were given."
@@ -47,7 +49,7 @@ class Stack:
 
     def pop(self):
         """Pop the last item off the stack, replicating LIFO behaviour, and returns the value. Raises an error if the stack is empty.
-        
+
         Raises:
             IndexError: occurs if the stack if already empty.
         """

@@ -14,8 +14,11 @@ export const generateMetadataFunc = async ({
 
   try {
     // Use fs to read the XML file from the server's file system
-    const filePath = path.join(process.cwd(), "public", "challenge_questions.xml");
-    console.log('t1t2', process.cwd())
+    const filePath = path.join(
+      process.cwd(),
+      "public",
+      "challenge_questions.xml"
+    );
     const challengeText = await fs.promises.readFile(filePath, "utf-8");
 
     // Parse XML using xml2js (returns a Promise)
@@ -31,14 +34,20 @@ export const generateMetadataFunc = async ({
     }));
 
     const challengeId = parseInt(slug, 10);
-    const foundChallenge = loadedChallenges.find((ch: any) => ch.id === challengeId);
+    const foundChallenge = loadedChallenges.find(
+      (ch: any) => ch.id === challengeId
+    );
 
     return {
-      title: `Challenge: ${foundChallenge ? foundChallenge.title : "Not Found"}`,
-      description: `${foundChallenge ? foundChallenge.description : "No description available"}`,
+      title: `Challenge: ${
+        foundChallenge ? foundChallenge.title : "Not Found"
+      }`,
+      description: `${
+        foundChallenge ? foundChallenge.description : "No description available"
+      }`,
     };
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return {
       title: "Error loading challenge",
       description: "There was an issue fetching the challenge data.",

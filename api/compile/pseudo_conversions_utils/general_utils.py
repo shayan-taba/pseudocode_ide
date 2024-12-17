@@ -47,9 +47,9 @@ reserved_keywords = [
     "mod",
     "div",
     # Methods
-    "addItem"
-    "hasNext",
+    "addItem" "hasNext",
 ]
+
 
 def get_string_indices_ranges(line: str) -> list[tuple]:
     """
@@ -64,10 +64,11 @@ def get_string_indices_ranges(line: str) -> list[tuple]:
     string_pattern = r"\".*?\"|\'.*?\'"
     return [(m.start(), m.end()) for m in re.finditer(string_pattern, line)]
 
+
 def is_char_in_string(pos: int, string_ranges: list[tuple]) -> bool:
-    """ 
+    """
     Determines and returns whether a character position is in a string in a line of pseudocode.
-    
+
     Args:
         pos (int): the index position of a character in a line of pseudocode
         string_ranges (list[tuple]): A list of tuples which contain the start (inclusive) and end (exlusive) of all strings in a line of pseudocode
@@ -75,11 +76,12 @@ def is_char_in_string(pos: int, string_ranges: list[tuple]) -> bool:
     Returns:
         bool: True if the character position is in a string, or the string itself, False otherwise
     """
-    
+
     for start, end in string_ranges:
         if start <= pos < end:
             return True
     return False
+
 
 def validate_whitespace(line: str) -> tuple:
     string_ranges = get_string_indices_ranges(line)
@@ -105,6 +107,7 @@ def validate_whitespace(line: str) -> tuple:
 
     return True, None
 
+
 def has_whitespace_before(line: str, start: int) -> bool:
     return not (start == 0) or line[start - 1].isspace()
 
@@ -112,10 +115,11 @@ def has_whitespace_before(line: str, start: int) -> bool:
 def has_whitespace_after(line: str, end: int) -> bool:
     return not (end == len(line)) and line[end].isspace()
 
+
 def parse_value(value, global_scope):
     """
     Parses a string and returns the appropriate data type or object.
-    
+
     Args:
         value (str): The input string to parse.
         global_scope (dict): A dictionary of predefined classes or objects.
@@ -124,9 +128,11 @@ def parse_value(value, global_scope):
         Any: The parsed value (e.g., int, float, string, object, etc.).
     """
     # Case 1: Quoted strings (e.g., '"hi"', "'hello'")
-    if (value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'")):
+    if (value.startswith('"') and value.endswith('"')) or (
+        value.startswith("'") and value.endswith("'")
+    ):
         return value[1:-1]  # Strip the quotes and return as a string
-    
+
     # Case 2: Boolean values
     if value == "True":
         return True

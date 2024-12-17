@@ -1,10 +1,12 @@
-
 from api.compile.pseudo_conversions_utils.general_utils import *
 from api.compile.pseudo_conversions_utils.input_output_utils import (
     pseudo_input_to_python_input,
     pseudo_output_to_python_print,
 )
-from api.compile.pseudo_conversions_utils.loop_utils import replace_and_check_from_loop_construct
+from api.compile.pseudo_conversions_utils.loop_utils import (
+    replace_and_check_from_loop_construct,
+)
+
 
 def pseudocode_to_python(pseudocode: str) -> str:
     conversion = intial_pseudocode_conversion(pseudocode)
@@ -87,7 +89,7 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
         "≠": "!=",
         "mod": "%",
         "div": "//",
-        " AND ": "and", # The surronding spaces ensure variable names with "AND" inside aren't replaced
+        " AND ": "and",  # The surronding spaces ensure variable names with "AND" inside aren't replaced
         " OR ": "or",
         " NOT ": "not",
         "false": "False",
@@ -135,16 +137,15 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
 
             continue
         # Perform conversion only on the pseudocode part
-        
+
         line_removed_comments = line = re.sub(r"#.*$", "", line)  # Remove # comments
         line_removed_comments = re.sub(r"//.*$", "", line)  # Remove // comments
- 
 
         if line.strip().startswith("loop") and " from " not in line.strip():
             endWithColon = True
         elif (
             line.strip().startswith("if") or line.strip().startswith("else if")
-        ) and not (line_removed_comments.strip().endswith("then")): 
+        ) and not (line_removed_comments.strip().endswith("then")):
             # This makes sure that if/else if statements must end with "then", accounting for in-line comments
             raise SyntaxError(
                 f'on Line {line_number+1}: If statements starting with "if" or "else if" must end with "then"'
@@ -210,9 +211,7 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
         if line.strip().startswith("loop "):
             current_indent += indent_amount
             block_statements.append(("loop", line_number))
-        elif (
-            line.strip().startswith("if ")
-        ):
+        elif line.strip().startswith("if "):
             current_indent += indent_amount
             block_statements.append(("if", line_number))
         elif line.strip().startswith("else if ") or line.strip() == "else":

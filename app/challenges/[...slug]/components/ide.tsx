@@ -161,7 +161,9 @@ const IDE: React.FC<IDEProps> = ({
 
         // Runtime checks to handle the response properly
         if ("error" in result) {
-          console.log("The 'Failed to load resource' warning above was successfully handled.");
+          console.log(
+            "The 'Failed to load resource' warning above was successfully handled."
+          );
           console.log("Handled Error:", result.error);
           handleBackendResponse(result.error);
         } else if ("result" in result && result.status === "success") {
@@ -200,8 +202,6 @@ const IDE: React.FC<IDEProps> = ({
   };
 
   const handleBackendResponse = (data: any) => {
-    console.log("may d", data, data);
-
     const currentIndex = testIndexRef.current;
 
     if (!testCases[currentIndex]) {
@@ -259,7 +259,6 @@ const IDE: React.FC<IDEProps> = ({
       return updatedResults;
     });
 
-    console.log("notisreq");
     // Once the test completes, move to the next test case
     testIndexRef.current += 1;
     // console.log(testCases[currentIndex]);

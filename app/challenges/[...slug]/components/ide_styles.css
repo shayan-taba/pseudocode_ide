@@ -7,7 +7,6 @@
 }
 
 @layer components {
-
   #IDE .divider:not(.container-els) {
     @apply ml-2;
   }
@@ -77,28 +76,30 @@
   }
 
   .scrollable-container {
-    @apply overflow-y-scroll
+    @apply overflow-y-scroll;
   }
-  
+
   .scrollable-container::-webkit-scrollbar {
-    @apply w-[10px]
+    @apply w-[10px];
   }
-  
+
   .scrollable-container::-webkit-scrollbar-thumb {
     @apply bg-slate-600 border-r-[5px];
   }
-  
+
   .scrollable-container::-webkit-scrollbar-thumb:hover {
     @apply bg-slate-600;
   }
 
   .acccordion {
-    @apply flex items-center justify-between cursor-pointer w-[fit-content] gap-4
+    @apply flex items-center justify-between cursor-pointer w-[fit-content] gap-4;
   }
 
   .acccordion > svg {
-    @apply h-7 w-7 text-white
+    @apply h-7 w-7 text-white;
   }
-  
-}
 
+  .hideSmallScreen {
+    @apply hidden;
+  }
+}

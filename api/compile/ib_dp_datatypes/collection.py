@@ -75,8 +75,10 @@ class Collection:
 
         This method must be called before using `getNext` or `hasNext`.
         """
-        self._current_index = 0 # Index for first element of collection
-        self._reset_yet = True # Allows for `getNext` and `hasNext` to be used without error,
+        self._current_index = 0  # Index for first element of collection
+        self._reset_yet = (
+            True  # Allows for `getNext` and `hasNext` to be used without error,
+        )
         # if appropriate arguments are used.
 
     def hasNext(self) -> bool:

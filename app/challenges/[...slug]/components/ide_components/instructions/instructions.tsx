@@ -21,7 +21,7 @@ interface InstructionsProps {
   hint: string;
   tags: string[];
   difficulty: string;
-  testCases: { inputs: string[]; output: string; }[]; // Test case structure
+  testCases: { inputs: string[]; output: string }[]; // Test case structure
   expandInstructions: boolean;
   setExpandInstructions: Dispatch<React.SetStateAction<boolean>>;
   instructionState: "task" | "solution";
@@ -30,7 +30,7 @@ interface InstructionsProps {
   testInputsTypes: {
     name: string;
     type: string;
-}[];
+  }[];
   exampleSolution: string;
   completeStatus: boolean | undefined;
 }
@@ -53,7 +53,6 @@ const Instructions: React.FC<InstructionsProps> = ({
   exampleSolution,
   completeStatus,
 }) => {
-
   return (
     <div className={`container-els divider ${width}`}>
       <div className="container-headings text-blue-400">

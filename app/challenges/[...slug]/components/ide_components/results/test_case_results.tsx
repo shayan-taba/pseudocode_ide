@@ -81,29 +81,30 @@ const TestCaseResult: React.FC<{
                   <p className="text-justify">
                     The hidden test case is a special test case used to verify
                     your solution. Its input and expected output are not
-                    displayed. You will only see the output and whether your solution passes or
-                    fails for this case, but not the specific values being
-                    tested. This ensures a fair assessment of your code&apos;s
-                    correctness.
+                    displayed. You will only see the output and whether your
+                    solution passes or fails for this case, but not the specific
+                    values being tested. This ensures a fair assessment of your
+                    code&apos;s correctness.
                   </p>
                 )}
                 <div className="mt-2">
                   <span className="font-bold">Input:</span>
                   <div className="text-gray-300 space-y-1">
-                    {!isLast && result.input.map((inputValue, index) => {
-                      const variable = testInputsTypes[index]; // Get the variable name from the testInputsTypes
-                      return (
-                        <div
-                          key={index}
-                          className="flex items-center space-x-2"
-                        >
-                          <span className="font-medium text-blue-300">
-                            {variable.name}:
-                          </span>
-                          <span>{inputValue}</span>
-                        </div>
-                      );
-                    })}
+                    {!isLast &&
+                      result.input.map((inputValue, index) => {
+                        const variable = testInputsTypes[index]; // Get the variable name from the testInputsTypes
+                        return (
+                          <div
+                            key={index}
+                            className="flex items-center space-x-2"
+                          >
+                            <span className="font-medium text-blue-300">
+                              {variable.name}:
+                            </span>
+                            <span>{inputValue}</span>
+                          </div>
+                        );
+                      })}
                     {isLast && "hidden"}
                   </div>
                 </div>
@@ -124,12 +125,11 @@ const TestCaseResult: React.FC<{
             <div className="mt-2">
               <span className="font-bold">Actual Output:</span>{" "}
               <span className="text-gray-300">
-                {
-                  (JSON.stringify(result.actual).length > 100
-                    ? `${JSON.stringify(result.actual[0]).slice(0, 100)}...`
-                    : result.actual[0]
-                    ? JSON.stringify(result.actual[0])
-                    : "None")}
+                {JSON.stringify(result.actual).length > 100
+                  ? `${JSON.stringify(result.actual[0]).slice(0, 100)}...`
+                  : result.actual[0]
+                  ? JSON.stringify(result.actual[0])
+                  : "None"}
               </span>
             </div>
           </div>

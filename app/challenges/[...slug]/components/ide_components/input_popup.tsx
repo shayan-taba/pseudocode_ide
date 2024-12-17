@@ -9,7 +9,13 @@ interface PopupProps {
   message: string;
 }
 
-const Popup: React.FC<PopupProps> = ({ isOpen, userInput, onInputChange, onSubmit, message }) => {
+const Popup: React.FC<PopupProps> = ({
+  isOpen,
+  userInput,
+  onInputChange,
+  onSubmit,
+  message,
+}) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(

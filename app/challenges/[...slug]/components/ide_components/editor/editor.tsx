@@ -13,7 +13,7 @@ import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
   ArrowDownOnSquareIcon, // Load icon
-  ArrowUpOnSquareIcon,   // Save icon
+  ArrowUpOnSquareIcon, // Save icon
 } from "@heroicons/react/24/solid";
 
 const myTheme = createTheme({
@@ -88,7 +88,7 @@ const Editor: React.FC<EditorProps> = ({
     const existingData = localStorage.getItem(key);
     const newData = { code }; // Data to save
 
-    let errorOnSave:boolean = false;
+    let errorOnSave: boolean = false;
     if (existingData) {
       try {
         const parsedData = JSON.parse(existingData);
@@ -103,7 +103,7 @@ const Editor: React.FC<EditorProps> = ({
     }
 
     if (!errorOnSave) {
-      alert("Code saved successfully")
+      alert("Code saved successfully");
     }
   };
 
@@ -127,7 +127,11 @@ const Editor: React.FC<EditorProps> = ({
   };
 
   return (
-    <div className={`z-10 container-els ${!expandEditor ? "h-[100%]" : ""} ${width}`}>
+    <div
+      className={`z-10 container-els ${
+        !expandEditor ? "h-[100%]" : ""
+      } ${width}`}
+    >
       <div className="container-headings text-green-400">
         <div className="container-nav-box">
           <div className={"container-navs"}>
@@ -140,7 +144,7 @@ const Editor: React.FC<EditorProps> = ({
             className="nav-btns px-3 bg-blue-600 hover:bg-blue-700"
           >
             <ArrowUpOnSquareIcon className="nav-icons" />
-            Save
+            <p className="hideSmallScreen">Save</p>
           </button>
 
           <button
@@ -148,7 +152,7 @@ const Editor: React.FC<EditorProps> = ({
             className="nav-btns px-3 bg-yellow-600 hover:bg-yellow-700"
           >
             <ArrowDownOnSquareIcon className="nav-icons" />
-            Load Saved
+            <p className="hideSmallScreen">Load</p>
           </button>
 
           <button
@@ -156,9 +160,9 @@ const Editor: React.FC<EditorProps> = ({
             className="nav-btns px-3 bg-green-600 hover:bg-green-700"
           >
             <PlayIcon className="nav-icons" />
-            Run
+            <p className="hideSmallScreen">Run</p>
           </button>
-          
+
           <button
             onClick={() => setExpandEditor(!expandEditor)}
             className={`nav-btns`}

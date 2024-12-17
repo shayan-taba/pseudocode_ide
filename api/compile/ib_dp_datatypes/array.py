@@ -22,10 +22,10 @@ class Array:
         # Once the length of the Array is fixed, this becomes a standard Python list.
         # It contains the items of Array.
         self._length = 0
-        self._initialized = False # Only True after methods set_length or initialize_values is successfully
+        self._initialized = False  # Only True after methods set_length or initialize_values is successfully
         # called. Once True, the internal property prevents either method to be reused. This restricts the only
         # way to set values as Array[index] = expression.
-        
+
         if values:
             self.initialize_values(*values)
 
@@ -71,7 +71,7 @@ class Array:
 
         self._length = len(values)
         self._data = list(values)
-        
+
         for value in values:
             if not isinstance(
                 value, (int, float, str, bool, list, dict, None.__class__)

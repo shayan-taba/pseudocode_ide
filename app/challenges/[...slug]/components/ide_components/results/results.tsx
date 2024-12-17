@@ -53,7 +53,6 @@ const Results: React.FC<ResultsProps> = ({
   }, [output, resultState]); // Runs whenever "output", "resultState" changes
 
   useEffect(() => {
-    console.log("setting local data to pass");
     const allPassed = testResults.every((result) => result.status === "Pass");
 
     // Update localStorage with the completion status
@@ -101,9 +100,17 @@ const Results: React.FC<ResultsProps> = ({
               <span className="text-red-300">
                 Syntax or runtime errors occurred on at least one &quot;Test
                 Case&quot;. Check the output console for details on the error
-                and to see on which Test Case(s) this occurred.<br/><br/>Refer to the{" "}
-                <Link className="text-blue-300 underline hover:text-blue-500" href={"/documentation"}>Documentation</Link> to understand
-                the potential runtime and syntax errors.
+                and to see on which Test Case(s) this occurred.
+                <br />
+                <br />
+                Refer to the{" "}
+                <Link
+                  className="text-blue-300 underline hover:text-blue-500"
+                  href={"/documentation"}
+                >
+                  Documentation
+                </Link>{" "}
+                to understand the potential runtime and syntax errors.
               </span>
             </>
           )}
@@ -164,7 +171,7 @@ const Results: React.FC<ResultsProps> = ({
               className={`nav-btns px-3 bg-rose-600 hover:bg-rose-700`}
             >
               <TrashIcon className="nav-icons" />
-              Clear
+              <p className="hideSmallScreen">Clear</p>
             </button>
           ) : (
             ""

@@ -112,7 +112,9 @@ const Task: React.FC<TaskProps> = ({
         {hint != "" && (
           <div className="flex flex-row gap-4">
             {/*<InformationCircleIcon className="h-6 w-6" />*/}
-            <p className="text-base"><strong>Hint:</strong> {hint}</p>
+            <p className="text-base">
+              <strong>Hint:</strong> {hint}
+            </p>
           </div>
         )}
       </div>

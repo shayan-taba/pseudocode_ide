@@ -6,7 +6,9 @@ from api.compile.ib_dp_datatypes.collection import Collection
 from api.compile.ib_dp_datatypes.queue import Queue
 from api.compile.ib_dp_datatypes.stack import Stack
 from api.compile.ib_dp_datatypes.custom_string import CustomString
-from api.compile.pseudo_conversions_utils.assignment_utils import check_valid_variable_assignment
+from api.compile.pseudo_conversions_utils.assignment_utils import (
+    check_valid_variable_assignment,
+)
 from api.compile.pseudo_conversions_utils.general_utils import parse_value
 from api.compile.pseudo_conversions_utils.predefined_functions import get_sqrt
 
@@ -50,7 +52,9 @@ def syntax_check_and_run_converted(
     # Validate variable assignments
     checked_variable_assignments = check_valid_variable_assignment(code_string)
     if not checked_variable_assignments[0]:
-        raise SyntaxError(f"on Line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}', must only contain uppercase alphabetic characters (A-Z) and underscores.")
+        raise SyntaxError(
+            f"on Line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}', must only contain uppercase alphabetic characters (A-Z) and underscores."
+        )
 
     # Prepare the global scope
     global_scope = {
@@ -61,7 +65,7 @@ def syntax_check_and_run_converted(
         "CustomString": CustomString,
         "get_sqrt": get_sqrt,
     }
-    print('a101')
+    print("a101")
     # Add test case inputs to the global scope
     for index, input_type in enumerate(test_case_input_names):
         global_scope[input_type["name"]] = parse_value(
@@ -112,7 +116,9 @@ def syntax_check_and_run_converted(
 
             if relevant_frame:
                 user_line_number = relevant_frame.lineno
-                raise RuntimeError(f"on Line {user_line_number}: {special_error_message if special_error_message else str(e)}")
+                raise RuntimeError(
+                    f"on Line {user_line_number}: {special_error_message if special_error_message else str(e)}"
+                )
 
             raise Exception(f"{str(e)}")
 
