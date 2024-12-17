@@ -145,7 +145,7 @@ def parse_value(value, global_scope):
     # Case 4: Python objects (e.g., Collection(0,4,5), Queue(...))
     try:
         return eval(value, global_scope)
-    except Exception:
+    except SyntaxError:
         pass
 
     # Case 5: If nothing matches, treat as a raw string

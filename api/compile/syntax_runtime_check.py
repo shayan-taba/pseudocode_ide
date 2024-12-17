@@ -45,12 +45,12 @@ def syntax_check_and_run_converted(
 
     except SyntaxError as e:
         error_line = code_string.splitlines()[e.lineno - 1]
-        return f"Syntax Error on line {e.lineno}: {e.msg}"
-    print('a100')
+        raise SyntaxError(f"on Line {e.lineno}: {e.msg}")
+
     # Validate variable assignments
     checked_variable_assignments = check_valid_variable_assignment(code_string)
     if not checked_variable_assignments[0]:
-        return f"Syntax Error on line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}', must only contain uppercase alphabetic characters (A-Z) and underscores."
+        raise SyntaxError(f"on Line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}', must only contain uppercase alphabetic characters (A-Z) and underscores.")
 
     # Prepare the global scope
     global_scope = {
@@ -70,7 +70,6 @@ def syntax_check_and_run_converted(
 
     def exec_with_input_pause():
         try:
-            print('102')
             # Create a generator to pause execution at input points
             exec_globals = global_scope.copy()
             exec_locals = {}
@@ -82,7 +81,7 @@ def syntax_check_and_run_converted(
             import sys
 
             sys.stdout = output_buffer
-            print('a103')
+
             def input_paused(prompt):
                 # Await input from the provided handler
                 if input_handler:
@@ -90,10 +89,7 @@ def syntax_check_and_run_converted(
                 else:
                     return input(prompt)
 
-            # Replace the input function with the custom async handler
-            exec_globals["input"] = input_paused
             exec(code_string, exec_globals, exec_locals)
-            print('a104')
             # Get the captured output from StringIO
             output = output_buffer.getvalue()
 
@@ -103,12 +99,8 @@ def syntax_check_and_run_converted(
             return output
 
         except Exception as e:
-            print('a105')
-
             # Check for special runtime errors before returning the standard message
             special_error_message = special_runtime_errors(str(e))
-            if special_error_message:
-                return special_error_message
 
             # Otherwise, handle the general exception
             tb = traceback.TracebackException.from_exception(e)
@@ -120,9 +112,8 @@ def syntax_check_and_run_converted(
 
             if relevant_frame:
                 user_line_number = relevant_frame.lineno
-                return f"Runtime Error on Line {user_line_number}: {str(e)}"
+                raise RuntimeError(f"on Line {user_line_number}: {special_error_message if special_error_message else str(e)}")
 
-            return f"Unexpected error: {str(e)}"
+            raise Exception(f"{str(e)}")
 
-    # Use `await` to directly run the async function
     return exec_with_input_pause()

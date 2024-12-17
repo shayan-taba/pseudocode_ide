@@ -55,23 +55,16 @@ const IDE: React.FC<IDEProps> = ({
   const [completeStatus, setCompleteStatus] = useState<boolean | undefined>();
   const [code, setCode] = useState<string>("");
   const [output, setOutput] = useState<string[]>([]);
-  const [userInput, setUserInput] = useState<string>("");
-  const [waitingForInput, setWaitingForInput] = useState<boolean>(false);
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
   const [expandInstructions, setExpandInstructions] = useState<boolean>(false);
   const [expandEditor, setExpandEditor] = useState<boolean>(false);
   const [expandResults, setExpandResults] = useState<boolean>(false);
 
-  const [inputMessage, setInputMessage] = useState<string>("");
-
   const [instructionState, setInstructionState] = useState<"task" | "solution">(
     "task"
   );
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const pollerRef = useRef<number | null>(null);
   const testIndexRef = useRef<number>(0);
 
   /*const [testResults, setTestResults] = useState<{ 
@@ -96,10 +89,6 @@ const IDE: React.FC<IDEProps> = ({
       input: testCase.inputs,
     }))
   );
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserInput(e.target.value);
-  };
 
   const toggleInstructionState = () => {
     setInstructionState((prevState) =>
@@ -150,24 +139,41 @@ const IDE: React.FC<IDEProps> = ({
     test_case_index: number
   ) => {
     if (code.trim()) {
-      const response = await fetch("/api/index/run_code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pseudocode: code,
-          test_case_input_name: testInputsTypes,
-          test_case_input_value: testCases[test_case_index].inputs,
-          test_case_index: test_case_index,
-        }),
-      });
-      console.log("prior json", response, response.ok);
-      const data = await response.json();
+      try {
+        // Send API request
+        const response = await fetch("/api/index/run_code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pseudocode: code, // Your pseudocode
+            test_case_input_name: testInputsTypes, // Input name
+            test_case_input_value: testCases[test_case_index]?.inputs, // Input value
+            test_case_index: test_case_index, // Test case index
+          }),
+        });
 
-      if (response.ok) {
-        handleBackendResponse(data);
-      } else {
-        console.error("Internal Server Error");
-        alert("Internal Server Error. Please reload and try again.");
+        // Parse the JSON response
+        type ApiResponse =
+          | { error: string }
+          | { result: string; status: string };
+
+        const result: ApiResponse = await response.json();
+
+        // Runtime checks to handle the response properly
+        if ("error" in result) {
+          console.log("The 'Failed to load resource' warning above was successfully handled.");
+          console.log("Handled Error:", result.error);
+          handleBackendResponse(result.error);
+        } else if ("result" in result && result.status === "success") {
+          console.log("Success:", result.result);
+          handleBackendResponse(result.result);
+        } else {
+          console.error("Unexpected response:", result);
+          alert("An unexpected error occurred.");
+        }
+      } catch (error) {
+        console.error("Unexpected response:", error);
+        alert("An unexpected error occurred. Please try again later.");
       }
     }
   };
@@ -178,7 +184,6 @@ const IDE: React.FC<IDEProps> = ({
 
   const handleRunCode = async () => {
     setOutput([]); // Clear previous output
-    setWaitingForInput(false); // Reset input state
     setIsComplete(false); // Reset completion state
     testIndexRef.current = 0; // Start from the first test case
     setTestResults(
@@ -194,15 +199,8 @@ const IDE: React.FC<IDEProps> = ({
     processNextTestCase();
   };
 
-  const handleSendInput = async () => {
-    setIsPopupOpen(false);
-    setWaitingForInput(false); // Hide input box while backend processes
-    await sendInputToBackend(userInput);
-    setUserInput(""); // Clear input field
-  };
-
   const handleBackendResponse = (data: any) => {
-    console.log("may d", data, data.result);
+    console.log("may d", data, data);
 
     const currentIndex = testIndexRef.current;
 
@@ -213,13 +211,9 @@ const IDE: React.FC<IDEProps> = ({
 
     const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
 
-    console.log(
-      "replaceded",
-      data.result.replace(new RegExp(uuid + " ", "g"), "")
-    );
     setOutput((prev) => [
       ...prev,
-      data.result.replace(new RegExp(uuid + " ", "g"), ""),
+      data.replace(new RegExp(uuid + " ", "g"), ""),
     ]); // Append new output
 
     const currentTest = testCases[currentIndex];
@@ -229,23 +223,23 @@ const IDE: React.FC<IDEProps> = ({
     const validOutputs: any = [];
     let match;
 
-    while ((match = outputRegex.exec(data.result)) !== null) {
+    while ((match = outputRegex.exec(data)) !== null) {
       validOutputs.push(match[1]);
     }
 
     // Default to "pending" while waiting for input
     let status: TestResultType["status"] = "Pending";
 
-    if (data.result.includes("Syntax Error")) {
+    if (data.includes("Syntax Error")) {
       status = "Syntax Error";
-    } else if (data.result.includes("Runtime Error")) {
+    } else if (data.includes("Runtime Error")) {
       status = "Runtime Error";
     } else if (validOutputs.length > 1) {
       status = "Fail (Multiple Outputs)";
     } else if (
-      data.result.includes("Error: Pseudocode argument missing") ||
-      data.result.includes("Error: Failed to convert pseudocode to Python") ||
-      data.result.includes("Error during conversion")
+      data.includes("Error: Pseudocode argument missing") ||
+      data.includes("Error: Failed to convert pseudocode to Python") ||
+      data.includes("Error during conversion")
     ) {
       status = "Special Error";
     } else if (validOutputs[0] === currentTest.output) {
@@ -272,57 +266,6 @@ const IDE: React.FC<IDEProps> = ({
     processNextTestCase(); // Move to the next test case
   };
 
-  // Function to send input back to the backend
-  async function sendInputToBackend(inputValue: string) {
-    console.log("SENDING INPUT", inputValue);
-    const response = await fetch("/api/index/send-input", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userInput: inputValue, // The input provided by the user
-      }),
-    });
-    console.log("GOT INPUT");
-    const data = await response.json();
-    console.log("GOT INPUTs");
-    console.log(data.result);
-  }
-
-  async function pollForInput() {
-    if (pollerRef.current !== null) return; // Avoid multiple pollers
-
-    try {
-      pollerRef.current = window.setInterval(async () => {
-        console.log("Polling for input...");
-        const response = await fetch("/api/index/input-status");
-        const data = await response.json();
-
-        if (data.input_prompt) {
-          stopPolling(); // Stop polling if input is requested
-
-          setInputMessage(data.input_prompt);
-          setIsPopupOpen(true);
-          setWaitingForInput(true);
-        }
-      }, 2200); // Poll every 2.2 seconds
-    } catch (error) {
-      console.error("Error polling for input:", error);
-      stopPolling(); // Ensure polling stops on error
-    }
-  }
-
-  function stopPolling() {
-    if (pollerRef.current !== null) {
-      clearInterval(pollerRef.current); // No type mismatch now
-      pollerRef.current = null; // Reset to null
-    }
-  }
-
-  // Start polling when the page loads or when needed
-  pollForInput();
-
   const processNextTestCase = async () => {
     if (testIndexRef.current >= testCases.length) {
       console.log("All test cases processed");
@@ -330,8 +273,12 @@ const IDE: React.FC<IDEProps> = ({
       return; // All test cases are processed
     }
 
-    setWaitingForInput(false); // Reset input state
     setIsComplete(false); // Reset completion state
+
+    setOutput((prev) => [
+      ...prev,
+      "_".repeat(20) + ` TEST CASE ${testIndexRef.current} ` + "_".repeat(20),
+    ]); // Append new output
 
     await fetchFromBackend("", true, testIndexRef.current); // Process current test case
   };
@@ -405,13 +352,6 @@ const IDE: React.FC<IDEProps> = ({
           </>
         )}
       </div>
-      <Popup
-        isOpen={isPopupOpen}
-        userInput={userInput}
-        onInputChange={handleInputChange}
-        onSubmit={handleSendInput}
-        message={inputMessage}
-      />
     </div>
   );
 };

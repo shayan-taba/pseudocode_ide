@@ -22,15 +22,15 @@ const TestCaseResult: React.FC<{
       case "Pass":
         return typeClass == "border" ? "border-green-300" : "text-green-300";
       case "Fail":
-        return typeClass == "border" ? "border-red-300" : "text-red-300";
+        return typeClass == "border" ? "border-yellow-300" : "text-yellow-300";
       case "Fail (Multiple Outputs)":
-        return typeClass == "border" ? "border-red-300" : "text-red-300";
+        return typeClass == "border" ? "border-yellow-300" : "text-yellow-300";
       case "Syntax Error":
-        return typeClass == "border" ? "border-yellow-300" : "text-yellow-300";
+        return typeClass == "border" ? "border-red-300" : "text-red-300";
       case "Runtime Error":
-        return typeClass == "border" ? "border-yellow-300" : "text-yellow-300";
+        return typeClass == "border" ? "border-red-300" : "text-red-300";
       case "Special Error":
-        return typeClass == "border" ? "border-yellow-300" : "text-yellow-300";
+        return typeClass == "border" ? "border-red-300" : "text-red-300";
       default:
         return typeClass == "border" ? "border-gray-300" : "text-gray-300";
     }

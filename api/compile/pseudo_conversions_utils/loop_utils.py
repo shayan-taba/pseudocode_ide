@@ -19,7 +19,7 @@ def replace_and_check_from_loop_construct(line: str, string_ranges: list) -> str
         if not re.search(
             r".+ from .+", line
         ):  # Checks the "from" is actually present in the statement
-            raise Exception(
+            raise SyntaxError(
                 'The loop must be either of the "while", "until", or "from" format'
             )
         elif len(line.strip()) > 2:
@@ -28,7 +28,7 @@ def replace_and_check_from_loop_construct(line: str, string_ranges: list) -> str
                     line.strip().split()[1]
                 ):  # The code contains "from" but the counter variable name is not good
                     pass
-            except Exception as e:
-                raise Exception(e)
+            except SyntaxError as e:
+                raise SyntaxError(str(e))
 
     return line

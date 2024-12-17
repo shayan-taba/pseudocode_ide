@@ -94,11 +94,11 @@ const Results: React.FC<ResultsProps> = ({
 
           {hasErrors && (
             <>
-              <div className="text-yellow-300 w-[100%] items-center flex flex-row gap-2 font-bold">
+              <div className="text-red-300 w-[100%] items-center flex flex-row gap-2 font-bold">
                 Overall Status: Error
                 {/*<ExclamationCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
               </div>
-              <span className="text-yellow-300">
+              <span className="text-red-300">
                 Syntax or runtime errors occurred on at least one &quot;Test
                 Case&quot;. Check the output console for details on the error
                 and to see on which Test Case(s) this occurred.<br/><br/>Refer to the{" "}
@@ -109,11 +109,11 @@ const Results: React.FC<ResultsProps> = ({
           )}
           {hasMismatch && (
             <>
-              <div className="text-red-300 w-[100%] items-center flex flex-row gap-2 font-bold">
+              <div className="text-yellow-300 w-[100%] items-center flex flex-row gap-2 font-bold">
                 Overall Status: Fail
                 {/*<XCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
               </div>
-              <span className="text-red-300">
+              <span className="text-yellow-300">
                 No errors occurred, but the output wasn&apos;t expected on at
                 least one &quot;Test Case&quot;. Click on &quot;Show
                 Details&quot; for further information in any of the failed

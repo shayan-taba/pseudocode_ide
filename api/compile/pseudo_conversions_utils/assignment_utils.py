@@ -4,11 +4,11 @@ from api.compile.pseudo_conversions_utils.general_utils import *
 def check_valid_variable_name(name: str) -> bool:
 
     if name in reserved_keywords:
-        raise Exception(
+        raise SyntaxError(
             f'The variable name, "{name}", must not be identical to a reserved keyword'
         )
     elif " " in name or not re.match(r"^[A-Z_]+$", name):
-        raise Exception(
+        raise SyntaxError(
             f'The name of the defined variable, "{name}", must only contain uppercase alphabetic characters (A-Z) and underscores'
         )
 
@@ -32,6 +32,6 @@ def check_valid_variable_assignment(code: str) -> tuple:
             # defined_variable[0] is the variable name.
             # defined_variable[1] is the line number of the assignment.
             check_valid_variable_name(defined_variable[0])
-    except Exception as e:
+    except SyntaxError as e:
         return (False, defined_variable[1], defined_variable[0]) # Return False, and the line number of the first insatnce of invalid variable names, and the variable name
     return (True, None) # No issues with any variable names 

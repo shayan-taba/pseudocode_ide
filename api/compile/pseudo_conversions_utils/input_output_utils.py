@@ -1,6 +1,8 @@
 import re
 from api.compile.pseudo_conversions_utils.general_utils import *
-from api.compile.pseudo_conversions_utils.assignment_utils import check_valid_variable_name
+from api.compile.pseudo_conversions_utils.assignment_utils import (
+    check_valid_variable_name,
+)
 
 
 def pseudo_output_to_python_print(line: str) -> str:
@@ -14,12 +16,15 @@ def pseudo_output_to_python_print(line: str) -> str:
 
 
 def pseudo_input_to_python_input(line: str, lineNumber) -> tuple:
-    subtracted_start = len("input ")
+
+    raise SyntaxError("The standard 'input' feature in pseudocode is not supported by this compiler. However, it is unnecessary for solving any pseudocode challenges, as test-case input methods will always be provided in the IDE.")
+
+    """subtracted_start = len("input ")
 
     input_values = re.split(" , |, | ,|,", line.rstrip()[subtracted_start:])
 
     if len(input_values) == 0:
-        raise Exception(
+        raise SyntaxError(
             "The input keyword must be placed before one or more variable names separated by commas"
         )
 
@@ -30,7 +35,8 @@ def pseudo_input_to_python_input(line: str, lineNumber) -> tuple:
         f"{';'.join([(input_value + f" = input('The code is requesting your input on line {str(lineNumber)}')") for input_value in input_values])}"
     )
 
-    return python_conversion
+    return python_conversion"""
+
 
 def modify_input_statements(code, lineNumber):
     # Regular expression to match `input()` calls with or without variable assignment

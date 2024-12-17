@@ -6,18 +6,11 @@ from api.compile.pseudo_conversions_utils.input_output_utils import (
 )
 from api.compile.pseudo_conversions_utils.loop_utils import replace_and_check_from_loop_construct
 
-def pseudocode_to_python(pseudocode: str):
-    try:
-        conversion = intial_pseudocode_conversion(pseudocode)
-        conversion = ib_specific_pseudocode_conversion(conversion)
+def pseudocode_to_python(pseudocode: str) -> str:
+    conversion = intial_pseudocode_conversion(pseudocode)
+    conversion = ib_specific_pseudocode_conversion(conversion)
 
-        # print(conversion)
-        """for index, line in enumerate(conversion.split("\n")):
-            print(index + 1, line)"""
-
-        return conversion
-    except Exception as e:
-        print(f"{e}")
+    return conversion
 
 
 def ib_specific_pseudocode_conversion(pseudocode: str):
@@ -32,7 +25,7 @@ def ib_specific_pseudocode_conversion(pseudocode: str):
             )
             python_code.append(python_converted_line)
 
-        elif "input " in line.strip():
+        elif line.strip().startswith("input "):
             original_indent = len(line) - len(line.lstrip())
             try:
                 converted_expression = pseudo_input_to_python_input(
@@ -40,8 +33,8 @@ def ib_specific_pseudocode_conversion(pseudocode: str):
                 )
                 python_converted_line = " " * original_indent + converted_expression
                 python_code.append(python_converted_line)
-            except Exception as e:
-                raise Exception(f"Syntax Error on Line {index+1}: {e}")
+            except SyntaxError as e:
+                raise SyntaxError(f"on Line {index+1}: {str(e)}")
 
         elif line.strip().startswith(
             "loop "
@@ -71,8 +64,8 @@ def ib_specific_pseudocode_conversion(pseudocode: str):
                 pseudocode_part += "comment_part"
 
                 python_code.append(python_converted_line)
-            except Exception as e:
-                raise Exception(f"Syntax Error on Line {index+1}: {e}")
+            except SyntaxError as e:
+                raise SyntaxError(f"on Line {index+1}: {str(e)}")
         else:
             python_code.append(line)
 
@@ -134,8 +127,8 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
 
             if line_number == len(pseudocode.split("\n")) - 1 and block_statements:
                 # if last line reached and a block statement hasn't been closed yet
-                raise Exception(
-                    f"Syntax Error on Line {line_number+1}: a `{block_statements[-1][0]}` block statement was opened on line {block_statements[-1][1]}, but it was never closed"
+                raise SyntaxError(
+                    f"on Line {line_number+1}: a `{block_statements[-1][0]}` block statement was opened on line {block_statements[-1][1]}, but it was never closed"
                 )
 
             python_code.append("")
@@ -153,8 +146,8 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
             line.strip().startswith("if") or line.strip().startswith("else if")
         ) and not (line_removed_comments.strip().endswith("then")): 
             # This makes sure that if/else if statements must end with "then", accounting for in-line comments
-            raise Exception(
-                f'Syntax Error on Line {line_number+1}: If statements starting with "if" or "else if" must end with "then"'
+            raise SyntaxError(
+                f'on Line {line_number+1}: If statements starting with "if" or "else if" must end with "then"'
             )
         # Replace only outside of string literals
 
@@ -165,21 +158,21 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
 
         # hints as errors
         if line.strip() in ["endloop", "endif"]:
-            raise Exception(
-                f'Syntax Error on Line {line_number+1}: `{line.strip()}` is undefined, did you mean {line.strip().replace("end", "end ")}'
+            raise SyntaxError(
+                f'on Line {line_number+1}: `{line.strip()}` is undefined, did you mean {line.strip().replace("end", "end ")}'
             )
 
         if line.strip().startswith("elif "):
             current_indent -= indent_amount
-            raise Exception(
-                f'Syntax Error on Line {line_number+1}: `elif` is not a defined keyword in IB pseudocode, did you mean "else if"?'
+            raise SyntaxError(
+                f'on Line {line_number+1}: `elif` is not a defined keyword in IB pseudocode, did you mean "else if"?'
             )
 
         elif line.strip().startswith("else if "):
             current_indent -= indent_amount
             if last_opened_block not in ["if", "else if"]:
-                raise Exception(
-                    f"Syntax Error on Line {line_number+1}: this `else if` block statement is unexpected as it should suceed a `if` or `else if` statement, but it succeeds the `{last_opened_block}` statement on line {last_opened_block_line}"
+                raise SyntaxError(
+                    f"on Line {line_number+1}: this `else if` block statement is unexpected as it should suceed a `if` or `else if` statement, but it succeeds the `{last_opened_block}` statement on line {last_opened_block_line}"
                 )
             block_statements.pop()
             block_statements.append(("else if", line_number))
@@ -187,8 +180,8 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
         elif line.strip() == "else":
             current_indent -= indent_amount
             if last_opened_block not in ["if", "else if"]:
-                raise Exception(
-                    f"Syntax Error on Line {line_number+1}: this `else` block statement is unexpected as it should suceed a `if` or `else if` statement, but it succeeds the `{last_opened_block}` statement on line {last_opened_block_line}"
+                raise SyntaxError(
+                    f"on Line {line_number+1}: this `else` block statement is unexpected as it should suceed a `if` or `else if` statement, but it succeeds the `{last_opened_block}` statement on line {last_opened_block_line}"
                 )
             block_statements.pop()
             block_statements.append(("else", line_number))
@@ -196,22 +189,22 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
         elif line.strip() == "end if":
             current_indent -= indent_amount
             if last_opened_block not in ["if", "else if", "else"]:
-                raise Exception(
-                    f"Syntax Error on Line {line_number+1}: this `end if` block statement is unexpected as it should suceed a `if`, `else if` or `else` statement, but it succeeds the `{last_opened_block}` statement on line {last_opened_block_line}"
+                raise SyntaxError(
+                    f"on Line {line_number+1}: this `end if` block statement is unexpected as it should suceed a `if`, `else if` or `else` statement, but it succeeds the `{last_opened_block}` statement on line {last_opened_block_line}"
                 )
             block_statements.pop()
 
         elif line.strip() == "end loop":
             current_indent -= indent_amount
             if last_opened_block != "loop":
-                raise Exception(
-                    f"Syntax Error on Line {line_number+1}: this `end loop` block statement is unexpected as it should suceed a `loop` statement, but it succeeds the `{last_opened_block}` statement on line {last_opened_block_line}"
+                raise SyntaxError(
+                    f"on Line {line_number+1}: this `end loop` block statement is unexpected as it should suceed a `loop` statement, but it succeeds the `{last_opened_block}` statement on line {last_opened_block_line}"
                 )
             block_statements.pop()
 
         if (len(line) - len(line.lstrip())) != current_indent:
-            raise Exception(
-                f'Syntax Error on Line {line_number+1}: this line has {abs(len(line) - len(line.lstrip())-current_indent)} {"too many" if (len(line) - len(line.lstrip())-current_indent) > current_indent else "too few"} whitespaces as each indent must be 4 whitespaces'
+            raise SyntaxError(
+                f'on Line {line_number+1}: this line has {abs(len(line) - len(line.lstrip())-current_indent)} {"too many" if (len(line) - len(line.lstrip())-current_indent) > current_indent else "too few"} whitespaces as each indent must be 4 whitespaces'
             )
 
         if line.strip().startswith("loop "):
@@ -252,8 +245,8 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
 
         if endWithColon:
             if converted_line.endswith(":"):
-                raise Exception(
-                    f'Syntax Error on Line {line_number+1}: IB CS Pseudocode does not expect ":" (colons) at the end of loop statements'
+                raise SyntaxError(
+                    f'on Line {line_number+1}: IB CS Pseudocode does not expect ":" (colons) at the end of loop statements'
                 )
             converted_line += ":"
         (
@@ -264,8 +257,8 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
 
         if line_number == len(pseudocode.split("\n")) - 1 and block_statements:
             # if last line reached and a block statement hasn't been closed yet
-            raise Exception(
-                f"Syntax Error on Line {line_number+1}: The `{block_statements[-1][0]}` block statement opened on line {block_statements[-1][1]+1} was never closed"
+            raise SyntaxError(
+                f"on Line {line_number+1}: The `{block_statements[-1][0]}` block statement opened on line {block_statements[-1][1]+1} was never closed"
             )
 
     return "\n".join(python_code)
