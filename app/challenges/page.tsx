@@ -5,6 +5,9 @@ import Link from "next/link";
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
+  LightBulbIcon,
+  TrophyIcon,
+  XCircleIcon,
 } from "@heroicons/react/24/outline";
 import Navbar from "../components/nav_bar";
 
@@ -22,6 +25,13 @@ const getCompletionStatus = (id: number): { status: boolean } => {
   return storedData
     ? { status: JSON.parse(storedData).status }
     : { status: false };
+};
+
+const getPointsStatus = (id: number): { pointStatus: boolean } => {
+  const storedData = localStorage.getItem(`challenge-${id}`);
+  return storedData
+    ? { pointStatus: JSON.parse(storedData).points }
+    : { pointStatus: false };
 };
 
 // Reusable CustomSelect Component
@@ -120,6 +130,7 @@ export default function ChallengesPage() {
   const filteredChallenges = challenges
     .filter((challenge) => {
       const { status } = getCompletionStatus(challenge.id);
+      const { pointStatus } = getPointsStatus(challenge.id);
 
       if (
         search &&
@@ -186,6 +197,7 @@ export default function ChallengesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredChallenges.map((challenge) => {
             const { status } = getCompletionStatus(challenge.id);
+            const { pointStatus } = getPointsStatus(challenge.id);
 
             return (
               <div
@@ -208,12 +220,23 @@ export default function ChallengesPage() {
                 </div>
                 <div className="flex items-center gap-2 mt-4">
                   {status ? (
-                    <CheckCircleIcon className="h-6 w-6 text-green-400" />
+                    pointStatus ? (
+                      <TrophyIcon className="h-6 w-6 text-green-400" />
+                    ) : (
+                      <LightBulbIcon className="h-6 w-6 text-yellow-400" />
+                    )
                   ) : (
-                    <ExclamationCircleIcon className="h-6 w-6 text-red-400" />
+                    <XCircleIcon className="h-6 w-6 text-red-400" />
                   )}
-                  <span>{status ? "Complete" : "Not Complete"}</span>
+                  <span>
+                    {status
+                      ? pointStatus
+                        ? "Challenge complete with points earned."
+                        : "Challenge complete, but no points earned (hint used)."
+                      : "Challenge not complete."}
+                  </span>
                 </div>
+
                 <Link
                   href={`challenges/${challenge.id}`}
                   className="text-blue-500 mt-2 inline-block"

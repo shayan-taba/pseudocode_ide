@@ -57,10 +57,33 @@ const Results: React.FC<ResultsProps> = ({
 
     // Update localStorage with the completion status
     if (allPassed) {
-      localStorage.setItem(
-        `challenge-${id}`,
-        JSON.stringify({ status: allPassed })
-      );
+      const saveResultStatus = (challengeId: number) => {
+        // Check for the challenge ID in localStorage
+        const key = `challenge-${challengeId}`;
+        const existingData = localStorage.getItem(key);
+
+        let updatedData = { status: allPassed, points: true }; // Sets to true
+
+        if (existingData) {
+          try {
+            // Parse and update existing data
+            const parsedData = JSON.parse(existingData);
+            updatedData = {
+              ...parsedData,
+              status: allPassed,
+              points: parsedData && !parsedData.hintUsed ? true : false,
+            };
+          } catch (err) {
+            console.error("Error parsing localStorage data: ", err);
+          }
+        }
+
+        // Save back to localStorage
+        localStorage.setItem(key, JSON.stringify(updatedData));
+      };
+
+      saveResultStatus(id);
+
       setCompleteStatus(true);
     } else {
       setCompleteStatus(false);

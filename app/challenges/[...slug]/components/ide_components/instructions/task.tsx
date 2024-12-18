@@ -8,6 +8,8 @@ import {
 import {
   ExclamationCircleIcon,
   InformationCircleIcon,
+  LightBulbIcon,
+  TrophyIcon,
 } from "@heroicons/react/24/outline";
 
 interface TaskProps {
@@ -19,11 +21,12 @@ interface TaskProps {
   difficulty: string;
   testCases: { inputs: string[]; output: string }[]; // Test case structure
   outputType: string;
-  completeStatus: boolean | undefined;
+  storedCompletionStatus: { status: boolean; message: string };
   testInputsTypes: {
     name: string;
     type: string;
   }[];
+  hintUsed: boolean;
 }
 const Task: React.FC<TaskProps> = ({
   id,
@@ -34,35 +37,16 @@ const Task: React.FC<TaskProps> = ({
   difficulty,
   testCases,
   outputType,
-  completeStatus,
+  storedCompletionStatus,
   testInputsTypes,
+  hintUsed
 }) => {
-  const [completionStatus, setCompletionStatus] = useState({
-    status: false,
-    message: "Not Complete",
-  });
-
   const [sections, setSections] = useState({
     task: true,
     instructions: false,
     inputOutput: false,
     exampleTestCase: false,
   });
-
-  useEffect(() => {
-    const fetchCompletionStatus = () => {
-      const storedData = localStorage.getItem(`challenge-${id}`);
-      if (storedData) {
-        const parsedData = JSON.parse(storedData);
-        setCompletionStatus({
-          status: parsedData.status,
-          message: parsedData.status ? "Complete" : "Not Complete",
-        });
-      }
-    };
-
-    fetchCompletionStatus();
-  }, [completeStatus, id]);
 
   type SectionKeys =
     | "task"
@@ -85,25 +69,38 @@ const Task: React.FC<TaskProps> = ({
 
   return (
     <div>
-      <div className="flex flex-col">
-        <h2 className="text-4xl font-bold mb-4">{title}</h2>
+     <div className="flex flex-col">
+  <h2 className="text-4xl font-bold mb-4">{title}</h2>
 
-        {/* Completion Status */}
-        <div className="flex items-center gap-2 mb-4">
-          {completionStatus.status ? (
-            <CheckCircleIcon className="h-6 w-6 text-green-300" />
-          ) : (
-            <ExclamationCircleIcon className="h-6 w-6 text-red-300" />
-          )}
-          <span
-            className={`text-lg font-medium ${
-              completionStatus.status ? "text-green-300" : "text-red-300"
-            }`}
-          >
-            {completionStatus.message}
-          </span>
-        </div>
-      </div>
+  {/* Completion Status */}
+  <div className="flex items-center gap-2 mb-4">
+    {storedCompletionStatus.status ? (
+      hintUsed ? (
+        <TrophyIcon className="h-6 w-6 text-yellow-300" /> // Trophy for completed with points
+      ) : (
+        <LightBulbIcon className="h-6 w-6 text-blue-300" /> // Lightbulb for hint used
+      )
+    ) : (
+      <ExclamationCircleIcon className="h-6 w-6 text-red-300" /> // Exclamation for incomplete
+    )}
+    <span
+      className={`text-lg font-medium ${
+        storedCompletionStatus.status
+          ? hintUsed
+            ? "text-yellow-300"
+            : "text-blue-300"
+          : "text-red-300"
+      }`}
+    >
+      {storedCompletionStatus.status
+        ? hintUsed
+          ? "Challenge complete with points earned."
+          : "Challenge complete, but no points earned (hint used)."
+        : "Challenge not complete."}
+    </span>
+  </div>
+</div>
+
 
       {/*<h3 className="text-2xl font-semibold mb-2">Task</h3>*/}
 

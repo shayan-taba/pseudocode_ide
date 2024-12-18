@@ -7,11 +7,10 @@ import {
   ArrowsPointingInIcon,
 } from "@heroicons/react/24/solid";
 
-import { Dispatch } from "react";
+import { Dispatch, useEffect, useState } from "react";
 
 import Task from "./task";
 import Solution from "./solution";
-import { TestResultType } from "../../ide";
 
 interface InstructionsProps {
   id: number;
@@ -53,6 +52,49 @@ const Instructions: React.FC<InstructionsProps> = ({
   exampleSolution,
   completeStatus,
 }) => {
+
+  const [hintUsed, setHintUsed] = useState<boolean>(false);
+
+  const [storedCompletionStatus, setStoredCompletionStatus] = useState({
+      status: false,
+      message: "Not Complete",
+    });
+
+  useEffect(() => {
+    const fetchCompletionStatus = () => {
+      const storedData = localStorage.getItem(`challenge-${id}`);
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        setStoredCompletionStatus({
+          status: parsedData.status,
+          message: parsedData.status ? "Complete" : "Not Complete",
+        });
+      }
+    };
+
+    fetchCompletionStatus();
+  }, [completeStatus, id]);
+
+
+  useEffect(()=>{
+    const key = `challenge-${id}`;
+      const existingData = localStorage.getItem(key);
+
+      if (existingData) {
+        try {
+          // Parse and update existing data
+          const parsedData = JSON.parse(existingData);
+          if (parsedData.hintUsed == true) {
+            setHintUsed(true)
+          } else {
+            setHintUsed(true)
+          }
+        } catch (err) {
+          console.error("Error parsing localStorage data: ", err);
+        }
+      }
+  }, [hintUsed])
+
   return (
     <div className={`container-els divider ${width}`}>
       <div className="container-headings text-blue-400">
@@ -101,11 +143,12 @@ const Instructions: React.FC<InstructionsProps> = ({
             difficulty={difficulty}
             tags={tags}
             testInputsTypes={testInputsTypes}
-            completeStatus={completeStatus}
+            storedCompletionStatus={storedCompletionStatus}
+            hintUsed = {hintUsed}
           />
         )}
         {instructionState == "solution" && (
-          <Solution exampleSolution={exampleSolution} />
+          <Solution setHintUsed={setHintUsed} storedCompletionStatus={storedCompletionStatus} exampleSolution={exampleSolution} id={id} />
         )}
       </div>
     </div>
