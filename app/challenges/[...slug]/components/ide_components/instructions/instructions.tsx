@@ -52,13 +52,12 @@ const Instructions: React.FC<InstructionsProps> = ({
   exampleSolution,
   completeStatus,
 }) => {
-
   const [hintUsed, setHintUsed] = useState<boolean>(false);
 
   const [storedCompletionStatus, setStoredCompletionStatus] = useState({
-      status: false,
-      message: "Not Complete",
-    });
+    status: false,
+    message: "Not Complete",
+  });
 
   useEffect(() => {
     const fetchCompletionStatus = () => {
@@ -75,25 +74,24 @@ const Instructions: React.FC<InstructionsProps> = ({
     fetchCompletionStatus();
   }, [completeStatus, id]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     const key = `challenge-${id}`;
-      const existingData = localStorage.getItem(key);
+    const existingData = localStorage.getItem(key);
 
-      if (existingData) {
-        try {
-          // Parse and update existing data
-          const parsedData = JSON.parse(existingData);
-          if (parsedData.hintUsed == true) {
-            setHintUsed(true)
-          } else {
-            setHintUsed(true)
-          }
-        } catch (err) {
-          console.error("Error parsing localStorage data: ", err);
+    if (existingData) {
+      try {
+        // Parse and update existing data
+        const parsedData = JSON.parse(existingData);
+        if (parsedData.hintUsed == true) {
+          setHintUsed(true);
+        } else {
+          setHintUsed(false);
         }
+      } catch (err) {
+        console.error("Error parsing localStorage data: ", err);
       }
-  }, [hintUsed])
+    }
+  }, [hintUsed]);
 
   return (
     <div className={`container-els divider ${width}`}>
@@ -144,11 +142,16 @@ const Instructions: React.FC<InstructionsProps> = ({
             tags={tags}
             testInputsTypes={testInputsTypes}
             storedCompletionStatus={storedCompletionStatus}
-            hintUsed = {hintUsed}
+            hintUsed={hintUsed}
           />
         )}
         {instructionState == "solution" && (
-          <Solution setHintUsed={setHintUsed} storedCompletionStatus={storedCompletionStatus} exampleSolution={exampleSolution} id={id} />
+          <Solution
+            setHintUsed={setHintUsed}
+            storedCompletionStatus={storedCompletionStatus}
+            exampleSolution={exampleSolution}
+            id={id}
+          />
         )}
       </div>
     </div>

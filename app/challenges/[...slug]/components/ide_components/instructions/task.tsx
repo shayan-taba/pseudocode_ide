@@ -67,6 +67,10 @@ const Task: React.FC<TaskProps> = ({
     });
   };
 
+  useEffect(()=>{
+    console.log('herher', storedCompletionStatus, hintUsed)
+  },[storedCompletionStatus, hintUsed])
+
   return (
     <div>
      <div className="flex flex-col">
@@ -94,8 +98,8 @@ const Task: React.FC<TaskProps> = ({
     >
       {storedCompletionStatus.status
         ? hintUsed
-          ? "Challenge complete with points earned."
-          : "Challenge complete, but no points earned (hint used)."
+          ? "Challenge complete, but no points earned (hint used)."
+          : "Challenge complete with points earned."
         : "Challenge not complete."}
     </span>
   </div>
