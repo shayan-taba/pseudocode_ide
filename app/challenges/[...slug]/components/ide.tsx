@@ -134,8 +134,7 @@ const IDE: React.FC<IDEProps> = ({
   }, [expandResults]);
 
   const fetchFromBackend = async (
-    input: string,
-    run: boolean,
+    isLast: boolean,
     test_case_index: number
   ) => {
     if (code.trim()) {
@@ -161,14 +160,15 @@ const IDE: React.FC<IDEProps> = ({
 
         // Runtime checks to handle the response properly
         if ("error" in result) {
+          // i.e., is "error" equal to any of the key
           console.log(
             "The 'Failed to load resource' warning above was successfully handled."
           );
           console.log("Handled Error:", result.error);
-          handleBackendResponse(result.error);
+          handleBackendResponse(result.error, isLast, true);
         } else if ("result" in result && result.status === "success") {
           console.log("Success:", result.result);
-          handleBackendResponse(result.result);
+          handleBackendResponse(result.result, isLast, false);
         } else {
           console.error("Unexpected response:", result);
           alert("An unexpected error occurred.");
@@ -201,7 +201,11 @@ const IDE: React.FC<IDEProps> = ({
     processNextTestCase();
   };
 
-  const handleBackendResponse = (data: any) => {
+  const handleBackendResponse = (
+    data: any,
+    isLast: boolean,
+    isError: boolean
+  ) => {
     const currentIndex = testIndexRef.current;
 
     if (!testCases[currentIndex]) {
@@ -211,10 +215,17 @@ const IDE: React.FC<IDEProps> = ({
 
     const uuid = "49e7d449-5214-4b8f-8743-888c6009c227";
 
-    setOutput((prev) => [
-      ...prev,
-      data.replace(new RegExp(uuid + " ", "g"), ""),
-    ]); // Append new output
+    if (!isError && isLast) {
+      setOutput((prev) => [
+        ...prev,
+        "[" + "_".repeat(4) + " OUTPUT HIDDEN " + "_".repeat(4) + "]"
+      ]); // Append new output
+    } else {
+      setOutput((prev) => [
+        ...prev,
+        data.replace(new RegExp(uuid + " ", "g"), ""),
+      ]); // Append new output
+    }
 
     const currentTest = testCases[currentIndex];
 
@@ -266,20 +277,23 @@ const IDE: React.FC<IDEProps> = ({
   };
 
   const processNextTestCase = async () => {
+    let isLast = false;
     if (testIndexRef.current >= testCases.length) {
       console.log("All test cases processed");
       setIsComplete(true);
       return; // All test cases are processed
+    } else if (testIndexRef.current == testCases.length - 1) {
+      isLast = true;
     }
 
     setIsComplete(false); // Reset completion state
 
     setOutput((prev) => [
       ...prev,
-      "_".repeat(20) + ` TEST CASE ${testIndexRef.current} ` + "_".repeat(20),
+      "[" + "_".repeat(4) + ` TEST CASE ${testIndexRef.current} ` + "_".repeat(4) + "]",
     ]); // Append new output
 
-    await fetchFromBackend("", true, testIndexRef.current); // Process current test case
+    await fetchFromBackend(isLast, testIndexRef.current); // Process current test case
   };
 
   const instructionArgs = {

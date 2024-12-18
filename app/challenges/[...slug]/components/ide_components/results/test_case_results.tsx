@@ -125,11 +125,13 @@ const TestCaseResult: React.FC<{
             <div className="mt-2">
               <span className="font-bold">Actual Output:</span>{" "}
               <span className="text-gray-300">
-                {JSON.stringify(result.actual).length > 100
-                  ? `${JSON.stringify(result.actual[0]).slice(0, 100)}...`
-                  : result.actual[0]
-                  ? JSON.stringify(result.actual[0])
-                  : "None"}
+                {isLast && "Output Hidden"}
+                {!isLast &&
+                  (JSON.stringify(result.actual).length > 100
+                    ? `${JSON.stringify(result.actual[0]).slice(0, 100)}...`
+                    : result.actual[0]
+                    ? JSON.stringify(result.actual[0])
+                    : "None")}
               </span>
             </div>
           </div>
