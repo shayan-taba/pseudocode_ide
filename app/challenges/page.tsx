@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import PointTally from "./point_tally";
+
 import Link from "next/link";
 import {
   CheckCircleIcon,
@@ -152,6 +154,8 @@ export default function ChallengesPage() {
       <Navbar />
       <div className="bg-zinc-950 min-h-screen p-8 text-cyan-50">
         <h1 className="text-3xl font-bold mb-8">Pseudocode Challenges</h1>
+
+        <PointTally />
 
         {/* Filters Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
