@@ -5,7 +5,6 @@ import Navbar from "../../../components/nav_bar";
 import Instructions from "./ide_components/instructions/instructions";
 import Editor from "./ide_components/editor/editor";
 import Results from "./ide_components/results/results";
-import Popup from "./ide_components/input_popup";
 
 import "./ide_styles.css";
 // pages/code-editor.tsx

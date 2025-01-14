@@ -332,7 +332,7 @@
     <dataTypes>
       <inputType>Array of integers.</inputType>
       <inputName>NUMBERS</inputName>
-      <inputType>Integer X.</inputType>
+      <inputType>Integer</inputType>
       <inputName>X</inputName>
       <outputType>Array of integers that are not multiples of X.</outputType>
     </dataTypes>
