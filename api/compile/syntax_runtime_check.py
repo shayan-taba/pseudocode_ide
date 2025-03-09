@@ -56,24 +56,33 @@ def syntax_check_and_run_converted(
             f"on Line {checked_variable_assignments[1]}: The name of the defined variable, '{checked_variable_assignments[2]}', must only contain uppercase alphabetic characters (A-Z) and underscores."
         )
 
-    # Prepare the global scope
-    global_scope = {
-        "Array": Array,
-        "Collection": Collection,
-        "Stack": Stack,
-        "Queue": Queue,
-        "CustomString": CustomString,
-        "get_sqrt": get_sqrt,
-    }
-    print("a101")
-    # Add test case inputs to the global scope
-    for index, input_type in enumerate(test_case_input_names):
-        global_scope[input_type["name"]] = parse_value(
-            test_case_input_values[index], global_scope
-        )
+    def exec_with_runtime_error_handling():
+        """This runs is a syntax error has not be found in the converted code which raises an error.
 
-    def exec_with_input_pause():
+        Raises:
+            RuntimeError: _description_
+            Exception: _description_
+
+        Returns:
+            _type_: _description_
+        """
         try:
+            # Prepare the global scope. IB Pseudocode variables (e.g., Collection, etc.) are added as classes accessible by the code. A custom func
+            global_scope = {
+                "Array": Array,
+                "Collection": Collection,
+                "Stack": Stack,
+                "Queue": Queue,
+                "CustomString": CustomString,
+                "get_sqrt": get_sqrt,
+            }
+            print("a101")
+            # Add test case inputs to the global scope
+            for index, input_type in enumerate(test_case_input_names):
+                global_scope[input_type["name"]] = parse_value(
+                    test_case_input_values[index], global_scope
+                )
+                
             # Create a generator to pause execution at input points
             exec_globals = global_scope.copy()
             exec_locals = {}
@@ -85,13 +94,6 @@ def syntax_check_and_run_converted(
             import sys
 
             sys.stdout = output_buffer
-
-            def input_paused(prompt):
-                # Await input from the provided handler
-                if input_handler:
-                    return input_handler(prompt)
-                else:
-                    return input(prompt)
 
             exec(code_string, exec_globals, exec_locals)
             # Get the captured output from StringIO
@@ -122,4 +124,4 @@ def syntax_check_and_run_converted(
 
             raise Exception(f"{str(e)}")
 
-    return exec_with_input_pause()
+    return exec_with_runtime_error_handling()

@@ -1,3 +1,7 @@
+"""
+Module of general variables and util functions for the compiler.
+"""
+
 import ast
 import re
 

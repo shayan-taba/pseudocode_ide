@@ -1,3 +1,12 @@
+"""Converts "output" to Python print function. If input is used, raises a syntax error.
+
+Raises:
+    SyntaxError: if "input" feature is used. This is not required for pseudocode challenges.
+
+Returns:
+    str: the converted line in Python.
+"""
+
 import re
 from api.compile.pseudo_conversions_utils.general_utils import *
 from api.compile.pseudo_conversions_utils.assignment_utils import (

@@ -1,3 +1,12 @@
+"""This module provides utility functions for the conversion pseudocode loops into python.
+In doing so, it handle loop-specific syntax errors.
+
+Raises:
+    SyntaxError: if arrangement of loop is wrong or the variable name is invalid for for loop.
+Returns:
+    _type_: _description_
+"""
+
 import re
 from api.compile.pseudo_conversions_utils.general_utils import *
 from api.compile.pseudo_conversions_utils.assignment_utils import (
@@ -28,9 +37,9 @@ def replace_and_check_from_loop_construct(line: str, string_ranges: list) -> str
             try:
                 if check_valid_variable_name(
                     line.strip().split()[1]
-                ):  # The code contains "from" but the counter variable name is not good
-                    pass
-            except SyntaxError as e:
+                ):
+                    pass 
+            except SyntaxError as e: # The code seems to be a `for loop` but the counter variable name does not follow standard
                 raise SyntaxError(str(e))
 
     return line

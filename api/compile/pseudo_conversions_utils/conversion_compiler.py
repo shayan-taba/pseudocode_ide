@@ -1,3 +1,8 @@
+"""
+Module that converts pseudocode to Python
+Raises SyntaxError if the Pseudocode is deemed to have one.
+"""
+
 from api.compile.pseudo_conversions_utils.general_utils import *
 from api.compile.pseudo_conversions_utils.input_output_utils import (
     pseudo_input_to_python_input,

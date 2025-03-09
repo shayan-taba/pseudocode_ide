@@ -1,5 +1,5 @@
 class Collection:
-    """A class representing an IB Pseudocde ordered collection of items with iteration functionality.
+    """A class representing an IB Pseudocode ordered collection of items with iteration functionality.
 
     The methods support custom error messages. This class allows adding items, iterating through them,
     and checking the state of the collection. It also adds an extra feature to obtain collection length.
