@@ -2,180 +2,180 @@
     <solution>
         <id>1</id>
         <code>COUNT = 0
-            NUMBERS.resetNext()
-            loop while NUMBERS.hasNext()
-            ITEM = NUMBERS.getNext()
-            if ITEM &lt; 0 and ITEM mod 2 == 0 then
-            COUNT = COUNT + 1
-            end if
-            end loop
-            output COUNT
+NUMBERS.resetNext()
+loop while NUMBERS.hasNext()
+    ITEM = NUMBERS.getNext()
+    if ITEM &lt; 0 and ITEM mod 2 == 0 then
+        COUNT = COUNT + 1
+    end if
+end loop
+output COUNT
         </code>
     </solution>
     <solution>
         <id>2</id>
         <code>STACK = Stack() # Temporary stack
-            loop while not QUEUE.isEmpty()
-            STACK.push(QUEUE.dequeue())
-            end loop
-            loop while not STACK.isEmpty()
-            QUEUE.enqueue(STACK.pop())
-            end loop
-            output QUEUE
+loop while not QUEUE.isEmpty()
+    STACK.push(QUEUE.dequeue())
+end loop
+loop while not STACK.isEmpty()
+    QUEUE.enqueue(STACK.pop())
+end loop
+output QUEUE
         </code>
     </solution>
     <solution>
         <id>3</id>
         <code>COUNT = 0
-            ECONOMICS.resetNext()
-            loop while ECONOMICS.hasNext()
-            ID = ECONOMICS.getNext()
+ECONOMICS.resetNext()
+loop while ECONOMICS.hasNext()
+    ID = ECONOMICS.getNext()
 
-            MATH.resetNext()
-            loop while MATH.hasNext()
-            MATH_ID = MATH.getNext()
-            if MATH_ID == ID then
+    MATH.resetNext()
+    loop while MATH.hasNext()
+        MATH_ID = MATH.getNext()
+        if MATH_ID == ID then
             COUNT = COUNT + 1
-            end if
-            end loop
-            end loop
-            output COUNT
+        end if
+    end loop
+end loop
+output COUNT
         </code>
     </solution>
     <solution>
         <id>4</id>
         <code>TEMP_STACK = Stack() # Temporary stack for sorting
 
-            # Transfer items from STACK to TEMP_STACK in ascending order
-            loop while not STACK.isEmpty()
-            ITEM = STACK.pop()
-            CONTINUE = true
-            loop while not TEMP_STACK.isEmpty() and CONTINUE
-            TEMP_TOP = TEMP_STACK.pop() # Remove the top item of TEMP_STACK
-            if TEMP_TOP &gt; ITEM then
+# Transfer items from STACK to TEMP_STACK in ascending order
+loop while not STACK.isEmpty()
+    ITEM = STACK.pop()
+    CONTINUE = true
+    loop while not TEMP_STACK.isEmpty() and CONTINUE
+        TEMP_TOP = TEMP_STACK.pop() # Remove the top item of TEMP_STACK
+        if TEMP_TOP &gt; ITEM then
             STACK.push(TEMP_TOP) # Push back smaller items to STACK
-            else
+        else
             TEMP_STACK.push(TEMP_TOP) # Restore the removed item to TEMP_STACK
             CONTINUE = false
-            end if
-            end loop
-            TEMP_STACK.push(ITEM) # Place ITEM in the correct position
-            end loop
+        end if
+    end loop
+    TEMP_STACK.push(ITEM) # Place ITEM in the correct position
+end loop
 
-            output TEMP_STACK
+output TEMP_STACK
         </code>
     </solution>
     <solution>
         <id>5</id>
         <code>STACK = Stack()
-            CONTINUE = True
-            loop CHAR from 0 to len(BRACKETS) - 1
-            if CONTINUE then
-            if BRACKETS[CHAR] == "(" or BRACKETS[CHAR] == "{" or BRACKETS[CHAR] == "[" then
+CONTINUE = True
+loop CHAR from 0 to len(BRACKETS) - 1
+    if CONTINUE then
+        if BRACKETS[CHAR] == "(" or BRACKETS[CHAR] == "{" or BRACKETS[CHAR] == "[" then
             STACK.push(BRACKETS[CHAR])
-            else if BRACKETS[CHAR] == ")" or BRACKETS[CHAR] == "}" or BRACKETS[CHAR] == "]" then
+        else if BRACKETS[CHAR] == ")" or BRACKETS[CHAR] == "}" or BRACKETS[CHAR] == "]" then
             if STACK.isEmpty() then
-            CONTINUE = False
+                CONTINUE = False
             else
-            OPEN_BRACKET = STACK.pop()
-            if (OPEN_BRACKET == "(" and BRACKETS[CHAR] != ")") or (OPEN_BRACKET == "{" and
-            BRACKETS[CHAR] != "}") or (OPEN_BRACKET == "[" and BRACKETS[CHAR] != "]") then
-            CONTINUE = False
+                OPEN_BRACKET = STACK.pop()
+                if (OPEN_BRACKET == "(" and BRACKETS[CHAR] != ")") or (OPEN_BRACKET == "{" and BRACKETS[CHAR] != "}") or (OPEN_BRACKET == "[" and BRACKETS[CHAR] != "]") then
+                    CONTINUE = False
+                end if
             end if
-            end if
-            end if
-            end if
-            end loop
-            output STACK.isEmpty()
+        end if
+    end if
+end loop
+output STACK.isEmpty()
         </code>
     </solution>
     <solution>
         <id>6</id>
         <code>COLLECTION_ONE.resetNext() # Reset the iterator for the first collection
-            MY_TEMP_COLLECTION = Collection() # Initialize an empty collection to store unique
-            elements
 
-            # Loop through each element in COLLECTION_ONE
-            loop while COLLECTION_ONE.hasNext()
+MY_TEMP_COLLECTION = Collection() # Initialize an empty collection to store unique elements
 
-            CURRENT = COLLECTION_ONE.getNext() # Get the next element from COLLECTION_ONE
-            DUPLICATE = False # Flag to track if the element is already in MY_TEMP_COLLECTION
-            MY_TEMP_COLLECTION.resetNext() # Reset the iterator for MY_TEMP_COLLECTION
+# Loop through each element in COLLECTION_ONE
+loop while COLLECTION_ONE.hasNext()
 
-            # Check if CURRENT already exists in MY_TEMP_COLLECTION
-            loop while MY_TEMP_COLLECTION.hasNext() and not DUPLICATE
-            CHECK_EL = MY_TEMP_COLLECTION.getNext() # Get the next element from MY_TEMP_COLLECTION
+    CURRENT = COLLECTION_ONE.getNext() # Get the next element from COLLECTION_ONE
+    DUPLICATE = False # Flag to track if the element is already in MY_TEMP_COLLECTION
 
-            if CHECK_EL == CURRENT then
+    MY_TEMP_COLLECTION.resetNext() # Reset the iterator for MY_TEMP_COLLECTION
+
+    # Check if CURRENT already exists in MY_TEMP_COLLECTION
+    loop while MY_TEMP_COLLECTION.hasNext() and not DUPLICATE
+        CHECK_EL = MY_TEMP_COLLECTION.getNext() # Get the next element from MY_TEMP_COLLECTION
+
+        if CHECK_EL == CURRENT then
             DUPLICATE = True # Mark as duplicate if CURRENT is found
-            end if
-            end loop
+        end if
+    end loop
 
-            if not DUPLICATE then
-            MY_TEMP_COLLECTION.addItem(CURRENT) # Add the unique element to MY_TEMP_COLLECTION
-            end if
-            end loop
+    if not DUPLICATE then
+        MY_TEMP_COLLECTION.addItem(CURRENT) # Add the unique element to MY_TEMP_COLLECTION
+    end if
+end loop
 
-            COLLECTION_TWO.resetNext() # Reset the iterator for the second collection
+COLLECTION_TWO.resetNext() # Reset the iterator for the second collection
 
-            # Loop through each element in COLLECTION_TWO
-            loop while COLLECTION_TWO.hasNext()
+# Loop through each element in COLLECTION_TWO
+loop while COLLECTION_TWO.hasNext()
 
-            CURRENT = COLLECTION_TWO.getNext() # Get the next element from COLLECTION_TWO
-            DUPLICATE = False # Flag to track if the element is already in MY_TEMP_COLLECTION
-            MY_TEMP_COLLECTION.resetNext() # Reset the iterator for MY_TEMP_COLLECTION
+    CURRENT = COLLECTION_TWO.getNext() # Get the next element from COLLECTION_TWO
+    DUPLICATE = False # Flag to track if the element is already in MY_TEMP_COLLECTION
 
-            # Check if CURRENT already exists in MY_TEMP_COLLECTION
-            loop while MY_TEMP_COLLECTION.hasNext() and not DUPLICATE
-            CHECK_EL = MY_TEMP_COLLECTION.getNext() # Get the next element from MY_TEMP_COLLECTION
+    MY_TEMP_COLLECTION.resetNext() # Reset the iterator for MY_TEMP_COLLECTION
 
-            if CHECK_EL == CURRENT then
+    # Check if CURRENT already exists in MY_TEMP_COLLECTION
+    loop while MY_TEMP_COLLECTION.hasNext() and not DUPLICATE
+        CHECK_EL = MY_TEMP_COLLECTION.getNext() # Get the next element from MY_TEMP_COLLECTION
+
+        if CHECK_EL == CURRENT then
             DUPLICATE = True # Mark as duplicate if CURRENT is found
-            end if
-            end loop
+        end if
+    end loop
 
-            if not DUPLICATE then
-            MY_TEMP_COLLECTION.addItem(CURRENT) # Add the unique element to MY_TEMP_COLLECTION
-            end if
-            end loop
+    if not DUPLICATE then
+        MY_TEMP_COLLECTION.addItem(CURRENT) # Add the unique element to MY_TEMP_COLLECTION
+    end if
+end loop
 
-            output MY_TEMP_COLLECTION # Output the final collection with unique elements
+output MY_TEMP_COLLECTION # Output the final collection with unique elements
         </code>
     </solution>
     <solution>
         <id>7</id>
         <code>loop I from 0 to NUMBERS.length - 2
-            loop J from 0 to NUMBERS.length - I - 2
-            if NUMBERS[J] &gt; NUMBERS[J + 1] then
+    loop J from 0 to NUMBERS.length - I - 2
+        if NUMBERS[J] &gt; NUMBERS[J + 1] then
             TEMP = NUMBERS[J]
             NUMBERS[J] = NUMBERS[J + 1]
             NUMBERS[J + 1] = TEMP
-            end if
-            end loop
-            end loop
-            MEDIAN_INDEX = NUMBERS.length div 2
-            if NUMBERS.length mod 2 == 0 then
-            output int((NUMBERS[MEDIAN_INDEX - 1] + NUMBERS[MEDIAN_INDEX]) / 2)
-            else
-            output NUMBERS[MEDIAN_INDEX]
-            end if
+        end if
+    end loop
+end loop
+MEDIAN_INDEX = NUMBERS.length div 2
+if NUMBERS.length mod 2 == 0 then
+    output int((NUMBERS[MEDIAN_INDEX - 1] + NUMBERS[MEDIAN_INDEX]) / 2)
+else
+    output NUMBERS[MEDIAN_INDEX]
+end if
         </code>
     </solution>
     <solution>
         <id>8</id>
         <code>DISTANCES = Array()
-            DISTANCES.set_length(LOCATIONS.length)
+DISTANCES.set_length(LOCATIONS.length)
 
-            # Compute distances
-            loop I from 0 to LOCATIONS.length - 1
-            DISTANCES[I] = get_sqrt(pow(LOCATIONS[I][1] - REFERENCE[0], 2) + pow(LOCATIONS[I][2] -
-            REFERENCE[1],2))
-            end loop
+# Compute distances
+loop I from 0 to LOCATIONS.length - 1
+    DISTANCES[I] = get_sqrt(pow(LOCATIONS[I][1] - REFERENCE[0], 2) + pow(LOCATIONS[I][2] - REFERENCE[1],2))
+end loop
 
-            # Sort LOCATIONS based on DISTANCES using Bubble Sort
-            loop I from 0 to DISTANCES.length - 2
-            loop J from 0 to DISTANCES.length - I - 2
-            if DISTANCES[J] &gt; DISTANCES[J + 1] then
+# Sort LOCATIONS based on DISTANCES using Bubble Sort
+loop I from 0 to DISTANCES.length - 2
+    loop J from 0 to DISTANCES.length - I - 2
+        if DISTANCES[J] &gt; DISTANCES[J + 1] then
             # Swap distances
             TEMP_DIST = DISTANCES[J]
             DISTANCES[J] = DISTANCES[J + 1]
@@ -185,221 +185,219 @@
             TEMP_LOC = LOCATIONS[J]
             LOCATIONS[J] = LOCATIONS[J + 1]
             LOCATIONS[J + 1] = TEMP_LOC
-            end if
-            end loop
-            end loop
+        end if
+    end loop
+end loop
 
-            # Create a Queue of location names
-            QUEUE = Queue()
-            loop I from 0 to LOCATIONS.length - 1
-            QUEUE.enqueue(LOCATIONS[I][0]) # Enqueue the name
-            end loop
+# Create a Queue of location names
+QUEUE = Queue()
+loop I from 0 to LOCATIONS.length - 1
+    QUEUE.enqueue(LOCATIONS[I][0]) # Enqueue the name
+end loop
 
-            output QUEUE
+output QUEUE
 
         </code>
     </solution>
     <solution>
         <id>9</id>
         <code># Part 1: Count how many even numbers are in NUMBERS
-            COUNT = 0
-            loop I from 0 to NUMBERS.length - 1
-            if NUMBERS[I] mod 2 == 0 then
-            COUNT = COUNT + 1
-            end if
-            end loop
+COUNT = 0
+loop I from 0 to NUMBERS.length - 1
+    if NUMBERS[I] mod 2 == 0 then
+        COUNT = COUNT + 1
+    end if
+end loop
 
-            # Part 2: Create an array of the correct length to store the even numbers
-            EVEN_NUMBERS = Array()
-            EVEN_NUMBERS.set_length(COUNT) # Pre-allocate an array of fixed size
+# Part 2: Create an array of the correct length to store the even numbers
+EVEN_NUMBERS = Array()
+EVEN_NUMBERS.set_length(COUNT) # Pre-allocate an array of fixed size
 
-            # Part 3: Populate the EVEN_NUMBERS array with the even numbers
-            INDEX = 0
-            loop I from 0 to NUMBERS.length - 1
-            if NUMBERS[I] mod 2 == 0 then
-            EVEN_NUMBERS[INDEX] = NUMBERS[I]
-            INDEX = INDEX + 1
-            end if
-            end loop
+# Part 3: Populate the EVEN_NUMBERS array with the even numbers
+INDEX = 0
+loop I from 0 to NUMBERS.length - 1
+    if NUMBERS[I] mod 2 == 0 then
+        EVEN_NUMBERS[INDEX] = NUMBERS[I]
+        INDEX = INDEX + 1
+    end if
+end loop
 
-            # Part 4: Perform bubble sort on the EVEN_NUMBERS array
-            loop I from 0 to EVEN_NUMBERS.length - 2
-            loop J from 0 to EVEN_NUMBERS.length - I - 2
-            if EVEN_NUMBERS[J] &lt; EVEN_NUMBERS[J + 1] then
+# Part 4: Perform bubble sort on the EVEN_NUMBERS array
+loop I from 0 to EVEN_NUMBERS.length - 2
+    loop J from 0 to EVEN_NUMBERS.length - I - 2
+        if EVEN_NUMBERS[J] &lt; EVEN_NUMBERS[J + 1] then
             TEMP = EVEN_NUMBERS[J]
             EVEN_NUMBERS[J] = EVEN_NUMBERS[J + 1]
             EVEN_NUMBERS[J + 1] = TEMP
-            end if
-            end loop
-            end loop
+        end if
+    end loop
+end loop
 
-            # Step 5: Output the sorted EVEN_NUMBERS array
-            output EVEN_NUMBERS</code>
+# Step 5: Output the sorted EVEN_NUMBERS array
+output EVEN_NUMBERS</code>
     </solution>
     <solution>
         <id>10</id>
         <code>SUM = 0
-            loop I from 0 to NUMBERS.length - 1
-            UNIQUE = true
-            loop J from 0 to NUMBERS.length - 1
-            if I != J and NUMBERS[I] == NUMBERS[J] then
+loop I from 0 to NUMBERS.length - 1
+    UNIQUE = true
+    loop J from 0 to NUMBERS.length - 1
+        if I != J and NUMBERS[I] == NUMBERS[J] then
             UNIQUE = false
-            end if
-            end loop
-            if UNIQUE then
-            SUM = SUM + NUMBERS[I]
-            end if
-            end loop
-            output SUM</code>
+        end if
+    end loop
+    if UNIQUE then
+        SUM = SUM + NUMBERS[I]
+    end if
+end loop
+output SUM</code>
     </solution>
     <solution>
         <id>11</id>
         <code># Part 1: Count how many numbers are not multiples of X
-            COUNT = 0
-            loop I from 0 to NUMBERS.length - 1
-            if NUMBERS[I] mod X != 0 then
-            COUNT = COUNT + 1
-            end if
-            end loop
+COUNT = 0
+loop I from 0 to NUMBERS.length - 1
+    if NUMBERS[I] mod X != 0 then
+        COUNT = COUNT + 1
+    end if
+end loop
 
-            # Part 2: Create a fixed-size array to store the result
-            RESULT = Array()
-            RESULT.set_length(COUNT)
-            # Allocate space for the RESULT array
+# Part 2: Create a fixed-size array to store the result
+RESULT = Array() 
+RESULT.set_length(COUNT)
+# Allocate space for the RESULT array
 
-            # Part 3: Populate the RESULT array with qualifying elements
-            INDEX = 0
-            loop I from 0 to NUMBERS.length - 1
-            if NUMBERS[I] mod X != 0 then
-            RESULT[INDEX] = NUMBERS[I]
-            INDEX = INDEX + 1
-            end if
-            end loop
+# Part 3: Populate the RESULT array with qualifying elements
+INDEX = 0
+loop I from 0 to NUMBERS.length - 1
+    if NUMBERS[I] mod X != 0 then
+        RESULT[INDEX] = NUMBERS[I]
+        INDEX = INDEX + 1
+    end if
+end loop
 
-            # Part 4: Output the result
-            output RESULT
+# Part 4: Output the result
+output RESULT
         </code>
     </solution>
     <solution>
         <id>12</id>
         <code>REVERSED_WORDS = Array()
-            REVERSED_WORDS.set_length(WORDS.length)
+REVERSED_WORDS.set_length(WORDS.length)
 
-            loop I from 0 to WORDS.length - 1
-            WORD = WORDS[I]
-            REVERSED = ""
-            loop J from 0 to WORD.length - 1
-            REVERSED = WORD[J] + REVERSED
-            end loop
-            REVERSED_WORDS[I] = REVERSED
-            end loop
-            output REVERSED_WORDS
+loop I from 0 to WORDS.length - 1
+    WORD = WORDS[I]
+    REVERSED = ""
+    loop J from 0 to WORD.length - 1
+        REVERSED = WORD[J] + REVERSED
+    end loop
+    REVERSED_WORDS[I] = REVERSED
+end loop
+output REVERSED_WORDS
         </code>
     </solution>
     <solution>
         <id>13</id>
         <code>LOOP_END = INPUT_STRING.length div 2
-            CONTINUE = True
+CONTINUE = True
 
-            loop I from 0 to LOOP_END - 1
-            if CONTINUE then
-            if INPUT_STRING[I] != INPUT_STRING[INPUT_STRING.length - I - 1] then
+loop I from 0 to LOOP_END - 1
+    if CONTINUE then
+        if INPUT_STRING[I] != INPUT_STRING[INPUT_STRING.length - I - 1] then
             output False
             CONTINUE = False
-            end if
-            end if
-            end loop
+        end if
+    end if
+end loop
 
-            if CONTINUE then
-            output True
-            end if
+if CONTINUE then
+    output True
+end if
         </code>
     </solution>
     <solution>
         <id>14</id>
         <code>SUM = 0
-            loop I from 1 to NUMBER
-            if NUMBER mod I == 0 then
-            SUM = SUM + I
-            end if
-            end loop
-            output SUM
+loop I from 1 to NUMBER
+    if NUMBER mod I == 0 then
+        SUM = SUM + I
+    end if
+end loop
+output SUM
         </code>
     </solution>
     <solution>
         <id>15</id>
         <code># Check if the number is less than or equal to 1
-            # Numbers ≤ 1 are not prime by definition
-            if INTEGER &lt;= 1 then
-            output False
-            end if
+# Numbers ≤ 1 are not prime by definition
+if INTEGER &lt;= 1 then
+    output False
+end if
 
-            # Initialize a flag to determine if the number is prime
-            CONTINUE = true
+# Initialize a flag to determine if the number is prime
+CONTINUE = true
 
-            # Loop through possible divisors from 2 up to the integer part of the square root of the
-            number
-            loop I from 2 to int(get_sqrt(INTEGER))
-            if CONTINUE then # Only proceed if CONTINUE is still true
-            # Check if the current divisor divides the number evenly
-            if INTEGER mod I == 0 then
+# Loop through possible divisors from 2 up to the integer part of the square root of the number
+loop I from 2 to int(get_sqrt(INTEGER))
+    if CONTINUE then # Only proceed if CONTINUE is still true
+        # Check if the current divisor divides the number evenly
+        if INTEGER mod I == 0 then
             # If a divisor is found, set CONTINUE to false and output False (not prime)
             CONTINUE = false
             output False
-            end if
-            end if
-            end loop
+        end if
+    end if
+end loop
 
-            # If no divisors were found and CONTINUE is still true, the number is prime
-            if CONTINUE then
-            output True
-            end if
+# If no divisors were found and CONTINUE is still true, the number is prime
+if CONTINUE then
+    output True
+end if
         </code>
     </solution>
     <solution>
         <id>16</id>
         <code>loop while NUMBER_TWO != 0
-            TEMP = NUMBER_TWO
-            NUMBER_TWO = NUMBER_ONE mod NUMBER_TWO
-            NUMBER_ONE = TEMP
-            end loop
-            output NUMBER_ONE
+    TEMP = NUMBER_TWO
+    NUMBER_TWO = NUMBER_ONE mod NUMBER_TWO
+    NUMBER_ONE = TEMP
+end loop
+output NUMBER_ONE
         </code>
     </solution>
     <solution>
         <id>17</id>
         <code>FACTORIAL = 1
-            loop I from 1 to NUMBER
-            FACTORIAL = FACTORIAL * I
-            end loop
-            output FACTORIAL
+loop I from 1 to NUMBER
+    FACTORIAL = FACTORIAL * I
+end loop
+output FACTORIAL
         </code>
     </solution>
     <solution>
         <id>18</id>
         <code>SUM = 0
-            loop I from 0 to ARRAY.length - 1
-            SUM = SUM + ARRAY[I]
-            end loop
-            output SUM
+loop I from 0 to ARRAY.length - 1
+    SUM = SUM + ARRAY[I]
+end loop
+output SUM
         </code>
     </solution>
     <solution>
         <id>19</id>
         <code>LARGEST = ARRAY[0]
-            loop I from 1 to ARRAY.length - 1
-            if ARRAY[I] &gt; LARGEST then
-            LARGEST = ARRAY[I]
-            end if
-            end loop
-            output LARGEST</code>
+loop I from 1 to ARRAY.length - 1
+    if ARRAY[I] &gt; LARGEST then
+        LARGEST = ARRAY[I]
+    end if
+end loop
+output LARGEST</code>
     </solution>
     <solution>
         <id>20</id>
         <code>LETTERS = Array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
-
 FREQ = Array()
-FREQ.set_length(26) # initialize frequency array to all zeros
+FREQ.set_length(26, 0)
 
 loop I from 0 to TEXT.length - 1
     CHAR = TEXT[I]
