@@ -1,4 +1,5 @@
-"""This module provides utility functions for the conversion pseudocode loops into python.
+"""pseudo_conversions_utils/loop_utils.py
+This module provides utility functions for the conversion pseudocode loops into python.
 In doing so, it handle loop-specific syntax errors.
 
 Raises:

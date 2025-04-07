@@ -1,4 +1,6 @@
-"""Module of utils functions that check the validity of variable names"""
+"""
+pseudo_conversions_utils/assignment_utils.py
+Module of utils functions that check the validity of variable names"""
 
 import ast
 from api.compile.pseudo_conversions_utils.general_utils import *

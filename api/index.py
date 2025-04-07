@@ -1,4 +1,5 @@
-"""API Handler for converting and executing pseudocode in python alongisde the input testcase variables."""
+"""Index.py
+API Handler for converting and executing pseudocode in python alongisde the input testcase variables."""
 
 from flask import Flask, request, jsonify
 from api.compile.syntax_runtime_check import syntax_check_and_run_converted

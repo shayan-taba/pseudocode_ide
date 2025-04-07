@@ -274,7 +274,7 @@ const IDE: React.FC<IDEProps> = ({
     processNextTestCase();
   };
 
-  // Process the next test case, or mark the process as complete
+  // Process the next test case, or mark the process as complete in a recursive function
   const processNextTestCase = async () => {
     let isLast = false;
     if (testIndexRef.current >= testCases.length) {

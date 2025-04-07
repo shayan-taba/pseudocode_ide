@@ -1,4 +1,5 @@
-"""Converts "output" to Python print function. If input is used, raises a syntax error.
+"""pseudo_conversions_utils/input_output_utils.py
+Converts "output" to Python print function. If input is used, raises a syntax error.
 
 Raises:
     SyntaxError: if "input" feature is used. This is not required for pseudocode challenges.

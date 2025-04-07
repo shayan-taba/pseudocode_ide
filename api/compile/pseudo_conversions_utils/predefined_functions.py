@@ -1,4 +1,5 @@
-"""This file defines certain functions that will be accessible to the pseudocode. 
+"""pseudo_conversions_utils/predefined_functions.py
+This file defines certain functions that will be accessible to the pseudocode. 
 This is to provide the end-user with certain features simply to develop their pseudocode"""
 
 import math

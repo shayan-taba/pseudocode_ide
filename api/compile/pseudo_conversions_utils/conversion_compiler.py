@@ -1,4 +1,5 @@
 """
+pseudo_conversions_utils/conversion_compiler.py
 Module that converts pseudocode to Python
 Raises SyntaxError if the Pseudocode is deemed to have one.
 """

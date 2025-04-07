@@ -1,4 +1,4 @@
-import asyncio
+"""syntax_runtime_check.py"""
 import traceback
 import io
 from api.compile.ib_dp_datatypes.array import Array
