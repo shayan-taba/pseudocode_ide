@@ -214,6 +214,7 @@ export default function ChallengesPage() {
               <div
                 key={challenge.id}
                 className="bg-slate-800 outline-1 outline p-4 rounded-lg shadow hover:shadow-lg transition"
+                onClick={()=>window.open(`challenges/${challenge.id}`)}
               >
                 <h2 className="text-xl font-bold mb-2">{challenge.title}</h2>
                 <p className="text-sm text-gray-400">
