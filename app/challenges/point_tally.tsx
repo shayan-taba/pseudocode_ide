@@ -1,5 +1,9 @@
 "use client";
 
+// This module defines a componenet used on the home page (challenges) to count
+// and display the total points through inspecting local storage.
+// It is client-side as that is where the browser data is stores.
+
 import { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/24/outline";
 

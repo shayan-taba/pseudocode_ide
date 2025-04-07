@@ -1,3 +1,11 @@
+// This is the IDE itself used in each challenge page.
+// This componenet is provided with the unique challenge's data through params.
+// It then displays that data across various sub-componenets.
+// It also handles sending and recieving the API request of the pseudocode to the backend compiler.
+// Upon recieving the API request, it identifies whether the code encountered errors.
+// If not, it identifies whether each test case passed by comparing the API's output to the expected output from params.
+// It displays these completition results or errors whenever ran. 
+
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -354,10 +362,10 @@ const IDE: React.FC<IDEProps> = ({
             <Instructions width={"w-[35%]"} {...instructionArgs} />
 
             <div className="divider flex flex-col flex-grow justify-between gap-6 w-[65%]">
-              <div className="h-[43%]">
+              <div className="h-[49%]">
                 <Editor width={"flex-grow"} {...editorArgs} />
               </div>
-              <div className="h-[53%] flex-grow">
+              <div className="h-[49%] flex-grow">
                 <Results width={"flex-grow"} {...resultsArgs} />
               </div>
             </div>

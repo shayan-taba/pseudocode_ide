@@ -1,3 +1,8 @@
+// This is a component that enables users to write pseudocode in a colour-formatted editor using the "CodeMirror" library.
+// Users run their code by sending it to the back-end API upon processing a run button.
+// Users can save their code to the browser's local storage to restore progress through an export button.
+// users can return to the prior saved-version through an import button.
+
 import React, { Dispatch, useEffect } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
@@ -14,7 +19,7 @@ import {
   ArrowsPointingInIcon,
   ArrowDownOnSquareIcon, // Load icon
   ArrowUpOnSquareIcon,
-} from "@heroicons/react/24/solid";
+} from "@heroicons/react/24/outline";
 
 import { CodeBracketSquareIcon } from "@heroicons/react/24/outline";
 
@@ -155,7 +160,7 @@ const Editor: React.FC<EditorProps> = ({
             className="nav-btns px-3 bg-yellow-600 hover:bg-yellow-700"
           >
             <ArrowDownOnSquareIcon className="nav-icons" />
-            <p className="hideSmallScreen">Load</p>
+            <p className="hideSmallScreen">Load Saved Code</p>
           </button>
 
           <button

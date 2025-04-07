@@ -25,14 +25,14 @@ def ib_specific_pseudocode_conversion(pseudocode: str):
     for index, line in enumerate(pseudocode.split("\n")):
         string_ranges = get_string_indices_ranges(line)
 
-        if line.strip().startswith("output "):
+        if line.strip().startswith("output "): # The user is trying to use output feature
             original_indent = len(line) - len(line.lstrip())
             python_converted_line = (
                 " " * original_indent + pseudo_output_to_python_print(line.lstrip())
             )
             python_code.append(python_converted_line)
 
-        elif line.strip().startswith("input "):
+        elif line.strip().startswith("input "): # The user is trying to use input feature
             original_indent = len(line) - len(line.lstrip())
             try:
                 converted_expression = pseudo_input_to_python_input(
@@ -94,9 +94,9 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
         "≠": "!=",
         "mod": "%",
         "div": "//",
-        " AND ": "and",  # The surronding spaces ensure variable names with "AND" inside aren't replaced
+        " AND ": " and ",  # The surronding spaces ensure variable names with "AND" inside aren't replaced
         " OR ": "or",
-        " NOT ": "not",
+        " NOT ": " not ",
         "false": "False",
         "true": "True",
     }
@@ -210,7 +210,7 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
 
         if (len(line) - len(line.lstrip())) != current_indent:
             raise SyntaxError(
-                f'on Line {line_number+1}: this line has {abs(len(line) - len(line.lstrip())-current_indent)} {"too many" if (len(line) - len(line.lstrip())-current_indent) > current_indent else "too few"} whitespaces as each indent must be 4 whitespaces'
+                f'on Line {line_number+1}: this line has {abs(len(line) - len(line.lstrip())-current_indent)} {"too many" if (len(line) - len(line.lstrip())-current_indent) > current_indent else "too few"} whitespaces because each indent must be 4 whitespaces or indentation was unexpected'
             )
 
         if line.strip().startswith("loop "):

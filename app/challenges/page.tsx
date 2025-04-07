@@ -1,5 +1,8 @@
 "use client";
 
+// This is the home/challenges page.
+// It provides a searchable and filterable catalogue of all challenges and their associated metadata.
+
 import { useState, useEffect } from "react";
 import PointTally from "./point_tally";
 
@@ -8,6 +11,7 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   LightBulbIcon,
+  StarIcon,
   TrophyIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -86,7 +90,7 @@ export default function ChallengesPage() {
 
   useEffect(() => {
     setSortBy("title");
-  }, []);
+  }, []); // This is default when page loaded.
 
   useEffect(() => {
     const fetchChallenges = async () => {
@@ -124,10 +128,13 @@ export default function ChallengesPage() {
   }, []);
 
   const uniqueTags = Array.from(
-    new Set(challenges.flatMap((challenge) => challenge.tags))
+    new Set(challenges.flatMap((challenge, index) => challenge.tags))
+  );
+  const uniqueDifficulties = Array.from(
+    new Set(challenges.flatMap((challenge, index) => challenge.difficulty))
   );
   const difficulties = ["All", "SL", "HL"];
-  const completionStatuses = ["All", "Complete", "Not Complete"];
+  //const completionStatuses = ["All", "Complete", "Not Complete"]; // This is replaced by the more dynamic "uniqueDifficulties"
 
   const filteredChallenges = challenges
     .filter((challenge) => {
@@ -137,17 +144,17 @@ export default function ChallengesPage() {
       if (
         search &&
         !challenge.title.toLowerCase().includes(search.toLowerCase())
-      )
+      ) // if search is being used, filter out items that dont substring match
         return false;
       if (difficulty !== "All" && challenge.difficulty !== difficulty)
-        return false;
+        return false; // filter out difficulties that aren't chosen
       if (selectedTag !== "All" && !challenge.tags.includes(selectedTag))
-        return false;
-      if (completionFilter === "Complete" && !status) return false;
-      if (completionFilter === "Not Complete" && status) return false;
-      return true;
+        return false; // filter out types that aren't chosen
+      if (completionFilter === "Complete" && !status) return false; // filter out incomplete ones if user selected as such
+      if (completionFilter === "Not Complete" && status) return false; // filter out complete ones if user selected as such
+      return true; // if none of the filters applied, it must be intended
     })
-    .sort((a, b) => (sortBy === "title" ? a.title.localeCompare(b.title) : 0));
+    .sort((a, b) => (sortBy === "title" ? a.title.localeCompare(b.title) : 0)); // default sort by title
 
   return (
     <>
@@ -174,7 +181,7 @@ export default function ChallengesPage() {
             <CustomSelect
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
-              options={difficulties}
+              options={["All", ...uniqueDifficulties]}
             />
           </div>
           <div>
@@ -192,7 +199,7 @@ export default function ChallengesPage() {
             <CustomSelect
               value={completionFilter}
               onChange={(e) => setCompletionFilter(e.target.value)}
-              options={completionStatuses}
+              options={difficulties}
             />
           </div>
         </div>
@@ -206,7 +213,7 @@ export default function ChallengesPage() {
             return (
               <div
                 key={challenge.id}
-                className="bg-slate-800 p-4 rounded-lg shadow hover:shadow-lg transition"
+                className="bg-slate-800 outline-1 outline p-4 rounded-lg shadow hover:shadow-lg transition"
               >
                 <h2 className="text-xl font-bold mb-2">{challenge.title}</h2>
                 <p className="text-sm text-gray-400">
@@ -225,7 +232,7 @@ export default function ChallengesPage() {
                 <div className="flex items-center gap-2 mt-4">
                   {status ? (
                     pointStatus ? (
-                      <TrophyIcon className="h-6 w-6 text-green-400" />
+                      <StarIcon className="h-6 w-6 text-green-400" />
                     ) : (
                       <LightBulbIcon className="h-6 w-6 text-yellow-400" />
                     )
@@ -233,11 +240,13 @@ export default function ChallengesPage() {
                     <XCircleIcon className="h-6 w-6 text-red-400" />
                   )}
                   <span>
-                    {status
-                      ? pointStatus
-                        ? "Challenge complete with points earned."
-                        : "Challenge complete, but no points earned (hint used)."
-                      : "Challenge not complete."}
+                    {
+                      status
+                        ? pointStatus
+                          ? "Completed (1 point)." // if completed and point gained
+                          : "Completed with example-solution (0 points)." // if completed and point not gained
+                        : "Incompleted." /*if incomplete*/
+                    }
                   </span>
                 </div>
 
@@ -254,7 +263,7 @@ export default function ChallengesPage() {
 
         {filteredChallenges.length === 0 && (
           <div className="text-center text-gray-500 mt-6">
-            No challenges found.
+            No challenges found. Please try to refine the filters above or refresh the page.
           </div>
         )}
       </div>

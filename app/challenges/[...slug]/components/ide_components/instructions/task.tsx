@@ -1,3 +1,6 @@
+// Using the params from the XML, this component displays the instructions and example test-cases require to complete the individual challenge.
+// Also, by accessing the local browser-storage, it displays whether the task is completed.
+
 import React, { useState, useEffect } from "react";
 import {
   CheckCircleIcon,
@@ -9,6 +12,7 @@ import {
   ExclamationCircleIcon,
   InformationCircleIcon,
   LightBulbIcon,
+  StarIcon,
   TrophyIcon,
 } from "@heroicons/react/24/outline";
 
@@ -39,7 +43,7 @@ const Task: React.FC<TaskProps> = ({
   outputType,
   storedCompletionStatus,
   testInputsTypes,
-  hintUsed
+  hintUsed,
 }) => {
   const [sections, setSections] = useState({
     task: true,
@@ -67,44 +71,43 @@ const Task: React.FC<TaskProps> = ({
     });
   };
 
-  useEffect(()=>{
-    console.log('herher', storedCompletionStatus, hintUsed)
-  },[storedCompletionStatus, hintUsed])
+  useEffect(() => {
+    console.log("herher", storedCompletionStatus, hintUsed);
+  }, [storedCompletionStatus, hintUsed]);
 
   return (
     <div>
-     <div className="flex flex-col">
-  <h2 className="text-4xl font-bold mb-4">{title}</h2>
+      <div className="flex flex-col">
+        <h2 className="text-4xl font-bold mb-4">{title}</h2>
 
-  {/* Completion Status */}
-  <div className="flex items-center gap-2 mb-4">
-    {storedCompletionStatus.status ? (
-      hintUsed ? (
-        <TrophyIcon className="h-6 w-6 text-yellow-300" /> // Trophy for completed with points
-      ) : (
-        <LightBulbIcon className="h-6 w-6 text-green-300" /> // Lightbulb for hint used
-      )
-    ) : (
-      <ExclamationCircleIcon className="h-6 w-6 text-red-300" /> // Exclamation for incomplete
-    )}
-    <span
-      className={`text-lg font-medium ${
-        storedCompletionStatus.status
-          ? hintUsed
-            ? "text-yellow-300"
-            : "text-green-300"
-          : "text-red-300"
-      }`}
-    >
-      {storedCompletionStatus.status
-        ? hintUsed
-          ? "Challenge complete, but no points earned (hint used)."
-          : "Challenge complete with points earned."
-        : "Challenge not complete."}
-    </span>
-  </div>
-</div>
-
+        {/* Completion Status */}
+        <div className="flex items-center gap-2 mb-4">
+          {storedCompletionStatus.status ? ( // i.e., It is complete
+            hintUsed ? (
+              <LightBulbIcon className="h-6 w-6 text-yellow-300" /> // Lightbublb for completed without points (hint used)
+            ) : (
+              <StarIcon className="h-6 w-6 text-green-300" /> // Trophy for hint unused and completed
+            )
+          ) : (
+            <ExclamationCircleIcon className="h-6 w-6 text-red-300" /> // Exclamation for incomplete.
+          )}
+          <span
+            className={`text-lg font-medium ${
+              storedCompletionStatus.status
+                ? hintUsed
+                  ? "text-yellow-300"
+                  : "text-green-300"
+                : "text-red-300"
+            }`}
+          >
+            {storedCompletionStatus.status
+              ? hintUsed
+                ? "Complete with example-solution (0 points)."
+                : "Complete (1 point)."
+              : "Incomplete."}
+          </span>
+        </div>
+      </div>
 
       {/*<h3 className="text-2xl font-semibold mb-2">Task</h3>*/}
 
@@ -168,7 +171,7 @@ const Task: React.FC<TaskProps> = ({
             </li>
             <li>
               Once ready, press <strong>Run Code</strong> to execute your code
-              and view results in the Outcome/Output panel.
+              and view results in the Results/Output panel.
             </li>
           </ul>
         )}

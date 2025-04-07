@@ -2,7 +2,8 @@
   <challenge>
     <id>1</id>
     <title>Count Numbers in Range</title>
-    <description>Write an algorithm to count how many numbers in a collection are both even and negative numbers.</description>
+    <description>Write an algorithm to count how many numbers in a collection are both even and
+      negative numbers.</description>
     <tags>
       <tag>Collections</tag>
       <tag>Loops</tag>
@@ -60,7 +61,8 @@
   <challenge>
     <id>3</id>
     <title>Find Common IDs</title>
-    <description>Write an algorithm to find the number of students who study both math and economics.</description>
+    <description>Write an algorithm to find the number of students who study both math and
+      economics.</description>
     <tags>
       <tag>Collections</tag>
       <tag>Conditionals</tag>
@@ -94,7 +96,8 @@
   <challenge>
     <id>4</id>
     <title>Stack Sort</title>
-    <description>Write an algorithm to sort a stack of integers in ascending order using a second stack.</description>
+    <description>Write an algorithm to sort a stack of integers in ascending order using a second
+      stack.</description>
     <tags>
       <tag>Stacks</tag>
       <tag>Sorting</tag>
@@ -123,7 +126,8 @@
   <challenge>
     <id>5</id>
     <title>Bracket Matching</title>
-    <description>Write an algorithm to check if the brackets &#40;parentheses, square, curly&#41; in a string are balanced using a stack.</description>
+    <description>Write an algorithm to check if the brackets &#40;parentheses, square, curly&#41; in
+      a string are balanced using a stack.</description>
     <tags>
       <tag>Stacks</tag>
       <tag>Conditionals</tag>
@@ -186,8 +190,10 @@
   <challenge>
     <id>7</id>
     <title>Bubble Sort and Median</title>
-    <description>Sort an array of integers using bubble sort and identify the median value as an integer.</description>
-    <hint>If calculations are used on numbers, then a float may be returned. However, the expected output is of an integer, so "int&#40;FLOAT&#41;" may be used.</hint>
+    <description>Sort an array of integers using bubble sort and identify the median value as an
+      integer.</description>
+    <hint>If calculations are used on numbers, then a float may be returned. However, the expected
+      output is of an integer, so `int&#40;FLOAT&#41;` may be used.</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Bubble Sort</tag>
@@ -216,8 +222,10 @@
   <challenge>
     <id>8</id>
     <title>Nearest Locations Queue</title>
-    <description>Given a 2D array of locations with names and coordinates, return a queue of location names ordered by proximity to a given reference point.</description>
-    <hint>Use can use the function "pow&#40;X, Y&#41;" to obtain X to the power of Y as in integer provided that X and Y are integers.</hint>
+    <description>Given a 2D array of locations with names and coordinates, return a queue of
+      location names ordered by proximity to a given reference point.</description>
+    <hint>Use can use the function `pow&#40;X, Y&#41;` to obtain X to the power of Y as in integer
+      provided that X and Y are integers.</hint>
     <tags>
       <tag>2D Arrays</tag>
       <tag>Queues</tag>
@@ -253,8 +261,10 @@
   <challenge>
     <id>9</id>
     <title>Bubble Sort for Even Numbers</title>
-    <description>Given an array of integers, filter out the even numbers and sort them in ascending order using bubble sort.</description>
-    <hint>Arrays must be initialized with a fixed length. Refer to the documentation for more information</hint>
+    <description>Given an array of integers, filter out the even numbers and sort them in ascending
+      order using bubble sort.</description>
+    <hint>Arrays must be initialized with a fixed length. Refer to the documentation for more
+      information</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Bubble Sort</tag>
@@ -288,6 +298,7 @@
     <tags>
       <tag>Arrays</tag>
       <tag>Conditionals</tag>
+      <tag>Sum</tag>
     </tags>
     <dataTypes>
       <inputType>Array of integers.</inputType>
@@ -314,7 +325,8 @@
     <id>11</id>
     <title>Filter Multiples of X</title>
     <description>Remove numbers that are multiples of a given integer X from an array.</description>
-    <hint>Arrays must be initialized with a fixed length. Refer to the documentation for more information</hint>
+    <hint>Arrays must be initialized with a fixed length. Refer to the documentation for more
+      information</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Conditionals</tag>
@@ -410,6 +422,7 @@
     <tags>
       <tag>Math</tag>
       <tag>Conditionals</tag>
+      <tag>Sum</tag>
     </tags>
     <dataTypes>
       <inputType>Integer for which factors need to be summed.</inputType>
@@ -437,7 +450,9 @@
     <id>15</id>
     <title>Check Prime Number</title>
     <description>Determine if a given integer is a prime number.</description>
-    <hint>You can use the "get_sqrt&#40;NUMBER&#41;" in your solution to obtain the square root of any number as a float. If you wish to use the square_root it as an integer, use "int(FLOAT)" to cnovert it.</hint>
+    <hint>You can use the `get_sqrt&#40;NUMBER&#41;` in your solution to obtain the square root of
+      any number as a float. If you wish to use the square_root it as an integer, use `int(FLOAT)`
+      to cnovert it.</hint>
     <tags>
       <tag>Math</tag>
       <tag>Conditionals</tag>
@@ -466,7 +481,8 @@
   <challenge>
     <id>16</id>
     <title>Greatest Common Divisor</title>
-    <description>Find the greatest common divisor (GCD) of two integers using the Euclidean algorithm.</description>
+    <description>Find the greatest common divisor (GCD) of two integers using the Euclidean
+      algorithm.</description>
     <tags>
       <tag>Math</tag>
       <tag>Algorithm</tag>
@@ -526,4 +542,108 @@
       </testCase>
     </testCases>
   </challenge>
+  <challenge>
+    <id>18</id>
+    <title>Sum of All Elements in an Array</title>
+    <description>Calculate the sum of all elements in an array of integers.</description>
+    <tags>
+      <tag>Arrays</tag>
+      <tag>Sum</tag>
+    </tags>
+    <dataTypes>
+      <inputType>Array of integers.</inputType>
+      <inputName>ARRAY</inputName>
+      <outputType>Integer sum of all elements in the array.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <testCases>
+      <testCase>
+        <input>Array(1, 3, 3, 4)</input>
+        <output>11</output>
+      </testCase>
+      <testCase>
+        <input>Array(0, 0, 0)</input>
+        <output>0</output>
+      </testCase>
+      <testCase>
+        <input>Array(5, 10, 15)</input>
+        <output>30</output>
+      </testCase>
+    </testCases>
+  </challenge>
+  <challenge>
+    <id>19</id>
+    <title>Find the Largest Number in an Array</title>
+    <description>Find the largest number in an array of integers.</description>
+    <tags>
+      <tag>Arrays</tag>
+      <tag>Comparison</tag>
+    </tags>
+    <dataTypes>
+      <inputType>Array of integers.</inputType>
+      <inputName>ARRAY</inputName>
+      <outputType>Integer representing the largest number in the array.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <testCases>
+      <testCase>
+        <input>Array(1, 5, -3, 8, 2)</input>
+        <output>8</output>
+      </testCase>
+      <testCase>
+        <input>Array(10, 20, 32, 40, 50)</input>
+        <output>50</output>
+      </testCase>
+      <testCase>
+        <input>Array(-5, -10, 0, -2)</input>
+        <output>0</output>
+      </testCase>
+    </testCases>
+  </challenge>
+  <challenge>
+    <id>20</id>
+    <title>Ascertain Most Frequent Character</title>
+    <description>Given a string, `TEXT`, return the character that appears most frequently (excluding
+      spaces). Assume a tie cannot exist. Assume a
+      predefined ordered array `LETTERS` contains all 26 lowercase letters (index 0 to 25) of
+      the alphabet in order.</description>
+    <hint>The "length" property may be used on a string. Create a 26-long array initialized to zero by invoking the Array method `set_length(26,0)`
+      method to be able to count how many times each letter in
+      the alphabet appears. Use the
+      index from `LETTERS` to match characters and store their frequencies.</hint>
+    <tags>
+      <tag>Strings</tag>
+      <tag>Loops</tag>
+      <tag>Arrays</tag>
+    </tags>
+    <dataTypes>
+      <inputType>String of characters.</inputType>
+      <inputName>TEXT</inputName>
+      <inputType>Ordered (A-Z) array that contains all lowercase letters (index 0 to 25).</inputType>
+      <inputName>LETTERS</inputName>
+      <outputType>String that is single character representing the most frequent character.</outputType>
+    </dataTypes>
+    <difficulty>SL</difficulty>
+    <testCases>
+      <testCase>
+        <input>CustomString("banana")</input>
+        <input>
+          Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")</input>
+        <output>a</output>
+      </testCase>
+      <testCase>
+        <input>CustomString("hello")</input>
+        <input>
+          Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")</input>
+        <output>l</output>
+      </testCase>
+      <testCase>
+        <input>CustomString("cool")</input>
+        <input>
+          Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")</input>
+        <output>o</output>
+      </testCase>
+    </testCases>
+  </challenge>
+
 </challenges>

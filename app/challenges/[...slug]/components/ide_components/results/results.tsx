@@ -1,4 +1,11 @@
-// components/Output.tsx
+// Firstly, this component displays the results of each test-case.
+// It has logical code to assess the overal status (e.g., pass, fail, error) from the test-cases.
+// If users pass the challenge, it updates the local browser-storage.
+// It also invokes componenets used to display each test-case.
+// Secondly, this component allows users to view the raw command-line output of the Python-executed code of each test-case.
+// This enable users to identify specific runtime/syntax errors and raw-outputs provided each test-case.
+// In doing so, this component allows users to switch between viewing both functions.
+
 import React, { Dispatch, use, useEffect, useRef, useState } from "react";
 
 import {
@@ -42,8 +49,8 @@ const getStatusIcon = (status: string) => {
   if (status.startsWith("Fail"))
     return <XCircleIcon className="h-5 w-5 text-yellow-200" />;
   if (status.includes("Error"))
-    return <ExclamationCircleIcon className="h-5 w-5 text-red-400" />;
-  return <ClockIcon className="h-5 w-5 text-gray-300" />;
+    return <ExclamationCircleIcon className="h-5 w-5 text-red-300" />;
+  return <ClockIcon className="h-5 w-5 text-gray-300 animate-pulse" />;
 };
 
 const Results: React.FC<ResultsProps> = ({
@@ -64,7 +71,6 @@ const Results: React.FC<ResultsProps> = ({
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  console.log(testResults);
   useEffect(() => {
     if (preRef.current) {
       preRef.current.scrollTop = preRef.current.scrollHeight;
@@ -145,13 +151,15 @@ const Results: React.FC<ResultsProps> = ({
             {hasMismatch && <XCircleIcon className="h-5 w-5" />}
             {/*<span>Overall Outcome: </span>*/}
             <span>
-              {allPassed
-                ? "Pass"
-                : hasErrors
-                ? "Error"
-                : hasMismatch
-                ? "Fail"
-                : "Results"}
+              {
+                allPassed
+                  ? "Pass"
+                  : hasErrors
+                  ? "Error"
+                  : hasMismatch
+                  ? "Fail"
+                  : null /*"Results"*/
+              }
             </span>
           </div>
           <div className="text-sm">
@@ -231,12 +239,12 @@ const Results: React.FC<ResultsProps> = ({
             <h1>Output</h1>
             <CommandLineIcon className="nav-icons" />
             {isLoading && (
-              <span className="absolute -top-1 -right-1">
-                <ClockIcon className="h-4 w-4 text-yellow-400 animate-spin" />
+              <span className="absolute top-[0%] left-[110%]">
+                <ClockIcon className="h-4 w-4 text-yellow-400 animate-pulse" />
               </span>
             )}
             {errorCount > 0 && !isLoading && (
-              <span className="absolute top-[0%] left-[110%] bg-red-500 text-xs text-white rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute top-[0%] left-[110%] bg-red-500 text-xs text-white rounded-full w-5 h-5 flex items-center justify-center animate-bounce">
                 {errorCount}
               </span>
             )}
@@ -279,10 +287,10 @@ const Results: React.FC<ResultsProps> = ({
             </pre>
             {!isComplete && (
               <>
-                <p className="text-yellow-200">
+                <p>
                   Waiting for execution to complete. Possible reasons include:
                 </p>
-                <ul className="text-yellow-200 list-disc list-inside">
+                <ul className="list-disc list-inside">
                   <li>The code has not been run.</li>
                   <li>No pseudocode was provided.</li>
                   <li>The pseudcode contains an infinite loop.</li>
@@ -309,7 +317,9 @@ const Results: React.FC<ResultsProps> = ({
                 <button
                   key={index}
                   onClick={() => setSelectedIndex(index)}
-                  className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium transition-all 
+                  className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                    result.status.includes("Error") ? /*"animate-bounce"*/ "" : ""
+                  }
                   ${
                     selectedIndex === index
                       ? "bg-violet-500 text-white"

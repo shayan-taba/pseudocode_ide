@@ -474,10 +474,10 @@ PREFERRED_STRING = CustomString("abc") # Subclass of Python string with addition
       </>
     ),
     constructorExample: `MY_ARRAY = Array()
-MY_ARRAY.set_length(5)
+MY_ARRAY.set_length(5, 0) # Initialize array with size of five all set to zero.
 MY_ARRAY[0] = "Hello"
 MY_ARRAY[1] = 42
-output MY_ARRAY # Array(["Hello",42,None,None,None])
+output MY_ARRAY # Array(["Hello",42,0,0,0])
 
 ANOTHER_ARRAY = Array(1,2,3)
 ANOTHER_ARRAY[0] = 4
@@ -485,9 +485,9 @@ ANOTHER_ARRAY[1] = 2
 output ANOTHER_ARRAY # Array([4,2,3])`,
     methods: [
       {
-        name: "set_length(length: number)",
+        name: "set_length(length: number, value: any = None)",
         description:
-          "Sets the array's size. Raises an error if size is not a positive integer.",
+          "Sets the array's size to `number`. Values initialized to `value` if provided or otherwise similar to Python's `NoneType`. Raises an error if size is not a positive integer.",
       },
       {
         name: "initialize_values(...values)",

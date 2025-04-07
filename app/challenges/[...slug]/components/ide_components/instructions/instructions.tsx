@@ -1,4 +1,6 @@
-// components/TaskDescription.tsx
+// This component renders instructions on the challenge being viewed, its current completion status, and example-solutions.
+// It relies on two sub-componenets to do so.
+// This component enables users to switch between viewing those two sub-components.
 
 import {
   ArrowsPointingOutIcon,

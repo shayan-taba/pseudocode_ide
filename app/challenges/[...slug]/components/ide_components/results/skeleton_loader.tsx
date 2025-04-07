@@ -1,3 +1,6 @@
+// Skeleton loader component of each test-case result.
+// It is invoked for each test-case when waiting for user to run the code or execution completion.
+
 import React from "react";
 
 const SkeletonLoader: React.FC<{ input: any; expected: any; isLast: boolean }> = ({
@@ -41,7 +44,7 @@ const SkeletonLoader: React.FC<{ input: any; expected: any; isLast: boolean }> =
                 ) : (
                   <div className="space-y-1">
                     {input.map((_val: any, i: number) => (
-                      <div key={i} className={skeletonBar + " w-48"} />
+                      <div key={i} className={" w-48"}>{_val}</div>
                     ))}
                   </div>
                 )}
@@ -56,7 +59,13 @@ const SkeletonLoader: React.FC<{ input: any; expected: any; isLast: boolean }> =
                 Output
               </td>
               <td className="border border-gray-700 px-3 py-2">
-                {isLast ? "Hidden" : <div className={skeletonBar + " w-48"} />}
+              {isLast ? (
+                  "Hidden"
+                ) : (
+                  <div className="space-y-1">
+                      <div className={" w-48"}>{expected}</div>
+                  </div>
+                )}
               </td>
             </tr>
 

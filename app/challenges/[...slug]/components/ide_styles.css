@@ -100,6 +100,6 @@
   }
 
   .hideSmallScreen {
-    @apply hidden;
+    @apply sm:hidden lg:block;
   }
 }

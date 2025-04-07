@@ -1,3 +1,7 @@
+// This creates a client-side handler in order to access the challenges in the public-static assets XML file.
+// It gets the intended challenged from the slug and processes the challenge's data from the XML file.
+// It then passes the data as params to the IDE.
+
 "use client";
 
 import { useEffect, useState } from "react";

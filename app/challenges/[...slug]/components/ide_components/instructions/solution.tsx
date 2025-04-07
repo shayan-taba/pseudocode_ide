@@ -1,3 +1,6 @@
+// This component allows the user to view the example-solution.
+// If they choose so, it will update the local storage to prevent them from obtaining points on this challenge.
+
 import { Dispatch, SetStateAction, useState } from "react";
 import {
   ExclamationCircleIcon,
@@ -15,7 +18,7 @@ const Solution: React.FC<SolutionProps> = ({
   exampleSolution,
   id,
   storedCompletionStatus,
-  setHintUsed
+  setHintUsed,
 }) => {
   const [message, setMessage] = useState("");
   const [showWarning, setShowWarning] = useState(false);
@@ -71,11 +74,13 @@ const Solution: React.FC<SolutionProps> = ({
             } flex items-center space-x-2`}
             style={{ borderColor: showWarning ? "#16a34a" : "#f59e0b" }}
           >
-            <ExclamationCircleIcon
-              className={`w-[60px] ${
-                showWarning ? "text-green-600" : "text-[#f59e0b]"
-              }`}
-            />
+            {!acknowledged ? (
+              <ExclamationCircleIcon
+                className={`w-[60px] ${
+                  showWarning ? "text-green-600" : "text-[#f59e0b]"
+                }`}
+              />
+            ) : null}
             <div
               className={`font-semibold ${
                 showWarning ? "text-green-700" : "text-yellow-600"

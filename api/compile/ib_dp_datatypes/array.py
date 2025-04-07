@@ -38,11 +38,12 @@ class Array:
         """
         return self._length
 
-    def set_length(self, length_being_set: int) -> None:
+    def set_length(self, length_being_set: int, initial_value: any = None) -> None:
         """Sets the length of the array and preallocates space with "None" values.
 
         Args:
             length_being_set (int): The desired length of the array. Must be an integer greater or equal to zero.
+            initial_value (any): The value that all elements will be initialized with. If unspecified, it defaults to None type.
 
         Raises:
             ValueError: If the length is set after initialization or if the length is not valid.
@@ -53,7 +54,7 @@ class Array:
         if not isinstance(length_being_set, int) or length_being_set < 0:
             raise ValueError("Length must be a non-negative and non-zero integer.")
         self._length = length_being_set
-        self._data = [None] * length_being_set  # Preallocate space.
+        self._data = [initial_value] * length_being_set  # Preallocate space.
         self._initialized = True
 
     def initialize_values(self, *values) -> None:

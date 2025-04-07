@@ -1,3 +1,5 @@
+// The component used for each test-case result that displays whether it failed/passed or had errors.
+
 import React, { useState } from "react";
 import SkeletonLoader from "./skeleton_loader";
 import { TestResultType } from "../../ide";
@@ -34,19 +36,19 @@ const TestCaseResult: React.FC<{
     <div
       className={"border p-4 rounded-md mb-4" + " " + getStatusClass("border")}
     >
-      <div className="font-bold underline underline-offset-3">
+      {/*<div className="font-bold underline underline-offset-3">
         {!isLast && `Test Case ${testCaseIndex + 1}`}
         {isLast && (
           <span className="">
             Test Case {testCaseIndex + 1} (Hidden Test Case)
           </span>
         )}
-      </div>
+      </div>*/}
 
       {result.status === "Pending" ? (
         <SkeletonLoader
           input={result.input}
-          expected={result.expected}
+          expected={JSON.stringify(result.expected)}
           isLast={isLast}
         />
       ) : (
@@ -97,9 +99,7 @@ const TestCaseResult: React.FC<{
                 {/* Expected Output */}
                 <tr>
                   <td className="border border-gray-700 px-3 py-2">
-                    Expected
-                    <br />
-                    Output
+                    Expected Output
                   </td>
                   <td className="border border-gray-700 px-3 py-2">
                     {isLast
@@ -113,9 +113,7 @@ const TestCaseResult: React.FC<{
                 {/* Actual Output */}
                 <tr>
                   <td className="border border-gray-700 px-3 py-2">
-                    Actual
-                    <br />
-                    Output
+                    Actual Output
                   </td>
                   <td className="border border-gray-700 px-3 py-2">
                     {isLast
