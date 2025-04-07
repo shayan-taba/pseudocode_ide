@@ -1,13 +1,19 @@
 // components/Output.tsx
-import React, { Dispatch, useEffect, useRef } from "react";
+import React, { Dispatch, use, useEffect, useRef, useState } from "react";
 
 import {
   TrashIcon,
-  CommandLineIcon,
   CheckCircleIcon,
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
+  ExclamationCircleIcon,
+  XCircleIcon,
+  ClockIcon,
 } from "@heroicons/react/24/solid";
+import {
+  CheckCircleIcon as CheckCircleIconOutline,
+  CommandLineIcon,
+} from "@heroicons/react/24/outline";
 import TestCaseResult from "./test_case_results";
 import { TestResultType } from "../../ide";
 import Link from "next/link";
@@ -30,6 +36,16 @@ interface ResultsProps {
   }[];
 }
 
+const getStatusIcon = (status: string) => {
+  if (status === "Pass")
+    return <CheckCircleIcon className="h-5 w-5 text-green-400" />;
+  if (status.startsWith("Fail"))
+    return <XCircleIcon className="h-5 w-5 text-yellow-200" />;
+  if (status.includes("Error"))
+    return <ExclamationCircleIcon className="h-5 w-5 text-red-400" />;
+  return <ClockIcon className="h-5 w-5 text-gray-300" />;
+};
+
 const Results: React.FC<ResultsProps> = ({
   id,
   width,
@@ -46,6 +62,9 @@ const Results: React.FC<ResultsProps> = ({
 }) => {
   const preRef = useRef<HTMLPreElement>(null);
 
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  console.log(testResults);
   useEffect(() => {
     if (preRef.current) {
       preRef.current.scrollTop = preRef.current.scrollHeight;
@@ -91,82 +110,108 @@ const Results: React.FC<ResultsProps> = ({
   }, [testResults, id]);
 
   const summarizeTestResults = () => {
-    const allPassed = testResults.every((result) => result.status === "Pass");
-    const hasErrors = testResults.some(
+    const passCount = testResults.filter(
+      (result) => result.status === "Pass"
+    ).length;
+    const errorCount = testResults.filter((result) =>
+      result.status.includes("Error")
+    ).length;
+    const failCount = testResults.filter(
       (result) =>
-        result.status.includes("Error") ||
+        (result.status === "Fail" && result.actual !== result.expected) ||
         result.status === "Fail (Multiple Outputs)"
-    );
-    const hasMismatch = testResults.some(
-      (result) => result.status === "Fail" && result.actual !== result.expected
-    );
+    ).length;
+
+    const allPassed = passCount === testResults.length;
+    const hasErrors = errorCount > 0;
+    const hasMismatch = failCount > 0;
 
     return (
       <>
-        <div className="flex flex-col">
-          {allPassed && (
-            <>
-              <div className="text-green-300 w-[100%] items-center flex flex-row gap-2 font-bold">
-                Overall Status: Pass
-                {/*<CheckCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
-              </div>
-              <span className="text-green-300">All tests passed!</span>
-            </>
-          )}
-
-          {hasErrors && (
-            <>
-              <div className="text-red-300 w-[100%] items-center flex flex-row gap-2 font-bold">
-                Overall Status: Error
-                {/*<ExclamationCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
-              </div>
-              <span className="text-red-300">
-                Syntax or runtime errors occurred on at least one &quot;Test
-                Case&quot;. Check the output console for details on the error
-                and to see on which Test Case(s) this occurred.
-                <br />
+        <div
+          className={`p-4 rounded-xl mb-4 ring-1 ring-inset ${
+            allPassed
+              ? "bg-green-900/30 text-green-200 ring-green-600/40"
+              : hasErrors
+              ? "bg-red-900/30 text-red-200 ring-red-600/40"
+              : hasMismatch
+              ? "bg-yellow-900/30 text-yellow-200 ring-yellow-600/40"
+              : "bg-slate-800 text-slate-100 ring-slate-600/30"
+          }`}
+        >
+          <div className="flex items-center gap-2 font-bold text-lg mb-1">
+            {allPassed && <CheckCircleIcon className="h-5 w-5" />}
+            {hasErrors && <ExclamationCircleIcon className="h-5 w-5" />}
+            {hasMismatch && <XCircleIcon className="h-5 w-5" />}
+            {/*<span>Overall Outcome: </span>*/}
+            <span>
+              {allPassed
+                ? "Pass"
+                : hasErrors
+                ? "Error"
+                : hasMismatch
+                ? "Fail"
+                : "Results"}
+            </span>
+          </div>
+          <div className="text-sm">
+            {allPassed && (
+              <>
+                All tests passed! ({passCount} test{passCount > 1 ? "s" : ""}{" "}
+                passed)
+              </>
+            )}
+            {hasErrors && (
+              <>
+                Syntax or runtime errors occurred in {errorCount} test case
+                {errorCount > 1 ? "s" : ""}. Check the console for further
+                details.
                 <br />
                 Refer to the{" "}
                 <Link
-                  className="text-blue-300 underline hover:text-blue-500"
-                  href={"/documentation"}
+                  className="text-blue-300 underline hover:text-blue-500 transition-colors"
+                  href="/documentation"
                 >
                   Documentation
-                </Link>{" "}
-                to understand the potential runtime and syntax errors.
-              </span>
-            </>
-          )}
-          {hasMismatch && (
-            <>
-              <div className="text-yellow-300 w-[100%] items-center flex flex-row gap-2 font-bold">
-                Overall Status: Fail
-                {/*<XCircleIcon className="h-5 w-5 mr-2" />*/}{" "}
-              </div>
-              <span className="text-yellow-300">
-                No errors occurred, but the output wasn&apos;t expected on at
-                least one &quot;Test Case&quot;. Click on &quot;Show
-                Details&quot; for further information in any of the failed
-                &quot;Test Cases&quot; below.
-              </span>
-            </>
-          )}
-          {!allPassed && !hasErrors && !hasMismatch && (
-            <p className="text-lg font-bold">
-              Run your code to see the results below. For more information, go
-              to <em>"output"</em>.
-            </p>
-          )}
+                </Link>
+                .
+              </>
+            )}
+            {hasMismatch && (
+              <>
+                {failCount} test case{failCount > 1 ? "s" : ""} did not match
+                the expected result, or had multiple outputs. Click on test
+                cases below for details.
+              </>
+            )}
+            {!allPassed &&
+              !hasErrors &&
+              !hasMismatch &&
+              "Run your code to see the results below."}
+          </div>
         </div>
       </>
     );
   };
 
+  const [errorCount, setErrorCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const errorCases = testResults.filter((r) =>
+      r.status.includes("Error")
+    ).length;
+    const hasPending = testResults.some((r) => r.status === "Pending");
+
+    setErrorCount(errorCases);
+    setIsLoading(output.length > 0 && hasPending);
+  }, [testResults, output]);
+
   return (
     <div
       className={`container-els ${!expandResults ? "h-[100%]" : ""} ${width}`}
     >
-      <div className="container-headings text-purple-400">
+      <div className="container-headings text-violet-400">
         <div className="container-nav-box">
           <div
             className={`container-navs ${
@@ -174,17 +219,27 @@ const Results: React.FC<ResultsProps> = ({
             }`}
             onClick={toggleResultsState}
           >
-            <h1>Outcome</h1>
-            <CheckCircleIcon className="nav-icons" />
+            <h1>Results</h1>
+            <CheckCircleIconOutline className="nav-icons" />
           </div>
           <div
             className={`container-navs ${
               resultState !== "output" ? "inactive" : ""
-            }`}
+            } relative`}
             onClick={toggleResultsState}
           >
             <h1>Output</h1>
             <CommandLineIcon className="nav-icons" />
+            {isLoading && (
+              <span className="absolute -top-1 -right-1">
+                <ClockIcon className="h-4 w-4 text-yellow-400 animate-spin" />
+              </span>
+            )}
+            {errorCount > 0 && !isLoading && (
+              <span className="absolute top-[0%] left-[110%] bg-red-500 text-xs text-white rounded-full w-5 h-5 flex items-center justify-center">
+                {errorCount}
+              </span>
+            )}
           </div>
         </div>
         <div className="container-utils-box">
@@ -217,37 +272,66 @@ const Results: React.FC<ResultsProps> = ({
           <>
             <pre
               ref={preRef}
-              className="text-white bg-zinc-950 p-2 scrollable-container rounded min-h-8"
+              className="text-white bg-slate-950 p-2 scrollable-container rounded min-h-8"
               style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}
             >
               {output.join("\n")}
             </pre>
             {!isComplete && (
-              <p className="text-yellow-200">
-                Waiting for Execution Completion - either no output has been
-                given or the code hasn't been run.
-              </p>
+              <>
+                <p className="text-yellow-200">
+                  Waiting for execution to complete. Possible reasons include:
+                </p>
+                <ul className="text-yellow-200 list-disc list-inside">
+                  <li>The code has not been run.</li>
+                  <li>No pseudocode was provided.</li>
+                  <li>The pseudcode contains an infinite loop.</li>
+                </ul>
+              </>
             )}
-            {isComplete &&
-              (output.join("\n").includes("Code executed successfully.") ? (
+            {
+              isComplete && (
+                <p className="text-green-200">Execution Completed</p>
+              )
+              /*(output.join("\n").includes("Code executed successfully.") ? (
                 <p className="text-green-200">Execution Completed</p>
               ) : (
                 <p className="text-red-200">Error on Conversion to Python</p>
-              ))}
+              ))*/
+            }
           </>
         )}
         {resultState == "outcome" && (
-          <div className="pr-4 rounded-md scrollable-container">
-            <div className="summary mb-4 text-lg">{summarizeTestResults()}</div>
-            {testResults.map((result, index) => (
+          <div className="mb-4 scrollable-container pr-4">
+            <div>{summarizeTestResults()}</div>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {testResults.map((result, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedIndex(index)}
+                  className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium transition-all 
+                  ${
+                    selectedIndex === index
+                      ? "bg-violet-500 text-white"
+                      : "bg-slate-700 text-zinc-300 hover:bg-slate-600"
+                  }`}
+                >
+                  {getStatusIcon(result.status)}
+                  {index === testResults.length - 1
+                    ? "Hidden Test Case"
+                    : `Test Case ${index + 1}`}
+                </button>
+              ))}
+            </div>
+
+            <div className="w-full">
               <TestCaseResult
-                key={index}
-                testCaseIndex={index}
-                result={result}
-                isLast={index === testResults.length - 1}
+                testCaseIndex={selectedIndex}
+                result={testResults[selectedIndex]}
+                isLast={selectedIndex === testResults.length - 1}
                 testInputsTypes={testInputsTypes}
               />
-            ))}
+            </div>
           </div>
         )}
       </div>

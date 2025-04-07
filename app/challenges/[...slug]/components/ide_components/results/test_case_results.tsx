@@ -11,12 +11,6 @@ const TestCaseResult: React.FC<{
     type: string;
   }[];
 }> = ({ testCaseIndex, result, isLast, testInputsTypes }) => {
-  const [isExpanded, setIsExpanded] = useState(false); // For collapsing the input/expected output
-
-  const handleExpandToggle = () => {
-    setIsExpanded((prev) => !prev);
-  };
-
   const getStatusClass = (typeClass: "border" | "text") => {
     switch (result.status) {
       case "Pass":
@@ -38,9 +32,7 @@ const TestCaseResult: React.FC<{
 
   return (
     <div
-      className={
-        "border w-ma p-4 rounded-md mb-4" + " " + getStatusClass("border")
-      }
+      className={"border p-4 rounded-md mb-4" + " " + getStatusClass("border")}
     >
       <div className="font-bold underline underline-offset-3">
         {!isLast && `Test Case ${testCaseIndex + 1}`}
@@ -61,79 +53,82 @@ const TestCaseResult: React.FC<{
         <>
           <div className="mt-2 flex justify-between items-center">
             <div>
-              <span className="font-bold">Status:</span>{" "}
+              <span className="font-bold">Outcome:</span>{" "}
               <span className={getStatusClass("text")}>{result.status}</span>
             </div>
-
-            {/* Toggle button to expand/collapse details */}
-            <button
-              onClick={handleExpandToggle}
-              className="text-lg underline text-blue-300 w-[30%] text-right"
-            >
-              {isExpanded ? "Hide Details" : "Show Details"}
-            </button>
           </div>
 
-          <div className={`mt-2 ${isExpanded ? "" : "hidden"}`}>
-            {
-              <>
-                {isLast && (
-                  <p className="text-justify">
-                    The hidden test case is a special test case used to verify
-                    your solution. Its input and expected output are not
-                    displayed. You will only see the output and whether your
-                    solution passes or fails for this case, but not the specific
-                    values being tested. This ensures a fair assessment of your
-                    code&apos;s correctness.
-                  </p>
-                )}
-                <div className="mt-2">
-                  <span className="font-bold">Input:</span>
-                  <div className="text-gray-300 space-y-1">
-                    {!isLast &&
-                      result.input.map((inputValue, index) => {
-                        const variable = testInputsTypes[index]; // Get the variable name from the testInputsTypes
-                        return (
-                          <div
-                            key={index}
-                            className="flex items-center space-x-2"
-                          >
-                            <span className="font-medium text-blue-300">
-                              {variable.name}:
-                            </span>
-                            <span>{inputValue}</span>
-                          </div>
-                        );
-                      })}
-                    {isLast && "hidden"}
-                  </div>
-                </div>
+          <div className="mt-2 overflow-x-auto">
+            <table className="table-auto w-full text-left border-collapse border border-gray-700 text-sm text-gray-300">
+              <thead>
+                <tr className="bg-gray-800">
+                  <th className="border border-gray-700 px-3 py-2">Field</th>
+                  <th className="border border-gray-700 px-3 py-2">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Input row(s) */}
+                <tr>
+                  <td className="border border-gray-700 px-3 py-2 align-top">
+                    Input
+                  </td>
+                  <td className="border border-gray-700 px-3 py-2">
+                    {isLast ? (
+                      "Hidden"
+                    ) : (
+                      <div className="space-y-1">
+                        {result.input.map((inputValue, index) => {
+                          const variable = testInputsTypes[index];
+                          return (
+                            <div key={index}>
+                              <span className="font-medium text-blue-300">
+                                {variable.name}
+                              </span>
+                              {" = "}
+                              {inputValue}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </td>
+                </tr>
 
-                <div className="mt-2">
-                  <span className="font-bold">Expected Output:</span>{" "}
-                  <span className="text-gray-300">
-                    {!isLast &&
-                      (JSON.stringify(result.expected).length > 100
-                        ? `${JSON.stringify(result.expected).slice(0, 100)}...`
-                        : JSON.stringify(result.expected))}
-                    {isLast && "hidden"}
-                  </span>
-                </div>
-              </>
-            }
+                {/* Expected Output */}
+                <tr>
+                  <td className="border border-gray-700 px-3 py-2">
+                    Expected
+                    <br />
+                    Output
+                  </td>
+                  <td className="border border-gray-700 px-3 py-2">
+                    {isLast
+                      ? "Hidden"
+                      : JSON.stringify(result.expected).length > 100
+                      ? `${JSON.stringify(result.expected).slice(0, 100)}...`
+                      : JSON.stringify(result.expected)}
+                  </td>
+                </tr>
 
-            <div className="mt-2">
-              <span className="font-bold">Actual Output:</span>{" "}
-              <span className="text-gray-300">
-                {isLast && "Output Hidden"}
-                {!isLast &&
-                  (JSON.stringify(result.actual).length > 100
-                    ? `${JSON.stringify(result.actual[0]).slice(0, 100)}...`
-                    : result.actual[0]
-                    ? JSON.stringify(result.actual[0])
-                    : "None")}
-              </span>
-            </div>
+                {/* Actual Output */}
+                <tr>
+                  <td className="border border-gray-700 px-3 py-2">
+                    Actual
+                    <br />
+                    Output
+                  </td>
+                  <td className="border border-gray-700 px-3 py-2">
+                    {isLast
+                      ? "Hidden"
+                      : result.actual[0]
+                      ? JSON.stringify(result.actual[0]).length > 100
+                        ? `${JSON.stringify(result.actual[0]).slice(0, 100)}...`
+                        : JSON.stringify(result.actual[0])
+                      : "None"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </>
       )}

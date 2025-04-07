@@ -1,11 +1,11 @@
 // components/TaskDescription.tsx
 
 import {
-  BookOpenIcon,
-  DocumentTextIcon,
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
 } from "@heroicons/react/24/solid";
+
+import {   BookOpenIcon, DocumentTextIcon } from "@heroicons/react/24/outline"
 
 import { Dispatch, useEffect, useState } from "react";
 

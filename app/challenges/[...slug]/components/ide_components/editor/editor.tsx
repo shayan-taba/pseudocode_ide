@@ -13,8 +13,10 @@ import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
   ArrowDownOnSquareIcon, // Load icon
-  ArrowUpOnSquareIcon, // Save icon
+  ArrowUpOnSquareIcon,
 } from "@heroicons/react/24/solid";
+
+import { CodeBracketSquareIcon } from "@heroicons/react/24/outline";
 
 const myTheme = createTheme({
   theme: "light",
@@ -132,10 +134,11 @@ const Editor: React.FC<EditorProps> = ({
         !expandEditor ? "h-[100%]" : ""
       } ${width}`}
     >
-      <div className="container-headings text-green-400">
+      <div className="container-headings text-emerald-400">
         <div className="container-nav-box">
           <div className={"container-navs"}>
             <h1>Pseudocode</h1>
+            <CodeBracketSquareIcon className="nav-icons" />
           </div>
         </div>
         <div className="container-utils-box">

@@ -82,7 +82,7 @@ const Task: React.FC<TaskProps> = ({
       hintUsed ? (
         <TrophyIcon className="h-6 w-6 text-yellow-300" /> // Trophy for completed with points
       ) : (
-        <LightBulbIcon className="h-6 w-6 text-blue-300" /> // Lightbulb for hint used
+        <LightBulbIcon className="h-6 w-6 text-green-300" /> // Lightbulb for hint used
       )
     ) : (
       <ExclamationCircleIcon className="h-6 w-6 text-red-300" /> // Exclamation for incomplete
@@ -92,7 +92,7 @@ const Task: React.FC<TaskProps> = ({
         storedCompletionStatus.status
           ? hintUsed
             ? "text-yellow-300"
-            : "text-blue-300"
+            : "text-green-300"
           : "text-red-300"
       }`}
     >
@@ -132,7 +132,7 @@ const Task: React.FC<TaskProps> = ({
         ))}
         <span
           key={difficulty}
-          className="px-3 py-1 text-sm font-semibold bg-purple-500 rounded-full"
+          className="px-3 py-1 text-sm font-semibold bg-violet-500 rounded-full"
         >
           Difficulty: {difficulty}
         </span>
@@ -204,10 +204,10 @@ const Task: React.FC<TaskProps> = ({
             ))}
             <div className="p-3 bg-slate-800 border border-slate-600 rounded-lg">
               <p className="text-sm">
-                <strong className="block text-purple-300 mb-1">
+                <strong className="block text-violet-300 mb-1">
                   Output Type:
                 </strong>
-                <span className="text-purple-300">{outputType}</span>
+                <span className="text-violet-300">{outputType}</span>
               </p>
             </div>
           </div>
@@ -261,10 +261,10 @@ const Task: React.FC<TaskProps> = ({
               {/* Displaying the expected output */}
               <div className="p-3 bg-slate-800 border border-slate-600 rounded-lg">
                 <p className="text-sm">
-                  <strong className="block text-purple-300 mb-1">
+                  <strong className="block text-violet-300 mb-1">
                     Expected Output:
                   </strong>
-                  <span className="text-purple-300">
+                  <span className="text-violet-300">
                     {/*JSON.stringify(*/ testCases[0].output /*)*/}
                   </span>
                 </p>

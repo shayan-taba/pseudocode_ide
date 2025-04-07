@@ -217,12 +217,12 @@ const IDE: React.FC<IDEProps> = ({
     if (!isError && isLast) {
       setOutput((prev) => [
         ...prev,
-        "[" + "_".repeat(4) + " OUTPUT HIDDEN " + "_".repeat(4) + "]"
+        "=".repeat(3) + " Output Hidden " + "=".repeat(3)
       ]); // Append new output
     } else {
       setOutput((prev) => [
         ...prev,
-        data.replace(new RegExp(uuid + " ", "g"), ""),
+        data.replace(new RegExp(uuid + " ", "g"), "")+"\n",
       ]); // Append new output
     }
 
@@ -289,7 +289,7 @@ const IDE: React.FC<IDEProps> = ({
 
     setOutput((prev) => [
       ...prev,
-      "[" + "_".repeat(4) + ` TEST CASE ${testIndexRef.current} ` + "_".repeat(4) + "]",
+      "=".repeat(3) + ` Running Test Case ${testIndexRef.current + 1} ` + "=".repeat(3),
     ]); // Append new output
 
     await fetchFromBackend(isLast, testIndexRef.current); // Process current test case
@@ -351,13 +351,13 @@ const IDE: React.FC<IDEProps> = ({
 
         {!expandInstructions && !expandEditor && !expandResults && (
           <>
-            <Instructions width={"w-[40%]"} {...instructionArgs} />
+            <Instructions width={"w-[35%]"} {...instructionArgs} />
 
-            <div className="divider flex flex-col flex-grow justify-between gap-6 w-[60%]">
-              <div className="h-[49%]">
+            <div className="divider flex flex-col flex-grow justify-between gap-6 w-[65%]">
+              <div className="h-[43%]">
                 <Editor width={"flex-grow"} {...editorArgs} />
               </div>
-              <div className="h-[49%] flex-grow">
+              <div className="h-[53%] flex-grow">
                 <Results width={"flex-grow"} {...resultsArgs} />
               </div>
             </div>
