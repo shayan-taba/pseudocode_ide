@@ -1,12 +1,9 @@
-// Firstly, this component displays the results of each test-case.
-// It has logical code to assess the overal status (e.g., pass, fail, error) from the test-cases.
-// If users pass the challenge, it updates the local browser-storage.
-// It also invokes componenets used to display each test-case.
-// Secondly, this component allows users to view the raw command-line output of the Python-executed code of each test-case.
-// This enable users to identify specific runtime/syntax errors and raw-outputs provided each test-case.
-// In doing so, this component allows users to switch between viewing both functions.
+// This component displays the results of individual test cases and allows the user
+// to toggle between viewing the test results and raw command-line output from the Python-executed code.
+// It assesses the overall status (Pass, Fail, Error) of the test cases and updates the local storage if all tests pass.
+// Additionally, it provides a detailed view of each test case's execution output and the associated runtime/syntax errors.
 
-import React, { Dispatch, use, useEffect, useRef, useState } from "react";
+import React, { Dispatch, useEffect, useRef, useState } from "react";
 
 import {
   TrashIcon,
@@ -28,31 +25,30 @@ import Link from "next/link";
 interface ResultsProps {
   id: number;
   width: string;
-  output: string[];
-  isComplete: boolean;
-  onClearOutput: () => void;
-  expandResults: boolean;
-  setExpandResults: Dispatch<React.SetStateAction<boolean>>;
-  resultState: "outcome" | "output";
-  toggleResultsState: () => void;
-  testResults: TestResultType[];
-  setCompleteStatus: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  output: string[]; // Stores the raw output of the Python code
+  isComplete: boolean; // Indicates whether the execution is completed
+  onClearOutput: () => void; // Function to clear the output view
+  expandResults: boolean; // Determines if the results should be expanded
+  setExpandResults: Dispatch<React.SetStateAction<boolean>>; // Function to toggle expand results state
+  resultState: "outcome" | "output"; // Tracks whether the results or output are currently visible
+  toggleResultsState: () => void; // Toggles between outcome and output views
+  testResults: TestResultType[]; // List of results for each individual test case
+  setCompleteStatus: React.Dispatch<React.SetStateAction<boolean | undefined>>; // Updates the completion status of the test cases
   testInputsTypes: {
     name: string;
     type: string;
-  }[];
+  }[]; // Defines the input types for each test case
 }
 
+// Helper function to determine the status icon based on the result status
 const getStatusIcon = (status: string) => {
-  if (status === "Pass")
-    return <CheckCircleIcon className="h-5 w-5 text-green-400" />;
-  if (status.startsWith("Fail"))
-    return <XCircleIcon className="h-5 w-5 text-yellow-200" />;
-  if (status.includes("Error"))
-    return <ExclamationCircleIcon className="h-5 w-5 text-red-300" />;
+  if (status === "Pass") return <CheckCircleIcon className="h-5 w-5 text-green-400" />;
+  if (status.startsWith("Fail")) return <XCircleIcon className="h-5 w-5 text-yellow-200" />;
+  if (status.includes("Error")) return <ExclamationCircleIcon className="h-5 w-5 text-red-300" />;
   return <ClockIcon className="h-5 w-5 text-gray-300 animate-pulse" />;
 };
 
+// Main component displaying results and raw output of test cases
 const Results: React.FC<ResultsProps> = ({
   id,
   width,
@@ -71,27 +67,26 @@ const Results: React.FC<ResultsProps> = ({
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  // Scroll to the latest output when it changes
   useEffect(() => {
     if (preRef.current) {
       preRef.current.scrollTop = preRef.current.scrollHeight;
     }
-  }, [output, resultState]); // Runs whenever "output", "resultState" changes
+  }, [output, resultState]);
 
+  // Update the completion status and save to localStorage if all tests pass
   useEffect(() => {
     const allPassed = testResults.every((result) => result.status === "Pass");
 
-    // Update localStorage with the completion status
     if (allPassed) {
       const saveResultStatus = (challengeId: number) => {
-        // Check for the challenge ID in localStorage
         const key = `challenge-${challengeId}`;
         const existingData = localStorage.getItem(key);
 
-        let updatedData = { status: allPassed, points: true }; // Sets to true
+        let updatedData = { status: allPassed, points: true };
 
         if (existingData) {
           try {
-            // Parse and update existing data
             const parsedData = JSON.parse(existingData);
             updatedData = {
               ...parsedData,
@@ -103,18 +98,17 @@ const Results: React.FC<ResultsProps> = ({
           }
         }
 
-        // Save back to localStorage
         localStorage.setItem(key, JSON.stringify(updatedData));
       };
 
       saveResultStatus(id);
-
       setCompleteStatus(true);
     } else {
       setCompleteStatus(false);
     }
   }, [testResults, id]);
 
+  // Summarizes the results by calculating counts for passes, failures, and errors
   const summarizeTestResults = () => {
     const passCount = testResults.filter(
       (result) => result.status === "Pass"
@@ -149,31 +143,25 @@ const Results: React.FC<ResultsProps> = ({
             {allPassed && <CheckCircleIcon className="h-5 w-5" />}
             {hasErrors && <ExclamationCircleIcon className="h-5 w-5" />}
             {hasMismatch && <XCircleIcon className="h-5 w-5" />}
-            {/*<span>Overall Outcome: </span>*/}
             <span>
-              {
-                allPassed
-                  ? "Pass"
-                  : hasErrors
-                  ? "Error"
-                  : hasMismatch
-                  ? "Fail"
-                  : null /*"Results"*/
-              }
+              {allPassed
+                ? "Pass"
+                : hasErrors
+                ? "Error"
+                : hasMismatch
+                ? "Fail"
+                : null}
             </span>
           </div>
           <div className="text-sm">
             {allPassed && (
               <>
-                All tests passed! ({passCount} test{passCount > 1 ? "s" : ""}{" "}
-                passed)
+                All tests passed! ({passCount} test{passCount > 1 ? "s" : ""} passed)
               </>
             )}
             {hasErrors && (
               <>
-                Syntax or runtime errors occurred in {errorCount} test case
-                {errorCount > 1 ? "s" : ""}. Check the console for further
-                details.
+                Syntax or runtime errors occurred in {errorCount} test case{errorCount > 1 ? "s" : ""}.
                 <br />
                 Refer to the{" "}
                 <Link
@@ -187,28 +175,22 @@ const Results: React.FC<ResultsProps> = ({
             )}
             {hasMismatch && (
               <>
-                {failCount} test case{failCount > 1 ? "s" : ""} did not match
-                the expected result, or had multiple outputs. Click on test
-                cases below for details.
+                {failCount} test case{failCount > 1 ? "s" : ""} did not match the expected result.
               </>
             )}
-            {!allPassed &&
-              !hasErrors &&
-              !hasMismatch &&
-              "Run your code to see the results below."}
+            {!allPassed && !hasErrors && !hasMismatch && "Run your code to see the results below."}
           </div>
         </div>
       </>
     );
   };
 
+  // Tracks error count and loading state for the output section
   const [errorCount, setErrorCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const errorCases = testResults.filter((r) =>
-      r.status.includes("Error")
-    ).length;
+    const errorCases = testResults.filter((r) => r.status.includes("Error")).length;
     const hasPending = testResults.some((r) => r.status === "Pending");
 
     setErrorCount(errorCases);
@@ -216,9 +198,7 @@ const Results: React.FC<ResultsProps> = ({
   }, [testResults, output]);
 
   return (
-    <div
-      className={`container-els ${!expandResults ? "h-[100%]" : ""} ${width}`}
-    >
+    <div className={`container-els ${!expandResults ? "h-[100%]" : ""} ${width}`}>
       <div className="container-headings text-violet-400">
         <div className="container-nav-box">
           <div
@@ -251,7 +231,7 @@ const Results: React.FC<ResultsProps> = ({
           </div>
         </div>
         <div className="container-utils-box">
-          {resultState == "output" ? (
+          {resultState === "output" && (
             <button
               onClick={onClearOutput}
               className={`nav-btns px-3 bg-rose-600 hover:bg-rose-700`}
@@ -259,8 +239,6 @@ const Results: React.FC<ResultsProps> = ({
               <TrashIcon className="nav-icons" />
               <p className="hideSmallScreen">Clear</p>
             </button>
-          ) : (
-            ""
           )}
           <button
             onClick={() => setExpandResults(!expandResults)}
@@ -276,7 +254,7 @@ const Results: React.FC<ResultsProps> = ({
       </div>
 
       <div className="container-body">
-        {resultState == "output" && (
+        {resultState === "output" && (
           <>
             <pre
               ref={preRef}
@@ -297,19 +275,10 @@ const Results: React.FC<ResultsProps> = ({
                 </ul>
               </>
             )}
-            {
-              isComplete && (
-                <p className="text-green-200">Execution Completed</p>
-              )
-              /*(output.join("\n").includes("Code executed successfully.") ? (
-                <p className="text-green-200">Execution Completed</p>
-              ) : (
-                <p className="text-red-200">Error on Conversion to Python</p>
-              ))*/
-            }
+            {isComplete && <p className="text-green-200">Execution Completed</p>}
           </>
         )}
-        {resultState == "outcome" && (
+        {resultState === "outcome" && (
           <div className="mb-4 scrollable-container pr-4">
             <div>{summarizeTestResults()}</div>
             <div className="flex flex-wrap gap-2 mb-3">
@@ -318,7 +287,7 @@ const Results: React.FC<ResultsProps> = ({
                   key={index}
                   onClick={() => setSelectedIndex(index)}
                   className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                    result.status.includes("Error") ? /*"animate-bounce"*/ "" : ""
+                    result.status.includes("Error") ? "" : ""
                   }
                   ${
                     selectedIndex === index

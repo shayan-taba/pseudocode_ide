@@ -1,9 +1,13 @@
 // The component used for each test-case result that displays whether it failed/passed or had errors.
+// It shows the test case outcome, including the input, expected output, and actual output, 
+// and handles skeleton loading while waiting for execution results.
 
 import React, { useState } from "react";
 import SkeletonLoader from "./skeleton_loader";
 import { TestResultType } from "../../ide";
 
+// TestCaseResult component that displays the result of each test case, including inputs, expected outputs, and actual outputs.
+// It also renders a skeleton loader if the test result is pending.
 const TestCaseResult: React.FC<{
   testCaseIndex: number;
   result: TestResultType;
@@ -13,6 +17,7 @@ const TestCaseResult: React.FC<{
     type: string;
   }[];
 }> = ({ testCaseIndex, result, isLast, testInputsTypes }) => {
+  // Function to determine the border and text class based on the test case status (e.g., Pass, Fail, Error)
   const getStatusClass = (typeClass: "border" | "text") => {
     switch (result.status) {
       case "Pass":
@@ -36,15 +41,10 @@ const TestCaseResult: React.FC<{
     <div
       className={"border p-4 rounded-md mb-4" + " " + getStatusClass("border")}
     >
-      {/*<div className="font-bold underline underline-offset-3">
-        {!isLast && `Test Case ${testCaseIndex + 1}`}
-        {isLast && (
-          <span className="">
-            Test Case {testCaseIndex + 1} (Hidden Test Case)
-          </span>
-        )}
-      </div>*/}
-
+      {/* 
+        If the result is "Pending", show the SkeletonLoader component while waiting for execution.
+        Otherwise, display the outcome, inputs, expected outputs, and actual outputs.
+      */}
       {result.status === "Pending" ? (
         <SkeletonLoader
           input={result.input}
@@ -53,6 +53,7 @@ const TestCaseResult: React.FC<{
         />
       ) : (
         <>
+          {/* Display the test case outcome (Pass/Fail/Error) */}
           <div className="mt-2 flex justify-between items-center">
             <div>
               <span className="font-bold">Outcome:</span>{" "}
@@ -60,6 +61,7 @@ const TestCaseResult: React.FC<{
             </div>
           </div>
 
+          {/* Display input, expected, and actual output tables */}
           <div className="mt-2 overflow-x-auto">
             <table className="table-auto w-full text-left border-collapse border border-gray-700 text-sm text-gray-300">
               <thead>
@@ -69,7 +71,7 @@ const TestCaseResult: React.FC<{
                 </tr>
               </thead>
               <tbody>
-                {/* Input row(s) */}
+                {/* Input row(s): Displays the test inputs */}
                 <tr>
                   <td className="border border-gray-700 px-3 py-2 align-top">
                     Input
@@ -96,7 +98,7 @@ const TestCaseResult: React.FC<{
                   </td>
                 </tr>
 
-                {/* Expected Output */}
+                {/* Expected Output row: Displays the expected result */}
                 <tr>
                   <td className="border border-gray-700 px-3 py-2">
                     Expected Output
@@ -110,7 +112,7 @@ const TestCaseResult: React.FC<{
                   </td>
                 </tr>
 
-                {/* Actual Output */}
+                {/* Actual Output row: Displays the actual result */}
                 <tr>
                   <td className="border border-gray-700 px-3 py-2">
                     Actual Output

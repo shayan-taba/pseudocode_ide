@@ -1,14 +1,27 @@
-// Skeleton loader component of each test-case result.
-// It is invoked for each test-case when waiting for user to run the code or execution completion.
+// This component displays a skeleton loader and placeholders for each test case result while waiting for the code to run or execution to complete. 
 
 import React from "react";
 
-const SkeletonLoader: React.FC<{ input: any; expected: any; isLast: boolean }> = ({
-  input,
-  expected,
-  isLast,
-}) => {
-  const skeletonBar = "h-4 bg-gray-600 animate-pulse rounded";
+interface SkeletonLoaderProps {
+  input: any;
+  expected: any;
+  isLast: boolean;
+}
+
+const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({ input, expected, isLast }) => {
+  const skeletonBarClass = "h-4 bg-gray-600 animate-pulse rounded";
+
+  const renderInputRow = (input: any) => {
+    return input.map((value: any, index: number) => (
+      <div key={index} className="w-48">
+        {value}
+      </div>
+    ));
+  };
+
+  const renderContentOrSkeleton = (content: React.ReactNode, showContent: boolean) => {
+    return showContent ? content : <div className={`${skeletonBarClass} w-48`} />;
+  };
 
   return (
     <>
@@ -21,7 +34,6 @@ const SkeletonLoader: React.FC<{ input: any; expected: any; isLast: boolean }> =
           role="status"
           className="w-6 h-6 text-gray-200 animate-spin fill-gray-600 dark:text-gray-600 dark:fill-gray-300"
         >
-       
           <span className="sr-only">Loading...</span>
         </div>
       </div>
@@ -35,23 +47,15 @@ const SkeletonLoader: React.FC<{ input: any; expected: any; isLast: boolean }> =
             </tr>
           </thead>
           <tbody>
-            {/* Input row */}
+            {/* Input Row */}
             <tr>
               <td className="border border-gray-700 px-3 py-2 align-top">Input</td>
               <td className="border border-gray-700 px-3 py-2">
-                {isLast ? (
-                  "Hidden"
-                ) : (
-                  <div className="space-y-1">
-                    {input.map((_val: any, i: number) => (
-                      <div key={i} className={" w-48"}>{_val}</div>
-                    ))}
-                  </div>
-                )}
+                {isLast ? "Hidden" : <div className="space-y-1">{renderInputRow(input)}</div>}
               </td>
             </tr>
 
-            {/* Expected Output */}
+            {/* Expected Output Row */}
             <tr>
               <td className="border border-gray-700 px-3 py-2">
                 Expected
@@ -59,17 +63,11 @@ const SkeletonLoader: React.FC<{ input: any; expected: any; isLast: boolean }> =
                 Output
               </td>
               <td className="border border-gray-700 px-3 py-2">
-              {isLast ? (
-                  "Hidden"
-                ) : (
-                  <div className="space-y-1">
-                      <div className={" w-48"}>{expected}</div>
-                  </div>
-                )}
+                {isLast ? "Hidden" : <div className="space-y-1 w-48">{expected}</div>}
               </td>
             </tr>
 
-            {/* Actual Output */}
+            {/* Actual Output Row */}
             <tr>
               <td className="border border-gray-700 px-3 py-2">
                 Actual
@@ -77,7 +75,7 @@ const SkeletonLoader: React.FC<{ input: any; expected: any; isLast: boolean }> =
                 Output
               </td>
               <td className="border border-gray-700 px-3 py-2">
-                {isLast ? "Hidden" : <div className={skeletonBar + " w-48"} />}
+                {renderContentOrSkeleton(null, !isLast)}
               </td>
             </tr>
           </tbody>

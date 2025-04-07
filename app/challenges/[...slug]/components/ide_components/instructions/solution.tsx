@@ -20,10 +20,11 @@ const Solution: React.FC<SolutionProps> = ({
   storedCompletionStatus,
   setHintUsed,
 }) => {
-  const [message, setMessage] = useState("");
-  const [showWarning, setShowWarning] = useState(false);
-  const [acknowledged, setAcknowledged] = useState(false);
+  const [message, setMessage] = useState(""); // State for success/failure message
+  const [showedWarning, setshowedWarning] = useState(false); // To control warning visibility
+  const [acknowledged, setAcknowledged] = useState(false); // To track if the user acknowledged the warning
 
+  // Function to save the hint usage status to localStorage
   const saveHintStatus = (challengeId: number) => {
     if (!storedCompletionStatus.status) {
       // Check for the challenge ID in localStorage
@@ -45,20 +46,21 @@ const Solution: React.FC<SolutionProps> = ({
       // Save back to localStorage
       localStorage.setItem(key, JSON.stringify(updatedData));
 
-      setHintUsed(true);
+      setHintUsed(true); // Update state to reflect hint usage
     }
   };
 
+  // Function to copy the solution text to the clipboard
   const copyText = (text: string) => {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        setMessage("Text copied to clipboard!");
+        setMessage("Text copied to clipboard!"); // Set success message
         saveHintStatus(id); // Update hint status in localStorage
-        setTimeout(() => setMessage(""), 2000);
+        setTimeout(() => setMessage(""), 2000); // Clear message after 2 seconds
       })
       .catch((err) => {
-        setMessage("Failed to copy text!");
+        setMessage("Failed to copy text!"); // Set error message
         console.error("Error copying text: ", err);
       });
   };
@@ -70,20 +72,20 @@ const Solution: React.FC<SolutionProps> = ({
         <>
           <div
             className={`gap-3 max-w-[400px] justify-between p-4 border-l-8 rounded-md ${
-              showWarning ? "bg-green-100" : "bg-yellow-100"
+              showedWarning ? "bg-green-100" : "bg-yellow-100"
             } flex items-center space-x-2`}
-            style={{ borderColor: showWarning ? "#16a34a" : "#f59e0b" }}
+            style={{ borderColor: showedWarning ? "#16a34a" : "#f59e0b" }}
           >
             {!acknowledged ? (
               <ExclamationCircleIcon
                 className={`w-[60px] ${
-                  showWarning ? "text-green-600" : "text-[#f59e0b]"
+                  showedWarning ? "text-green-600" : "text-[#f59e0b]"
                 }`}
               />
             ) : null}
             <div
               className={`font-semibold ${
-                showWarning ? "text-green-700" : "text-yellow-600"
+                showedWarning ? "text-green-700" : "text-yellow-600"
               }`}
             >
               {!acknowledged ? (
@@ -92,8 +94,8 @@ const Solution: React.FC<SolutionProps> = ({
                   points.
                   <button
                     onClick={() => {
-                      setShowWarning(true);
-                      setAcknowledged(true);
+                      setshowedWarning(true); // Shown the warning triggered so that the warning coloured elements changes to green.
+                      setAcknowledged(true); // Mark as acknowledged
                     }}
                     className="text-blue-500 text-left mt-2 underline hover:underline"
                   >
@@ -105,7 +107,7 @@ const Solution: React.FC<SolutionProps> = ({
                   You have acknowledged the warning.
                   <div className="flex flex-col mt-2 space-y-2">
                     <button
-                      onClick={() => copyText(exampleSolution)}
+                      onClick={() => copyText(exampleSolution)} // Copy the solution when clicked
                       className="w-[max-content] px-3 text-sm py-2 bg-blue-500 rounded-md hover:bg-blue-600 text-white flex items-center space-x-2"
                     >
                       <span>Copy Text</span>
@@ -128,7 +130,7 @@ const Solution: React.FC<SolutionProps> = ({
               to view the solution.
               <div className="flex flex-col mt-2 space-y-2">
                 <button
-                  onClick={() => copyText(exampleSolution)}
+                  onClick={() => copyText(exampleSolution)} // Copy the solution when clicked
                   className="w-[max-content] px-3 text-sm py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 flex items-center space-x-2"
                 >
                   <span>Copy Text</span>

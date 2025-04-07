@@ -18,18 +18,19 @@ import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
   ArrowDownOnSquareIcon, // Load icon
-  ArrowUpOnSquareIcon,
+  ArrowUpOnSquareIcon,   // Save icon
 } from "@heroicons/react/24/outline";
 
 import { CodeBracketSquareIcon } from "@heroicons/react/24/outline";
 
+// Define a custom CodeMirror theme to apply consistent styling
 const myTheme = createTheme({
   theme: "light",
   settings: {
     background: "",
     backgroundImage: "",
     foreground: "",
-    caret: "#ffffff", // this is the cursor color
+    caret: "#ffffff", // Cursor color
     selection: "#000000",
     selectionMatch: "#000000",
     lineHighlight: "#8a91991a",
@@ -55,6 +56,7 @@ const myTheme = createTheme({
   ],
 });
 
+// Define props interface for the Editor component
 interface EditorProps {
   id: number;
   width: string;
@@ -82,7 +84,7 @@ const Editor: React.FC<EditorProps> = ({
       try {
         const parsedData = JSON.parse(savedData);
         if (parsedData.code) {
-          onCodeChange(parsedData.code);
+          onCodeChange(parsedData.code); // Restore code into editor
         }
       } catch (error) {
         console.error("Error parsing saved data:", error);
@@ -93,20 +95,20 @@ const Editor: React.FC<EditorProps> = ({
   const handleSave = () => {
     const key = `challenge-${id}`;
     const existingData = localStorage.getItem(key);
-    const newData = { code }; // Data to save
+    const newData = { code }; // New code to be saved
 
     let errorOnSave: boolean = false;
     if (existingData) {
       try {
         const parsedData = JSON.parse(existingData);
         const mergedData = { ...parsedData, ...newData };
-        localStorage.setItem(key, JSON.stringify(mergedData));
+        localStorage.setItem(key, JSON.stringify(mergedData)); // Merge and save
       } catch (error) {
         errorOnSave = true;
         console.error("Error parsing existing data:", error);
       }
     } else {
-      localStorage.setItem(key, JSON.stringify(newData));
+      localStorage.setItem(key, JSON.stringify(newData)); // Save new entry
     }
 
     if (!errorOnSave) {
@@ -121,7 +123,7 @@ const Editor: React.FC<EditorProps> = ({
       try {
         const parsedData = JSON.parse(savedData);
         if (parsedData.code) {
-          onCodeChange(parsedData.code);
+          onCodeChange(parsedData.code); // Load code into editor
         } else {
           alert("No saved code found.");
         }
@@ -139,6 +141,7 @@ const Editor: React.FC<EditorProps> = ({
         !expandEditor ? "h-[100%]" : ""
       } ${width}`}
     >
+      {/* Header section with title and utility buttons */}
       <div className="container-headings text-emerald-400">
         <div className="container-nav-box">
           <div className={"container-navs"}>
@@ -147,6 +150,7 @@ const Editor: React.FC<EditorProps> = ({
           </div>
         </div>
         <div className="container-utils-box">
+          {/* Save button */}
           <button
             onClick={handleSave}
             className="nav-btns px-3 bg-blue-600 hover:bg-blue-700"
@@ -155,6 +159,7 @@ const Editor: React.FC<EditorProps> = ({
             <p className="hideSmallScreen">Save</p>
           </button>
 
+          {/* Load button */}
           <button
             onClick={handleLoad}
             className="nav-btns px-3 bg-yellow-600 hover:bg-yellow-700"
@@ -163,6 +168,7 @@ const Editor: React.FC<EditorProps> = ({
             <p className="hideSmallScreen">Load Saved Code</p>
           </button>
 
+          {/* Run button */}
           <button
             onClick={onRun}
             className="nav-btns px-3 bg-green-600 hover:bg-green-700"
@@ -171,6 +177,7 @@ const Editor: React.FC<EditorProps> = ({
             <p className="hideSmallScreen">Run</p>
           </button>
 
+          {/* Expand/shrink editor toggle */}
           <button
             onClick={() => setExpandEditor(!expandEditor)}
             className={`nav-btns`}
@@ -183,18 +190,20 @@ const Editor: React.FC<EditorProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Editor body with CodeMirror */}
       <div className="container-body scrollable-container">
         <CodeMirror
           value={code}
           height="100%"
           extensions={[
-            python(),
+            python(), // Syntax highlighting for pseudocode (Python-like)
             autocompletion({ activateOnTyping: false }),
-            indentUnit.of("    "),
+            indentUnit.of("    "), // Indentation style
             EditorView.lineWrapping,
           ]}
-          theme={myTheme}
-          onChange={(value) => onCodeChange(value || "")} // Ensure `value` is never `undefined`
+          theme={myTheme} // Apply custom theme
+          onChange={(value) => onCodeChange(value || "")} // Ensure empty string fallback
         />
       </div>
     </div>

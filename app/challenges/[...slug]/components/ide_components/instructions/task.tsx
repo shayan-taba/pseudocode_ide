@@ -1,6 +1,3 @@
-// Using the params from the XML, this component displays the instructions and example test-cases require to complete the individual challenge.
-// Also, by accessing the local browser-storage, it displays whether the task is completed.
-
 import React, { useState, useEffect } from "react";
 import {
   CheckCircleIcon,
@@ -16,8 +13,9 @@ import {
   TrophyIcon,
 } from "@heroicons/react/24/outline";
 
+// Define the TaskProps interface for the component's expected props
 interface TaskProps {
-  id: number; // Task ID to fetch the completion status
+  id: number; // Task ID to fetch completion status
   title: string;
   description: string;
   hint: string;
@@ -25,13 +23,14 @@ interface TaskProps {
   difficulty: string;
   testCases: { inputs: string[]; output: string }[]; // Test case structure
   outputType: string;
-  storedCompletionStatus: { status: boolean; message: string };
+  storedCompletionStatus: { status: boolean; message: string }; // Completion status
   testInputsTypes: {
     name: string;
     type: string;
-  }[];
-  hintUsed: boolean;
+  }[]; // Types of input variables
+  hintUsed: boolean; // Whether hint was used
 }
+
 const Task: React.FC<TaskProps> = ({
   id,
   title,
@@ -45,6 +44,7 @@ const Task: React.FC<TaskProps> = ({
   testInputsTypes,
   hintUsed,
 }) => {
+  // State to handle accordion section visibility (task, instructions, input-output, example test case)
   const [sections, setSections] = useState({
     task: true,
     instructions: false,
@@ -52,15 +52,16 @@ const Task: React.FC<TaskProps> = ({
     exampleTestCase: false,
   });
 
+  // Type for section keys
   type SectionKeys =
     | "task"
     | "instructions"
     | "inputOutput"
     | "exampleTestCase";
 
+  // Function to toggle section visibility
   const toggleSection = (section: SectionKeys) => {
     setSections((prev) => {
-      // Close all sections first, then toggle the selected section
       const newSections = Object.keys(prev).reduce((acc, key) => {
         acc[key as SectionKeys] = false; // Close all sections
         return acc;
@@ -71,6 +72,7 @@ const Task: React.FC<TaskProps> = ({
     });
   };
 
+  // Effect to log completion status and hint used on changes
   useEffect(() => {
     console.log("herher", storedCompletionStatus, hintUsed);
   }, [storedCompletionStatus, hintUsed]);
@@ -80,16 +82,16 @@ const Task: React.FC<TaskProps> = ({
       <div className="flex flex-col">
         <h2 className="text-4xl font-bold mb-4">{title}</h2>
 
-        {/* Completion Status */}
+        {/* Completion Status Section */}
         <div className="flex items-center gap-2 mb-4">
-          {storedCompletionStatus.status ? ( // i.e., It is complete
+          {storedCompletionStatus.status ? ( // Check if the task is complete
             hintUsed ? (
-              <LightBulbIcon className="h-6 w-6 text-yellow-300" /> // Lightbublb for completed without points (hint used)
+              <LightBulbIcon className="h-6 w-6 text-yellow-300" /> // Lightbulb for completed with hint
             ) : (
-              <StarIcon className="h-6 w-6 text-green-300" /> // Trophy for hint unused and completed
+              <StarIcon className="h-6 w-6 text-green-300" /> // Star for completed without hint
             )
           ) : (
-            <ExclamationCircleIcon className="h-6 w-6 text-red-300" /> // Exclamation for incomplete.
+            <ExclamationCircleIcon className="h-6 w-6 text-red-300" /> // Exclamation for incomplete
           )}
           <span
             className={`text-lg font-medium ${
@@ -109,13 +111,11 @@ const Task: React.FC<TaskProps> = ({
         </div>
       </div>
 
-      {/*<h3 className="text-2xl font-semibold mb-2">Task</h3>*/}
-
+      {/* Task Description and Hint Section */}
       <div className="mb-4 flex flex-col gap-4">
         <p className="text-base">{description}</p>
-        {hint != "" && (
+        {hint && (
           <div className="flex flex-row gap-4">
-            {/*<InformationCircleIcon className="h-6 w-6" />*/}
             <p className="text-base">
               <strong>Hint:</strong> {hint}
             </p>
@@ -230,7 +230,6 @@ const Task: React.FC<TaskProps> = ({
 
           {sections.exampleTestCase && (
             <div className="bg-slate-700 p-4 border rounded-xl mt-2 space-y-4">
-              {/* Displaying each input variable with its value and type */}
               {testCases[0].inputs.map((inputValue, index) => (
                 <div
                   key={index}
@@ -249,7 +248,8 @@ const Task: React.FC<TaskProps> = ({
                       Input Value:
                     </strong>
                     <span className="text-blue-300">
-                      {/*JSON.stringify(*/ inputValue /*)*/}
+                      {/* Display input values */}
+                      {inputValue}
                     </span>
                   </p>
                   <p className="text-sm mt-2">
@@ -268,7 +268,7 @@ const Task: React.FC<TaskProps> = ({
                     Expected Output:
                   </strong>
                   <span className="text-violet-300">
-                    {/*JSON.stringify(*/ testCases[0].output /*)*/}
+                    {testCases[0].output}
                   </span>
                 </p>
               </div>
