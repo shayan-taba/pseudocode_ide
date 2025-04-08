@@ -161,9 +161,9 @@ const IDE: React.FC<IDEProps> = ({
         // Handle response based on status
         if ("error" in result) {
           console.log("Handled Error:", result.error);
-          handleBackendResponse(result.error, isLast, true);
+          handleBackendResponse(result.error, isLast, true); // Handle the error
         } else if ("result" in result && result.status === "success") {
-          console.log("Success:", result.result);
+          console.log("Success:", result.result); // Handle the error-free execution of the code
           handleBackendResponse(result.result, isLast, false);
         } else {
           console.error("Unexpected response:", result);
