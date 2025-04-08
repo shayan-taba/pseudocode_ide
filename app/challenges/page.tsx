@@ -199,7 +199,7 @@ export default function ChallengesPage() {
             <CustomSelect
               value={completionFilter}
               onChange={(e) => setCompletionFilter(e.target.value)}
-              options={difficulties}
+              options={["All","Complete","Not Complete"]}
             />
           </div>
         </div>
