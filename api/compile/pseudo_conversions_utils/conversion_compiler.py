@@ -81,7 +81,7 @@ def ib_specific_pseudocode_conversion(pseudocode: str):
 
 
 def intial_pseudocode_conversion(pseudocode: str) -> str:
-    # Mapping of pseudocode keywords to Python equivalents
+    # Dictionary mapping pseudocode keywords/symbols to Python equivalents
     direct_mappings = {
         "if": "if",
         " then": ":",
@@ -91,90 +91,88 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
         "loop while": "while",
         "loop until": "while not",
         "end loop": "",
-        "//": "#",
+        "//": "#",  # Converts pseudocode-style comments to Python-style
         "≠": "!=",
         "mod": "%",
         "div": "//",
-        " AND ": " and ",  # The surronding spaces ensure variable names with "AND" inside aren't replaced
+        " AND ": " and ",  # Surrounding spaces prevent replacing inside variable names
         " OR ": "or",
         " NOT ": " not ",
         "false": "False",
         "true": "True",
     }
 
+    # Used to help remove block end statements like "end if" after translation
     pseudocode_block_endings = ["end loop", "end if"]
 
-    python_code = []
-
-    block_statements: list = []
-    current_indent = 0
+    python_code = []  # Stores final converted code
+    block_statements: list = []  # Keeps track of nested block structures (e.g., if, loop)
+    current_indent = 0  # Tracks indentation level
 
     for line_number, line in enumerate(pseudocode.split("\n")):
-
+        # Get string ranges to avoid replacements inside string literals
         string_ranges = get_string_indices_ranges(line)
         converted_line = line
-        endWithColon = False
+        endWithColon = False  # Flag to add colon manually
 
-        comment_part = ""  # Default assumes no comment
-        pseudocode_part = line  # Default assume whole line is commentless
+        comment_part = ""  # Stores comment part of the line
+        pseudocode_part = line  # Stores line without the comment
 
-        for i, char in enumerate(line):  # Increments each character in the line.
-            if char == "#" and not is_char_in_string(
-                i, string_ranges
-            ):  # Determines if the character is a comment
-                # if it is a "#" not in a string.
-                pseudocode_part = line[:i]  # Everything before the comment
-                # print(pseudocode_part)
-                comment_part = line[i:]  # The comment itself
+        # Separate comment from code, ensuring "#" inside strings isn't counted
+        for i, char in enumerate(line):
+            if char == "#" and not is_char_in_string(i, string_ranges):
+                pseudocode_part = line[:i]
+                comment_part = line[i:]
                 break
 
-        converted_line = pseudocode_part  # Only convert non comments
+        converted_line = pseudocode_part  # Operate only on non-comment portion
 
         if line.strip() == "":
-            # Skip empty lines
-
+            # Handle empty lines (preserve structure)
             if line_number == len(pseudocode.split("\n")) - 1 and block_statements:
-                # if last line reached and a block statement hasn't been closed yet
+                # Check for unclosed block at end of input
                 raise SyntaxError(
                     f"on Line {line_number+1}: a `{block_statements[-1][0]}` block statement was opened on line {block_statements[-1][1]}, but it was never closed"
                 )
-
             python_code.append("")
-
             continue
-        # Perform conversion only on the pseudocode part
 
-        line_removed_comments = line = re.sub(r"#.*$", "", line)  # Remove # comments
-        line_removed_comments = re.sub(r"//.*$", "", line)  # Remove // comments
+        # Remove trailing comments from pseudocode
+        line_removed_comments = line = re.sub(r"#.*$", "", line)
+        line_removed_comments = re.sub(r"//.*$", "", line)
 
+        # Set flag to add colon for loop constructs
         if line.strip().startswith("loop") and " from " not in line.strip():
             endWithColon = True
+
+        # Enforce correct syntax for "if"/"else if" requiring "then"
         elif (
             line.strip().startswith("if") or line.strip().startswith("else if")
         ) and not (line_removed_comments.strip().endswith("then")):
-            # This makes sure that if/else if statements must end with "then", accounting for in-line comments
             raise SyntaxError(
                 f'on Line {line_number+1}: If statements starting with "if" or "else if" must end with "then"'
             )
-        # Replace only outside of string literals
 
+        # Track the last opened block for structure validation
         last_opened_block: str = block_statements[-1][0] if block_statements else ""
         last_opened_block_line: int | str = (
             block_statements[-1][1] if block_statements else ""
         )
 
-        # hints as errors
+        # Error hints for common IB pseudocode typos
         if line.strip() in ["endloop", "endif"]:
             raise SyntaxError(
                 f'on Line {line_number+1}: `{line.strip()}` is undefined, did you mean {line.strip().replace("end", "end ")}'
             )
 
+        # Reject "elif" as it is not part of IB pseudocode
         if line.strip().startswith("elif "):
             current_indent -= indent_amount
             raise SyntaxError(
                 f'on Line {line_number+1}: `elif` is not a defined keyword in IB pseudocode, did you mean "else if"?'
             )
 
+        # Validate block structure for "else if"
         elif line.strip().startswith("else if "):
             current_indent -= indent_amount
             if last_opened_block not in ["if", "else if"]:
@@ -184,6 +182,7 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
             block_statements.pop()
             block_statements.append(("else if", line_number))
 
+        # Validate block structure for "else"
         elif line.strip() == "else":
             current_indent -= indent_amount
             if last_opened_block not in ["if", "else if"]:
@@ -193,6 +192,7 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
             block_statements.pop()
             block_statements.append(("else", line_number))
 
+        # Handle "end if" and "end loop" closures with structure validation
         elif line.strip() == "end if":
             current_indent -= indent_amount
             if last_opened_block not in ["if", "else if", "else"]:
@@ -209,11 +209,13 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
                 )
             block_statements.pop()
 
+        # Check for correct indentation using consistent whitespace levels
         if (len(line) - len(line.lstrip())) != current_indent:
             raise SyntaxError(
                 f'on Line {line_number+1}: this line has {abs(len(line) - len(line.lstrip())-current_indent)} {"too many" if (len(line) - len(line.lstrip())-current_indent) > current_indent else "too few"} whitespaces because each indent must be 4 whitespaces or indentation was unexpected'
             )
 
+        # Update indentation and push to block stack for new blocks
         if line.strip().startswith("loop "):
             current_indent += indent_amount
             block_statements.append(("loop", line_number))
@@ -223,6 +225,7 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
         elif line.strip().startswith("else if ") or line.strip() == "else":
             current_indent += indent_amount
 
+        # Perform string replacements for pseudocode tokens only outside of strings
         for pseudocode_word, python_word in direct_mappings.items():
             start_pos = 0
             while True:
@@ -237,6 +240,7 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
                     )
                 start_pos += len(python_word)
 
+        # Nullify line if it's a block end keyword (already handled)
         for block_end in pseudocode_block_endings:
             start_pos = 0
             while True:
@@ -245,25 +249,29 @@ def intial_pseudocode_conversion(pseudocode: str) -> str:
                     break
                 if not is_char_in_string(start_pos, string_ranges):
                     converted_line = None
-
                 start_pos += len(python_word)
 
+        # Add colon for certain loop headers if missing
         if endWithColon:
             if converted_line.endswith(":"):
                 raise SyntaxError(
                     f'on Line {line_number+1}: IB CS Pseudocode does not expect ":" (colons) at the end of loop statements'
                 )
             converted_line += ":"
+
+        # Add converted line (and preserved comment if any) to output
         (
             python_code.append(converted_line + comment_part)
             if (converted_line or comment_part)
             else python_code.append("")
         )
 
+        # Final check for unclosed blocks
         if line_number == len(pseudocode.split("\n")) - 1 and block_statements:
-            # if last line reached and a block statement hasn't been closed yet
             raise SyntaxError(
                 f"on Line {line_number+1}: The `{block_statements[-1][0]}` block statement opened on line {block_statements[-1][1]+1} was never closed"
             )
 
+    # Join and return full converted code
     return "\n".join(python_code)
+

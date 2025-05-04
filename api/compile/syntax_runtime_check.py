@@ -57,7 +57,9 @@ def syntax_check_and_run_converted(
         )
 
     def exec_with_runtime_error_handling():
-        """This runs is a syntax error has not be found in the converted code which raises an error.
+        """This runs if a syntax error has not been found in the converted code.
+        
+        Handles runtime errors during execution and maps them back to the original pseudocode line if possible.
 
         Raises:
             RuntimeError: _description_
@@ -67,7 +69,7 @@ def syntax_check_and_run_converted(
             _type_: _description_
         """
         try:
-            # Prepare the global scope. IB Pseudocode variables (e.g., Collection, etc.) are added as classes accessible by the code. A custom func
+            # Prepare the global scope with built-in types and functions used in pseudocode
             global_scope = {
                 "Array": Array,
                 "Collection": Collection,
@@ -76,52 +78,56 @@ def syntax_check_and_run_converted(
                 "CustomString": CustomString,
                 "get_sqrt": get_sqrt,
             }
-            print("a101")
-            # Add test case inputs to the global scope
+
+            # Map each test case input into the global scope for execution
             for index, input_type in enumerate(test_case_input_names):
                 global_scope[input_type["name"]] = parse_value(
                     test_case_input_values[index], global_scope
                 )
-                
-            # Create a generator to pause execution at input points
+
+            # Create isolated environments for exec (code string execution)
             exec_globals = global_scope.copy()
             exec_locals = {}
 
-            # Create a StringIO object to capture output
+            # Redirect stdout to capture output
             output_buffer = io.StringIO()
-
-            # Redirect standard output to the StringIO object
             import sys
+            sys.stdout = output_buffer  # Temporarily redirect print output
 
-            sys.stdout = output_buffer
-
+            # Execute the code string in the prepared scope
             exec(code_string, exec_globals, exec_locals)
-            # Get the captured output from StringIO
+
+            # Retrieve printed output
             output = output_buffer.getvalue()
 
-            # Reset stdout to its original value
+            # Reset stdout back to default
             sys.stdout = sys.__stdout__
 
             return output
 
         except Exception as e:
-            # Check for special runtime errors before returning the standard message
+            # Exception handling block catches any runtime error raised in exec()
+
+            # Check for known custom errors (e.g. divide by 0) and convert them to user-friendly messages
             special_error_message = special_runtime_errors(str(e))
 
-            # Otherwise, handle the general exception
+            # Extract traceback to find where in the user's code the error occurred
             tb = traceback.TracebackException.from_exception(e)
             relevant_frame = None
             for frame in tb.stack:
-                if frame.filename == "<string>":
+                if frame.filename == "<string>":  # Indicates user-submitted code
                     relevant_frame = frame
                     break
 
             if relevant_frame:
                 user_line_number = relevant_frame.lineno
+                # Raise a clean, user-friendly error with the original pseudocode line number.
                 raise RuntimeError(
                     f"on Line {user_line_number}: {special_error_message if special_error_message else str(e)}"
                 )
 
+            # If no specific user line was found, raise a general error message
             raise Exception(f"{str(e)}")
 
     return exec_with_runtime_error_handling()
+

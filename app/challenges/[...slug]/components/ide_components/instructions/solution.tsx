@@ -24,7 +24,7 @@ const Solution: React.FC<SolutionProps> = ({
   const [showedWarning, setshowedWarning] = useState(false); // To control warning visibility
   const [acknowledged, setAcknowledged] = useState(false); // To track if the user acknowledged the warning
 
-  // Function to save the hint usage status to localStorage
+  // Function to save the hint usage status to localStorage when the user uses a hint
   const saveHintStatus = (challengeId: number) => {
     if (!storedCompletionStatus.status) {
       // Check for the challenge ID in localStorage
