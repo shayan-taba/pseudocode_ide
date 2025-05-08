@@ -549,6 +549,7 @@
     <id>18</id>
     <title>Sum of All Elements in an Array</title>
     <description>Calculate the sum of all elements in an array of integers.</description>
+    <hint>The `length` property on arrays may provide the number of elements.</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Sum</tag>
