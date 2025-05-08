@@ -77,6 +77,7 @@ def syntax_check_and_run_converted(
                 "Queue": Queue,
                 "CustomString": CustomString,
                 "get_sqrt": get_sqrt,
+                "letters": Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
             }
 
             # Map each test case input into the global scope for execution

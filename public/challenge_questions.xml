@@ -193,7 +193,7 @@
     <description>Sort an array of integers using bubble sort and identify the median value as an
       integer.</description>
     <hint>If calculations are used on numbers, then a float may be returned. However, the expected
-      output is of an integer, so `int&#40;FLOAT&#41;` may be used.</hint>
+      output is of an integer, so `int&#40;FLOAT&#41;` may be used. The `length` property on arrays may provide the number of elements.</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Bubble Sort</tag>
@@ -225,7 +225,7 @@
     <description>Given a 2D array of locations with names and coordinates, return a queue of
       location names ordered by proximity to a given reference point.</description>
     <hint>Use can use the function `pow&#40;X, Y&#41;` to obtain X to the power of Y as in integer
-      provided that X and Y are integers.</hint>
+      provided that X and Y are integers. The `length` property on arrays may provide the number of elements.</hint>
     <tags>
       <tag>2D Arrays</tag>
       <tag>Queues</tag>
@@ -264,7 +264,7 @@
     <description>Given an array of integers, filter out the even numbers and sort them in ascending
       order using bubble sort.</description>
     <hint>Arrays must be initialized with a fixed length. Refer to the documentation for more
-      information</hint>
+      information. The `length` property on arrays may provide the number of elements.</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Bubble Sort</tag>
@@ -295,6 +295,7 @@
     <id>10</id>
     <title>Sum of Unique Elements</title>
     <description>Calculate the sum of all unique elements in an array.</description>
+    <hint>The `length` property on arrays may provide the number of elements.</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Conditionals</tag>
@@ -326,7 +327,7 @@
     <title>Filter Multiples of X</title>
     <description>Remove numbers that are multiples of a given integer X from an array.</description>
     <hint>Arrays must be initialized with a fixed length. Refer to the documentation for more
-      information</hint>
+      information. The `length` property on an existing array may provide the number of elements.</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Conditionals</tag>
@@ -361,6 +362,7 @@
     <id>12</id>
     <title>Reverse Characters in Words</title>
     <description>Reverse the characters in each word of a given array of strings.</description>
+    <hint>The `length` property on strings may provide the number of characters.</hint>
     <tags>
       <tag>Strings</tag>
       <tag>Arrays</tag>
@@ -390,6 +392,7 @@
     <id>13</id>
     <title>Palindrome Identifier</title>
     <description>Determine if a given string is a palindrome (reads the same backward as forward).</description>
+    <hint>The `length` property on strings may provide the number of characters.</hint>
     <tags>
       <tag>Strings</tag>
       <tag>Conditionals</tag>
@@ -575,6 +578,7 @@
     <id>19</id>
     <title>Find the Largest Number in an Array</title>
     <description>Find the largest number in an array of integers.</description>
+    <hint>The `length` property on arrays may provide the number of elements.</hint>
     <tags>
       <tag>Arrays</tag>
       <tag>Comparison</tag>
@@ -627,20 +631,17 @@
     <testCases>
       <testCase>
         <input>CustomString("banana")</input>
-        <input>
-          Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")</input>
+        <input>Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")</input>
         <output>a</output>
       </testCase>
       <testCase>
         <input>CustomString("hello")</input>
-        <input>
-          Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")</input>
+        <input>Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")</input>
         <output>l</output>
       </testCase>
       <testCase>
         <input>CustomString("cool")</input>
-        <input>
-          Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")</input>
+        <input>Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")</input>
         <output>o</output>
       </testCase>
     </testCases>
