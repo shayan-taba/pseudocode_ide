@@ -1,3 +1,5 @@
+A challenge-based platform for practicing IB Computer Science Pseudocode (last exam 2026 syllabus) with automated test cases.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
